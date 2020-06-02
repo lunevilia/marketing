@@ -1,0 +1,78 @@
+{% extends 'categorylayout/categorylayer.html' %}
+{% block name %}
+<script>
+    $('#exampleModal').on('show.bs.modal', function (event) {
+      var button = $(event.relatedTarget) // Button that triggered the modal
+      var recipient = button.data('whatever') // Extract info from data-* attributes
+      // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+      // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+      var modal = $(this)
+      modal.find('.modal-title').text('New message to ' + recipient)
+      modal.find('.modal-body input').val(recipient)
+    })
+
+    function myFunction(x, y) {
+        document.getElementById("recipient-name").value = x;
+        document.modify.action = "{% url 'category:mod_category' 12345 %}".replace(/12345/, y.toString())
+    }
+
+    function delete_category(x) {
+      var r = confirm("정말로 게시판을 삭제하시겠습니까?");
+
+      if (r == true) {
+        location.href = "{% url 'category:delete_category' 12345 %}".replace(/12345/, x);
+      } else {
+        return;
+      }
+    }
+
+</script>
+
+{% if user.is_superuser %}
+<form action="{% url 'category:show_category' %}" method="post">
+    {% csrf_token %}
+    {{ form.as_table }}
+    <!-- 새로운 카테고리 추가 : <input name="new_category" type="text" required><br> -->
+    <input type="submit" value="추가하기">
+</form>
+{% endif %}
+<hr>
+
+<h4>게시판 목록</h4>
+
+{% for i in show_all %}
+<a href="{% url 'forms:selectform' i.board_name %}">{{i.board_name}}</a> {% if user.is_superuser %} | <a href="javascript:delete_category({{i.id}});">게시판 삭제</a> |
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo" onclick="myFunction('{{i.board_name}}','{{i.id}}');">수정하기</button>{% endif %}<br>
+{% endfor %}
+
+{% if user.is_superuser %}
+<form action="" name="modify" method="post">
+    {% csrf_token %}
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">게시판 이름 수정하기</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <form>
+                <div class="form-group">
+                  <label for="recipient-name" class="col-form-label">게시판 이름 :</label>
+                  <input name="board_name" type="text" class="form-control" id="recipient-name" value="{{i.board_name}}" required> 
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
+              <button type="submit" class="btn btn-primary">수정하기</button>
+            </div>
+          </div>
+        </div>
+    </div>
+</form>
+{% endif %}
+
+{% endblock %}

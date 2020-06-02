@@ -1,0 +1,10 @@
+{% extends 'layer.html' %}
+{% block contents %}
+<h2>form test</h2>
+{% if detail_getForm %}
+    <a href="/board/{{detail_getForm.category}}">뒤로가기</a>
+{% endif %}
+{% block name %}
+{% endblock %}
+{% endblock %}
+

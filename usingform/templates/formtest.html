@@ -1,0 +1,29 @@
+{% extends 'formlayout/formlayer.html' %}
+{% block name %}
+<h2>{{board_name}}</h2>
+<button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+    글쓰기
+</button>
+<div class="collapse" id="collapseExample">
+<br>
+<form action="{% url 'forms:selectform' board_name %}" method="post">
+    {% csrf_token %}
+    <table>
+    {{ form.as_table }}
+    </table>
+    <input type="submit" value="제출하기" />
+</form>
+</div>
+<hr>
+{% for form_contents in getForm %}
+<h2>번호 : {{form_contents.id}}</h2>
+<em>{{form_contents.created_at}}</em>
+<h3>제목 :</h3>
+{{form_contents.title}}<br><br>
+<h3>내용 :</h3>
+{{form_contents.body}}<br><br>
+<a href="{% url 'forms:shw_form' form_contents.category form_contents.id %}">자세히 보기</a>
+<hr>
+{% endfor %}
+
+{% endblock %}

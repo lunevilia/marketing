@@ -1,0 +1,12 @@
+{% extends 'youtubelayout/youtubelayer.html' %}
+{% block name %}
+<div id=enters>
+{% for i in response_dict %}
+<div style="text-align: center; margin: 5%">
+<iframe src="https://www.youtube.com/embed/{{i.id.videoId}}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe><br>
+{{i.snippet.title}}
+<!-- {{i.snippet.thumbnails.high.url}} <br> -->
+</div>
+{% endfor %}
+</div>
+{% endblock %}

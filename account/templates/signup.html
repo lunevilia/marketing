@@ -1,0 +1,19 @@
+{% extends 'accountlayout/accountlayer.html' %}
+{% block name %}
+
+<form enctype="multipart/form-data" action="{% url 'account:signup' %}" method="post">
+    {% csrf_token %}
+    <p>아이디: <input id="username_id" name="username_id" type="text" required> <input type="button" value="중복확인" onclick="overlap($('#username_id').val(), 'username');"> </p>
+    <p id="username_check"></p>
+    <p>비밀번호: <input name="password1" type="password" required></p>
+    <p>비밀번호 확인: <input name="password2" type="password" required></p>
+    {{ form.as_p }}
+    <p><input type="button" value="닉네임 중복확인" onclick="overlap($('#nickname_id').val(), 'nickname');"></p>
+    <p id="nickname_check"></p>
+    <p><input type="button" value="이메일 중복확인" onclick="overlap($('#email_id').val(), 'email');"></p>
+    <p id="email_check"></p>
+    <p><input id="user_submit" type="submit" value="가입하기" disabled> <span id="overlap_id">중복확인을 해주세요!</span></p>
+    <p>{{error}}</p>
+</form>
+
+{% endblock %}
