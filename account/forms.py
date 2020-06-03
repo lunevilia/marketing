@@ -11,6 +11,8 @@ class SignupForm(forms.ModelForm):
             'Email': '이메일',
         }
         widgets = {
-            'Name': forms.TextInput(attrs={'id': 'nickname_id'}),
-            'Email': forms.TextInput(attrs={'id': 'email_id'}),
+            'Name': forms.TextInput(attrs={'id': 'nickname_id', 'onchange':"rematch(this.id)", }),
+            'Email': forms.TextInput(attrs={'id': 'email_id', 'onchange':"rematch(this.id)",}),
         }
+
+        onchange="rematch(this.id)"

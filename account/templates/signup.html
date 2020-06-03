@@ -3,7 +3,7 @@
 
 <form enctype="multipart/form-data" action="{% url 'account:signup' %}" method="post">
     {% csrf_token %}
-    <p>아이디: <input id="username_id" name="username_id" type="text" required> <input type="button" value="중복확인" onclick="overlap($('#username_id').val(), 'username');"> </p>
+    <p>아이디: <input id="username_id" name="username_id" type="text" onchange="rematch(this.id)" required> <input type="button" value="중복확인" onclick="overlap($('#username_id').val(), 'username');"> </p>
     <p id="username_check"></p>
     <p>비밀번호: <input name="password1" type="password" required></p>
     <p>비밀번호 확인: <input name="password2" type="password" required></p>

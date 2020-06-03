@@ -5,6 +5,25 @@
 <script>
 var username_check, nickname_check, email_check;
 
+function rematch(x){
+    console.log(x)
+    if(x=="username_id"){
+        username_check = false
+        $('#username_check').text("중복된 확인을 해주세요!");
+        $('#username_check').css("color", "red");
+    } else if (x=="nickname_id") {
+        nickname_check = false
+        $('#nickname_check').text("중복된 확인을 해주세요!");
+        $('#nickname_check').css("color", "red");
+    } else if (x=="email_id"){
+        email_check = false
+        $('#email_check').text("중복된 확인을 해주세요!");
+        $('#email_check').css("color", "red");
+    }
+    $('#user_submit').attr("disabled", true);
+    $('#overlap_id').text("중복확인을 해주세요!");
+}
+
 //중복 확인하는 ajax 함수
 function overlap(x, region){
 $.ajax({
