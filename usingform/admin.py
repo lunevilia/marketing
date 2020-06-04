@@ -1,8 +1,10 @@
 from django.contrib import admin
-from .models import Defaultform, Image, Files, Like, Favorite
+from .models import Defaultform, Image, Files, Like, Favorite, Comment, CommentLike
 
 admin.site.register(Defaultform)
 admin.site.register(Image)
 admin.site.register(Files)
 admin.site.register(Like)
 admin.site.register(Favorite)
+admin.site.register(Comment)
+admin.site.register(CommentLike)

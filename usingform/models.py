@@ -50,3 +50,19 @@ class Favorite(TimeStampedModel):
 
     def __str__(self):
         return self.post
+
+class Comment(TimeStampedModel):
+    main_post = models.ForeignKey(Defaultform, on_delete=models.CASCADE)
+    post = models.ForeignKey("self", on_delete=models.CASCADE, null=True)
+    author = models.ForeignKey(Profile, on_delete=models.CASCADE,)
+    body = models.TextField()
+
+    def __str__(self):
+        return '%s - %s - %s' % (self.main_post, self.post, self.body)
+
+class CommentLike(TimeStampedModel):
+    post = models.ForeignKey(Comment, on_delete=models.CASCADE,)
+    author = models.ForeignKey(Profile, on_delete=models.CASCADE,)
+
+    def __str__(self):
+        return '%s - %s' % (self.post, self.author)

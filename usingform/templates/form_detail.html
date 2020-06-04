@@ -18,6 +18,15 @@ function image_change(){
 function files_change(){
   $('#files_modify').val('true');
 }
+
+function re_comment(x, y){
+  var text = document.getElementById(y);
+  if (x.checked == true){
+    text.style.display="block";
+  } else {
+    text.style.display="none";
+  }
+}
 </script>
 
 <h2>번호 : {{detail_getForm.id}}</h2>
@@ -92,5 +101,43 @@ function files_change(){
 <a href="{% url 'forms:del_form' detail_getForm.category detail_getForm.id %}">삭제하기</a>
 {% endif %}
 <hr>
+
+{% if user.is_authenticated %}
+<form action="{% url 'forms:comment_write' detail_getForm.category detail_getForm.id %}" method="post">
+    {% csrf_token %}
+    {{ commentform.as_table }}
+    <input type="submit" value="댓글달기">
+</form>
+{% endif %}
+
+{% for comment in detail_getComment %}
+<p>
+<p>
+<div>댓글 : {{comment.body}}</div>
+<div>작성자 : {{comment.author.Name}}</div>
+</p>
+{% if user.is_authenticated %}
+<p><input id="checkBox{{comment.id}}" type="checkbox" name="re_comment" value="답글" onclick="re_comment(this, 're_comment{{comment.id}}')"> 답글달기</p>
+<div style="display: none;" id=re_comment{{comment.id}}>
+<form action="{% url 'forms:recomment_write' detail_getForm.category detail_getForm.id comment.id %}" method="post">
+    {% csrf_token %}
+    {{ commentform.as_table }}
+    <p><input type="submit" value="댓글달기"></p>
+</form>
+</div>
+{% endif %}
+
+{% for re_comment in comment.comment_set.all %}
+<!-- 대체로 _set은 앞에는 class 이름이다!! -->
+<p>
+&nbsp;&nbsp;&nbsp;&nbsp;<b>답글 내용</b> : {{re_comment.body}}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<b>작성자</b> : {{re_comment.author.Name}}<br>
+</p>
+{% endfor %}
+<hr>
+
+</p>
+{% endfor %}
+
 
 {% endblock %}

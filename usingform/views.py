@@ -46,10 +46,9 @@ def selectform(request, board="자유게시판"): #작성하기 및 전체 글 �
 
 def shw_form(request, board, id): #글의 자세한 내용 보여주기
     detail_getForm = get_object_or_404(Defaultform, id=id)
-    image_getForm = Image.objects.filter(post=detail_getForm)
-    files_getForm = Files.objects.filter(post=detail_getForm)
-
-    return render(request, 'form_detail.html', {'detail_getForm':detail_getForm, })
+    detail_getComment = Comment.objects.filter(main_post=detail_getForm, post__isnull=True)
+    commentform = CommentTest()
+    return render(request, 'form_detail.html', {'detail_getForm':detail_getForm, 'commentform':commentform, 'detail_getComment':detail_getComment,})
 
 def mod_form(request, board, id): #글 수정하기
     mod_getForm = get_object_or_404(Defaultform, id=id)
@@ -85,34 +84,35 @@ def del_form(request, board, id): #글 삭제하기
     post_instance.delete()
     return redirect('/board/'+str(board))
 
-def ajax_mod_form(request, board, id): #글 수정하기
-    mod_getForm = get_object_or_404(Defaultform, id=id)
-    mod_getImage = get_object_or_404(Image, post=mod_getForm)
-    mod_getFile = get_object_or_404(Files, post=mod_getForm)
-
+def comment_write(request, board, id):
     if request.method == 'POST':
-        form = FormTest(request.POST, instance=mod_getForm)
-        imageform = ImageTest(request.FILES, instance=mod_getImage)
-        filesform = FilesTest(request.FILES, instance=mod_getFile)
-        if form.is_valid():
-            a = form.save()
-
-            if imageform.is_valid():
-                image_list = request.FILES.getlist('image')
-                for item in image_list: 
-                    image = Image.objects.create(post=a, image=item)
-                    image.save()
-
-            if filesform.is_valid():
-                files_list = request.FILES.getlist('files')
-                for item in files_list: 
-                    files = Files.objects.create(post=a, files=item)
-                    files.save()
-                    
+        main_post = Defaultform.objects.get(id=id)
+        # if comment_id:
+        #     post = Comment.objects.get(id=comment_id)
+        #답글을 클릭하면 option request.post로 option id번호 주기
+        commentform = CommentTest(request.POST)
+        if commentform.is_valid():
+            getProfile = Profile.objects.get(user__username=request.user) #안됬는데 보니깐 슈퍼유저는 Profile이 안만들어져서 찾지를 못하는 것이였음
+            a = commentform.save(commit=False)
+            a.author = getProfile
+            a.main_post = main_post
+            # if comment_id:
+            #     a.post = post
+            a.save()
             return redirect('/board/'+str(board)+'/'+str(id))
-    else:
-        form = FormTest(instance=mod_getForm)
-        imageform = ImageTest(instance=mod_getImage)
-        filesform = FilesTest(instance=mod_getFile)
 
-    return render(request, 'form_mod.html', {'id':id, 'form':form, 'mod_getForm':mod_getForm})
+def recomment_write(request, board, id, comment_id):
+    if request.method == 'POST':
+        main_post = Defaultform.objects.get(id=id)
+        post = Comment.objects.get(id=comment_id)
+        #답글을 클릭하면 option request.post로 option id번호 주기
+        commentform = CommentTest(request.POST)
+        if commentform.is_valid():
+            getProfile = Profile.objects.get(user__username=request.user) #안됬는데 보니깐 슈퍼유저는 Profile이 안만들어져서 찾지를 못하는 것이였음
+            a = commentform.save(commit=False)
+            a.author = getProfile
+            a.main_post = main_post
+            a.post = post
+            a.save()
+            return redirect('/board/'+str(board)+'/'+str(id))
+

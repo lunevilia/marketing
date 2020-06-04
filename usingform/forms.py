@@ -29,3 +29,12 @@ class FilesTest(forms.ModelForm):
         widgets = {
             'files': forms.ClearableFileInput(attrs={'multiple': True}),
         }
+
+class CommentTest(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ('body', )
+        labels = { 'body': '댓글',}
+        widgets = {
+            'body': forms.TextInput(attrs={'class': 'form-control', 'rows':3, 'id':False,}),
+        }
