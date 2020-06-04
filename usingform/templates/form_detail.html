@@ -44,6 +44,7 @@ function files_change(){
 <a href="{{i.files.url}}" download>{{i.files.name|slice:"11:"}}</a><br>
 {% endfor %}
 <br>
+{% if detail_getForm.author.user.username == request.user.username %}
 <!-- 수정하기 modal -->
 <form enctype="multipart/form-data" action="{% url 'forms:mod_form' detail_getForm.category detail_getForm.id %}" method="post">
     {% csrf_token %}
@@ -89,6 +90,7 @@ function files_change(){
 
 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo">수정하기</button>
 <a href="{% url 'forms:del_form' detail_getForm.category detail_getForm.id %}">삭제하기</a>
+{% endif %}
 <hr>
 
 {% endblock %}
