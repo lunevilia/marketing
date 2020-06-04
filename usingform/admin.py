@@ -1,3 +1,8 @@
 from django.contrib import admin
+from .models import Defaultform, Image, Files, Like, Favorite
 
-# Register your models here.
+admin.site.register(Defaultform)
+admin.site.register(Image)
+admin.site.register(Files)
+admin.site.register(Like)
+admin.site.register(Favorite)

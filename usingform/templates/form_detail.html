@@ -14,13 +14,31 @@ $('#exampleModal').on('show.bs.modal', function (event) {
 </script>
 
 <h2>번호 : {{detail_getForm.id}}</h2>
+<!-- 작성자 -->
+작성자 : {{detail_getForm.author.Name}}<br>
+
+<!-- 제목 -->
 <h3>제목 :</h3>
 {{detail_getForm.title}} <br>
+
+<!-- 내용 -->
 <h3>내용 :</h3>
 {{detail_getForm.body}} <br>
 
+<!-- 사진 -->
+<b>사진</b><br>
+{% for i in detail_getForm.image_set.all %}
+<a href="{{i.image.url}}" download>{{i.image.name|slice:"14:"}}</a><br>
+{% endfor %}
+
+<!-- 첨부파일 -->
+<b>첨부파일</b><br>
+{% for i in detail_getForm.files_set.all %}
+<a href="{{i.files.url}}" download>{{i.files.name|slice:"11:"}}</a><br>
+{% endfor %}
+<br>
 <!-- 수정하기 modal -->
-<form action="{% url 'forms:mod_form' detail_getForm.category detail_getForm.id %}" method="post">
+<form enctype="multipart/form-data" action="{% url 'forms:mod_form' detail_getForm.category detail_getForm.id %}" method="post">
     {% csrf_token %}
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -41,6 +59,17 @@ $('#exampleModal').on('show.bs.modal', function (event) {
               <label for="message-text" class="col-form-label">내용 :</label>
               <textarea name="body" class="form-control" id="message-text" required>{{detail_getForm.body}}</textarea>
             </div>
+            {% for i in detail_getForm.image_set.all %}
+            {{i.image.name|slice:"14:"}}<br>
+            {% endfor %}
+            이미지 : <input onchange="$('#image_modify').val('true');console.log($('#image_modify').val());" type="file" name="image" accept="image/*" multiple><br>
+            <!-- ajax를 이용해서 클릭해서 변경시키면 이름이랑 전부 없애고 views에스는 이 녀석들을 저장 이거를 누르지 않는다면 그냥 저장 -->
+            {% for i in detail_getForm.files_set.all %}
+            {{i.files.name|slice:"11:"}}<br>
+            {% endfor %}
+            첨부파일 : <input onchange="$('#files_modify').val('true');console.log($('#files_modify').val());" type="file" name="files" multiple>
+            <input id="image_modify" type="text" name="image_modify" value='' hidden>
+            <input id="files_modify" type="text" name="files_modify" value='' hidden>
           </form>
         </div>
         <div class="modal-footer">
