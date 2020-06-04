@@ -3,10 +3,23 @@ from .models import *
 from .forms import *
 from django.contrib.auth.models import User
 from django.contrib import auth
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 import json
 
-# Create your views here.
+def login(request):
+    if request.method == "POST":
+        if request.is_ajax():
+            username = request.POST.get("login_username")
+            password = request.POST.get("login_password")
+            user = auth.authenticate(request, username=username, password=password)
+            if user is not None:
+                auth.login(request, user)
+                _next = request.POST.get('next', '/')
+                return HttpResponse(json.dumps({'login_error':None, '_next':_next}), 'application/json')
+            else:
+                login_error = "아이디 혹은 비밀번호를 잘못 입력하셨습니다!"
+                return HttpResponse(json.dumps({'login_error':login_error}), 'application/json')
+
 def signup(request):
     if request.method == "POST":
         form = SignupForm(request.POST, request.FILES)
