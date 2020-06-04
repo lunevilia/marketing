@@ -60,7 +60,7 @@ def mod_form(request, board, id): #글 수정하기
         if form.is_valid():
             a = form.save()
 
-            if request.POST.get("image_modify"): #그전에 있던 녀석들을 삭제! 추가해야됨
+            if request.POST.get("image_modify"):
                 pre_image_delete = Image.objects.filter(post=mod_getForm)
                 pre_image_delete.delete()
                 image_list = request.FILES.getlist('image')
@@ -79,12 +79,6 @@ def mod_form(request, board, id): #글 수정하기
                     files.save()
 
             return redirect('/board/'+str(board)+'/'+str(id))
-    else:
-        form = FormTest(instance=mod_getForm)
-        # imageform = ImageTest(instance=mod_getImage)
-        # filesform = FilesTest(instance=mod_getFile)
-
-    return render(request, 'form_mod.html', {'id':id, 'form':form, 'mod_getForm':mod_getForm})
 
 def del_form(request, board, id): #글 삭제하기
     post_instance = Defaultform.objects.get(id=id)

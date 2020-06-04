@@ -11,6 +11,13 @@ $('#exampleModal').on('show.bs.modal', function (event) {
   modal.find('.modal-title').text('New message to ' + recipient)
   modal.find('.modal-body input').val(recipient)
 })
+function image_change(){
+  $('#image_modify').val('true');
+}
+
+function files_change(){
+  $('#files_modify').val('true');
+}
 </script>
 
 <h2>번호 : {{detail_getForm.id}}</h2>
@@ -62,12 +69,11 @@ $('#exampleModal').on('show.bs.modal', function (event) {
             {% for i in detail_getForm.image_set.all %}
             {{i.image.name|slice:"14:"}}<br>
             {% endfor %}
-            이미지 : <input onchange="$('#image_modify').val('true');console.log($('#image_modify').val());" type="file" name="image" accept="image/*" multiple><br>
-            <!-- ajax를 이용해서 클릭해서 변경시키면 이름이랑 전부 없애고 views에스는 이 녀석들을 저장 이거를 누르지 않는다면 그냥 저장 -->
+            이미지 : <input onchange="image_change()" type="file" name="image" accept="image/*" multiple><br>
             {% for i in detail_getForm.files_set.all %}
             {{i.files.name|slice:"11:"}}<br>
             {% endfor %}
-            첨부파일 : <input onchange="$('#files_modify').val('true');console.log($('#files_modify').val());" type="file" name="files" multiple>
+            첨부파일 : <input onchange="files_change()" type="file" name="files" multiple>
             <input id="image_modify" type="text" name="image_modify" value='' hidden>
             <input id="files_modify" type="text" name="files_modify" value='' hidden>
           </form>
