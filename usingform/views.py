@@ -120,6 +120,7 @@ def recomment_write(request, board, id, comment_id):
             a.save()
             return redirect('/board/'+str(board)+'/'+str(id))
 
+#댓글 좋아요
 def ajax_comment_like(request, comment_id):
     if request.is_ajax():
         comment = Comment.objects.get(id=comment_id)
@@ -137,4 +138,42 @@ def ajax_comment_like(request, comment_id):
 
         count_like = CommentLike.objects.filter(post=comment).count()
         return HttpResponse(json.dumps({'count_like':str(count_like), 'like_state':like_state,}), 'application/json')
+
+#게시글 좋아요
+def ajax_board_like(request, id):
+    if request.is_ajax():
+        board = Defaultform.objects.get(id=id)
+        getProfile = Profile.objects.get(user__username=request.user) #안됬는데 보니깐 슈퍼유저는 Profile이 안만들어져서 찾지를 못하는 것이였음
+
+        #있을 경우 삭제
+        try:
+            a = Like.objects.get(post=board, author=getProfile)
+            a.delete()
+            like_state = True #없어졌으니깐 좋아요를 누를 수 있음
+        #없을 경우 생성
+        except:
+            Like.objects.create(post=board, author=getProfile)
+            like_state = False #생기니깐 좋아요 취소 누를 수 있음
+
+        board_like = Like.objects.filter(post=board).count()
+        return HttpResponse(json.dumps({'board_like':str(board_like), 'like_state':like_state,}), 'application/json')
+
+#게시글 즐겨찾기
+def ajax_board_favorite(request, id):
+    if request.is_ajax():
+        board = Defaultform.objects.get(id=id)
+        getProfile = Profile.objects.get(user__username=request.user) #안됬는데 보니깐 슈퍼유저는 Profile이 안만들어져서 찾지를 못하는 것이였음
+
+        #있을 경우 삭제
+        try:
+            a = Favorite.objects.get(post=board, author=getProfile)
+            a.delete()
+            like_state = True #없어졌으니깐 좋아요를 누를 수 있음
+        #없을 경우 생성
+        except:
+            Favorite.objects.create(post=board, author=getProfile)
+            like_state = False #생기니깐 좋아요 취소 누를 수 있음
+
+        board_favorite = Favorite.objects.filter(post=board).count()
+        return HttpResponse(json.dumps({'board_favorite':str(board_favorite), 'like_state':like_state,}), 'application/json')
 

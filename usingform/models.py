@@ -26,6 +26,9 @@ class Defaultform(TimeStampedModel):
     def __str__(self):
         return self.title
 
+    def mylike(self):
+        return Like.objects.filter(post=self).count()
+
 class Image(TimeStampedModel):
     post = models.ForeignKey(Defaultform, on_delete=models.CASCADE,)
     image = models.ImageField(upload_to='board_picture/', null=True, blank=True)
