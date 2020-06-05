@@ -93,6 +93,7 @@ function ajax_board_favorite(x, y){
   });
 }
 
+// 알람 차단 설정
 function ajax_donot_alert(x, y){
   $.ajax({
     // type을 설정합니다.
@@ -112,6 +113,24 @@ function ajax_donot_alert(x, y){
         }
     },
   });
+}
+
+function delete_board() {
+  var r = confirm("정말로 게시글을 삭제하시겠습니까?");
+  if (r == true) {
+    location.href = "{% url 'forms:del_form' detail_getForm.category detail_getForm.id %}";
+  } else {
+    return;
+  }
+}
+
+function delete_comment(x) {
+  var r = confirm("정말로 게시글을 삭제하시겠습니까?");
+  if (r == true) {
+    location.href = "{% url 'forms:comment_del' detail_getForm.category detail_getForm.id '00000' %}".replace(/00000/, x);
+  } else {
+    return;
+  }
 }
 
 </script>
@@ -204,7 +223,7 @@ Favorite : <span onclick="ajax_board_favorite('{{detail_getForm.id}}', this)">{{
 </form>
 
 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo">수정하기</button>
-<a href="{% url 'forms:del_form' detail_getForm.category detail_getForm.id %}">삭제하기</a>
+<a style="color:#f83f3f;cursor:pointer;" onclick="delete_board();">삭제하기</a>
 {% endif %}
 <hr>
 
@@ -226,6 +245,9 @@ Favorite : <span onclick="ajax_board_favorite('{{detail_getForm.id}}', this)">{{
 👍 : <span id="countlike{{comment.id}}">{{comment.mylike}}</span>
 {% if user.is_authenticated %}
 <span onclick="ajax_comment_like('{{comment.id}}', this)">{{comment|_checking:request.user.username|safe}}</span>
+{% endif %}
+{% if request.user.username == comment.author.user.username %}
+<a style="color:#f83f3f;cursor:pointer;" onclick="delete_comment('{{comment.id}}');">댓글 삭제</a>
 {% endif %}
 </div>
 </p>
@@ -252,6 +274,9 @@ Favorite : <span onclick="ajax_board_favorite('{{detail_getForm.id}}', this)">{{
 &nbsp;&nbsp;&nbsp;&nbsp;👍 : <span id="countlike{{re_comment.id}}">{{re_comment.mylike}}</span>
 {% if user.is_authenticated %}
 <span onclick="ajax_comment_like('{{re_comment.id}}', this)">{{re_comment|_checking:request.user.username|safe}}</span>
+{% endif %}
+{% if request.user.username == re_comment.author.user.username %}
+<a style="color:#f83f3f;cursor:pointer;" onclick="delete_comment('{{re_comment.id}}');">댓글 삭제</a>
 {% endif %}
 <br>
 </p>

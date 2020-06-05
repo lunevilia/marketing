@@ -7,9 +7,11 @@ urlpatterns = [
     path('', views.selectform, name='selectform'),
     path('<board>/', views.selectform, name='selectform'),
 
-    #댓글
+    #댓글 생성
     path('comment/<board>/<int:id>/', views.comment_write, name='comment_write'),
     path('recomment/<board>/<int:id>/<int:comment_id>/', views.recomment_write, name='recomment_write'),
+    #댓글 삭제
+    path('comment_del/<board>/<int:id>/<int:comment_id>/', views.comment_del, name='comment_del'),
 
     #좋아요
     path('ajax_comment_like/<int:comment_id>/', views.ajax_comment_like, name='ajax_comment_like'),

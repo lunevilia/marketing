@@ -85,9 +85,11 @@ def mod_form(request, board, id): #글 수정하기
 
 def del_form(request, board, id): #글 삭제하기
     post_instance = Defaultform.objects.get(id=id)
-    post_instance.delete()
+    if post_instance.author.user.username == request.user.username:
+        post_instance.delete()
     return redirect('/board/'+str(board))
 
+#댓글 생성
 def comment_write(request, board, id):
     if request.method == 'POST':
         main_post = Defaultform.objects.get(id=id)
@@ -114,6 +116,14 @@ def comment_write(request, board, id):
             
             return redirect('/board/'+str(board)+'/'+str(id))
 
+#댓글 삭제
+def comment_del(request, board, id, comment_id):
+    comment = Comment.objects.get(id=comment_id)
+    if comment.author.user.username == request.user.username:
+        comment.delete()
+    return redirect('/board/'+str(board)+"/"+str(id))
+
+#대댓글 생성
 def recomment_write(request, board, id, comment_id):
     if request.method == 'POST':
         main_post = Defaultform.objects.get(id=id)
