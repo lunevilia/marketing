@@ -137,9 +137,9 @@ function ajax_comment_like(x, y){
 <p>
 <div>댓글 : {{comment.body}}</div>
 <div>작성자 : {{comment.author.Name}} 좋아요 : <span id="countlike{{comment.id}}">{{comment.mylike}}</span></div>
-<input type="button" value="{{comment|_checking:request.user.username}}" class="btn btn-primary" onclick="ajax_comment_like('{{comment.id}}', this)">
 </p>
 {% if user.is_authenticated %}
+<p><input type="button" value="{{comment|_checking:request.user.username}}" class="btn btn-primary" onclick="ajax_comment_like('{{comment.id}}', this)"></p>
 <p><input id="checkBox{{comment.id}}" type="checkbox" name="re_comment" value="답글" onclick="re_comment(this, 're_comment{{comment.id}}')"> 답글달기</p>
 <div style="display: none;" id=re_comment{{comment.id}}>
 <form action="{% url 'forms:recomment_write' detail_getForm.category detail_getForm.id comment.id %}" method="post">
@@ -155,8 +155,11 @@ function ajax_comment_like(x, y){
 <p>
 &nbsp;&nbsp;&nbsp;&nbsp;<b>답글 내용</b> : {{re_comment.body}}<br>
 &nbsp;&nbsp;&nbsp;&nbsp;<b>작성자</b> : {{re_comment.author.Name}} 좋아요 : <span id="countlike{{re_comment.id}}">{{re_comment.mylike}}</span><br>
-<input type="button" value="{{re_comment|_checking:request.user.username}}" class="btn btn-primary" onclick="ajax_comment_like('{{re_comment.id}}', this)">
 </p>
+{% if user.is_authenticated %}
+<p><input type="button" value="{{re_comment|_checking:request.user.username}}" class="btn btn-primary" onclick="ajax_comment_like('{{re_comment.id}}', this)"></p>
+{% endif %}
+
 {% endfor %}
 <hr>
 
