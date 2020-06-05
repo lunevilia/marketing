@@ -107,14 +107,13 @@ def comment_write(request, board, id):
             #알람 차단한 사람은 알려주지 않고, 알람 차단하지 않은 사람은 알려주기
             #내가 내 글에 댓글을 작성했을 경우!
             if not (main_post.author.user.username == request.user.username) and not (Donotalert.objects.filter(profile=main_post.author, board=main_post).exists()):
-                print(main_post.author.user.username, request.user.username, "1111")
                 comment_a = Commentalert.objects.get(profile=main_post.author)
                 comment_a.recent = comment_a.recent+1
                 comment_a.save()
 
                 body = commentform.cleaned_data['body']
                 #내용과 id를 저장하기
-                Commentalertcontent.objects.create(board=main_post, profile=main_post.author, content=body)
+                Commentalertcontent.objects.create(board=main_post, profile_name=main_post.author.Name, content=body)
             
             return redirect('/board/'+str(board)+'/'+str(id))
 
@@ -148,7 +147,7 @@ def recomment_write(request, board, id, comment_id):
 
                 body = commentform.cleaned_data['body']
                 #내용과 id를 저장하기
-                Commentalertcontent.objects.create(board=main_post, profile=post.author, content=str("(답글) ")+body)
+                Commentalertcontent.objects.create(board=main_post, profile_name=post.author.Name, content=str("(답글) ")+body)
 
             return redirect('/board/'+str(board)+'/'+str(id))
 

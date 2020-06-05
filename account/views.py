@@ -74,11 +74,11 @@ def notice_ajax(request):
         getProfile.save()
 
         if(how_many_filter):
-            show_alert = Commentalertcontent.objects.filter(profile=getProfile)[:how_many_filter]
+            show_alert = Commentalertcontent.objects.filter(profile_name=getProfile.Name)[:how_many_filter]
             qs_json = serializers.serialize('json', show_alert)
             qs_json = json.loads(qs_json)
         else:
-            show_alert = Commentalertcontent.objects.filter(profile=getProfile)[:5]
+            show_alert = Commentalertcontent.objects.filter(profile_name=getProfile.Name)[:5]
             qs_json = serializers.serialize('json', show_alert)
             qs_json = json.loads(qs_json)
 

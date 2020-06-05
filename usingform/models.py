@@ -78,7 +78,7 @@ class CommentLike(TimeStampedModel):
 
 #알람 내용
 class Commentalertcontent(models.Model):
-    profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    profile_name = models.CharField(max_length=300)
     board = models.ForeignKey(Defaultform, on_delete=models.CASCADE)
     content = models.CharField(max_length=300)
 
@@ -86,7 +86,7 @@ class Commentalertcontent(models.Model):
         ordering = ['-id', ]
 
     def __str__(self):
-        return '%s - %s - %s' % (self.profile, self.board, self.content)
+        return '%s - %s - %s' % (self.profile_name, self.board, self.content)
 
 #알람 차단하기
 class Donotalert(models.Model):
