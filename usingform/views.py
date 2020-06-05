@@ -4,6 +4,8 @@ from .models import *
 from account.models import Profile
 from category.models import Category
 from django.contrib.auth.models import User
+from django.http import HttpResponse
+import json
 # Create your views here.
 
 def selectform(request, board="자유게시판"): #작성하기 및 전체 글 보여주기
@@ -45,7 +47,9 @@ def selectform(request, board="자유게시판"): #작성하기 및 전체 글 �
     return render(request, 'formtest.html', {'form':form, 'imageform':imageform, 'filesform':filesform, 'getForm':getForm, 'board_name':board,})
 
 def shw_form(request, board, id): #글의 자세한 내용 보여주기
+    #글 내용 보여주기
     detail_getForm = get_object_or_404(Defaultform, id=id)
+    #댓글 보여주기
     detail_getComment = Comment.objects.filter(main_post=detail_getForm, post__isnull=True)
     commentform = CommentTest()
     return render(request, 'form_detail.html', {'detail_getForm':detail_getForm, 'commentform':commentform, 'detail_getComment':detail_getComment,})
@@ -115,4 +119,22 @@ def recomment_write(request, board, id, comment_id):
             a.post = post
             a.save()
             return redirect('/board/'+str(board)+'/'+str(id))
+
+def ajax_comment_like(request, comment_id):
+    if request.is_ajax():
+        comment = Comment.objects.get(id=comment_id)
+        getProfile = Profile.objects.get(user__username=request.user) #안됬는데 보니깐 슈퍼유저는 Profile이 안만들어져서 찾지를 못하는 것이였음
+
+        #있을 경우 삭제
+        try:
+            a = CommentLike.objects.get(post=comment, author=getProfile)
+            a.delete()
+            like_state = True #없어졌으니깐 좋아요를 누를 수 있음
+        #없을 경우 생성
+        except:
+            CommentLike.objects.create(post=comment, author=getProfile)
+            like_state = False #생기니깐 좋아요 취소 누를 수 있음
+
+        count_like = CommentLike.objects.filter(post=comment).count()
+        return HttpResponse(json.dumps({'count_like':str(count_like), 'like_state':like_state,}), 'application/json')
 

@@ -2,6 +2,9 @@ from django.db import models
 from category.models import Category
 from account.models import Profile
 from django.contrib.auth.models import User
+from django import template
+
+register = template.Library()
 
 # Create your models here.
 class TimeStampedModel(models.Model):
@@ -59,6 +62,9 @@ class Comment(TimeStampedModel):
 
     def __str__(self):
         return '%s - %s - %s' % (self.main_post, self.post, self.body)
+
+    def mylike(self):
+        return CommentLike.objects.filter(post=self).count()
 
 class CommentLike(TimeStampedModel):
     post = models.ForeignKey(Comment, on_delete=models.CASCADE,)

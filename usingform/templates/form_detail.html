@@ -1,4 +1,5 @@
 {% extends 'formlayout/formlayer.html' %}
+{% load post_extras %}
 {% block name %}
 
 <script>
@@ -26,6 +27,27 @@ function re_comment(x, y){
   } else {
     text.style.display="none";
   }
+}
+
+function ajax_comment_like(x, y){
+  $.ajax({
+    // type을 설정합니다.
+    type : 'GET',
+    url : "{% url 'forms:ajax_comment_like' '00000' %}".replace(/00000/, x),
+    success : function (data) {
+        // 로그인 사용자 정보가 잘못 되었을 경우
+        if(data["count_like"]){
+          $('#countlike'+x).text(data["count_like"])
+          if(data["like_state"]){
+            // 좋아요를 누를 수 있음
+            y.value = "좋아요"
+          } else {
+            // 좋아요 취소를 누를 수 있음
+            y.value = "좋아요 취소"
+          }
+        }
+    },
+  });
 }
 </script>
 
@@ -114,7 +136,8 @@ function re_comment(x, y){
 <p>
 <p>
 <div>댓글 : {{comment.body}}</div>
-<div>작성자 : {{comment.author.Name}}</div>
+<div>작성자 : {{comment.author.Name}} 좋아요 : <span id="countlike{{comment.id}}">{{comment.mylike}}</span></div>
+<input type="button" value="{{comment|_checking:request.user.username}}" class="btn btn-primary" onclick="ajax_comment_like('{{comment.id}}', this)">
 </p>
 {% if user.is_authenticated %}
 <p><input id="checkBox{{comment.id}}" type="checkbox" name="re_comment" value="답글" onclick="re_comment(this, 're_comment{{comment.id}}')"> 답글달기</p>
@@ -131,7 +154,8 @@ function re_comment(x, y){
 <!-- 대체로 _set은 앞에는 class 이름이다!! -->
 <p>
 &nbsp;&nbsp;&nbsp;&nbsp;<b>답글 내용</b> : {{re_comment.body}}<br>
-&nbsp;&nbsp;&nbsp;&nbsp;<b>작성자</b> : {{re_comment.author.Name}}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<b>작성자</b> : {{re_comment.author.Name}} 좋아요 : <span id="countlike{{re_comment.id}}">{{re_comment.mylike}}</span><br>
+<input type="button" value="{{re_comment|_checking:request.user.username}}" class="btn btn-primary" onclick="ajax_comment_like('{{re_comment.id}}', this)">
 </p>
 {% endfor %}
 <hr>
