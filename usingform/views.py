@@ -102,14 +102,15 @@ def comment_write(request, board, id):
             a.main_post = main_post
             a.save()
 
-            #알람 설정 / 듣지 않을 녀석의 추가한다 -> 가져오면 in을 통해 id랑 겹치면 안하게 한다!!
-            comment_a = Commentalert.objects.get(profile=getProfile)
-            comment_a.recent = comment_a.recent+1
-            comment_a.save()
+            #알람 차단한 사람은 알려주지 않고, 알람 차단하지 않은 사람은 알려주기
+            if not (Donotalert.objects.filter(profile=main_post.author, board=main_post).exists()):
+                comment_a = Commentalert.objects.get(profile=main_post.author)
+                comment_a.recent = comment_a.recent+1
+                comment_a.save()
 
-            body = commentform.cleaned_data['body']
-            #내용과 id를 저장하기
-            Commentalertcontent.objects.create(board=main_post, profile=main_post.author, content=body)
+                body = commentform.cleaned_data['body']
+                #내용과 id를 저장하기
+                Commentalertcontent.objects.create(board=main_post, profile=main_post.author, content=body)
             
             return redirect('/board/'+str(board)+'/'+str(id))
 
@@ -127,14 +128,15 @@ def recomment_write(request, board, id, comment_id):
             a.post = post
             a.save()
 
-            #알람 설정 / 듣지 않을 녀석의 추가한다 -> 가져오면 in을 통해 id랑 겹치면 안하게 한다!!
-            comment_a = Commentalert.objects.get(profile=getProfile)
-            comment_a.recent = comment_a.recent+1
-            comment_a.save()
+            #알람 차단한 사람은 알려주지 않고, 알람 차단하지 않은 사람은 알려주기
+            if not (Donotalert.objects.filter(profile=post.author, board=main_post).exists()):
+                comment_a = Commentalert.objects.get(profile=post.author)
+                comment_a.recent = comment_a.recent+1
+                comment_a.save()
 
-            body = commentform.cleaned_data['body']
-            #내용과 id를 저장하기
-            Commentalertcontent.objects.create(board=main_post, profile=main_post.author, content=str("(답글) ")+body)
+                body = commentform.cleaned_data['body']
+                #내용과 id를 저장하기
+                Commentalertcontent.objects.create(board=main_post, profile=post.author, content=str("(답글) ")+body)
 
             return redirect('/board/'+str(board)+'/'+str(id))
 
@@ -195,3 +197,21 @@ def ajax_board_favorite(request, id):
         board_favorite = Favorite.objects.filter(post=board).count()
         return HttpResponse(json.dumps({'board_favorite':str(board_favorite), 'like_state':like_state,}), 'application/json')
 
+#알람 차단하기
+def ajax_donot_alert(request, id):
+    if request.is_ajax():
+        board = Defaultform.objects.get(id=id)
+        getProfile = Profile.objects.get(user__username=request.user) #안됬는데 보니깐 슈퍼유저는 Profile이 안만들어져서 찾지를 못하는 것이였음
+
+        #있을 경우 삭제
+        try:
+            a = Donotalert.objects.get(board=board, profile=getProfile)
+            a.delete()
+            like_state = True #없어졌으니깐 좋아요를 누를 수 있음
+        #없을 경우 생성
+        except:
+            Donotalert.objects.create(board=board, profile=getProfile)
+            like_state = False #생기니깐 좋아요 취소 누를 수 있음
+
+        board_donotalert = Donotalert.objects.filter(board=board).count()
+        return HttpResponse(json.dumps({'board_donotalert':str(board_donotalert), 'like_state':like_state,}), 'application/json')

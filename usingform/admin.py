@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Defaultform, Image, Files, Like, Favorite, Comment, CommentLike, Commentalertcontent
+from .models import Defaultform, Image, Files, Like, Favorite, Comment, CommentLike, Commentalertcontent, Donotalert
 
 admin.site.register(Defaultform)
 admin.site.register(Image)
@@ -9,3 +9,4 @@ admin.site.register(Favorite)
 admin.site.register(Comment)
 admin.site.register(CommentLike)
 admin.site.register(Commentalertcontent)
+admin.site.register(Donotalert)

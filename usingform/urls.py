@@ -18,6 +18,9 @@ urlpatterns = [
     #즐겨찾기
     path('ajax_board_favorite/<int:id>/', views.ajax_board_favorite, name='ajax_board_favorite'),
 
+    #알람차단 및 설정
+    path('ajax_donot_alert/<int:id>/', views.ajax_donot_alert, name='ajax_donot_alert'),
+
     #조회, 수정, 삭제
     path('modify/<board>/<int:id>/', views.mod_form, name='mod_form'),
     path('<board>/<int:id>/', views.shw_form, name='shw_form'),
