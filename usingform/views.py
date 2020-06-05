@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from .forms import *
 from .models import *
-from account.models import Profile
+from account.models import Profile, Commentalert
 from category.models import Category
 from django.contrib.auth.models import User
 from django.http import HttpResponse
@@ -100,9 +100,17 @@ def comment_write(request, board, id):
             a = commentform.save(commit=False)
             a.author = getProfile
             a.main_post = main_post
-            # if comment_id:
-            #     a.post = post
             a.save()
+
+            #알람 설정 / 듣지 않을 녀석의 추가한다 -> 가져오면 in을 통해 id랑 겹치면 안하게 한다!!
+            comment_a = Commentalert.objects.get(profile=getProfile)
+            comment_a.recent = comment_a.recent+1
+            comment_a.save()
+
+            body = commentform.cleaned_data['body']
+            #내용과 id를 저장하기
+            Commentalertcontent.objects.create(board=main_post, profile=main_post.author, content=body)
+            
             return redirect('/board/'+str(board)+'/'+str(id))
 
 def recomment_write(request, board, id, comment_id):
@@ -118,6 +126,16 @@ def recomment_write(request, board, id, comment_id):
             a.main_post = main_post
             a.post = post
             a.save()
+
+            #알람 설정 / 듣지 않을 녀석의 추가한다 -> 가져오면 in을 통해 id랑 겹치면 안하게 한다!!
+            comment_a = Commentalert.objects.get(profile=getProfile)
+            comment_a.recent = comment_a.recent+1
+            comment_a.save()
+
+            body = commentform.cleaned_data['body']
+            #내용과 id를 저장하기
+            Commentalertcontent.objects.create(board=main_post, profile=main_post.author, content=str("(답글) ")+body)
+
             return redirect('/board/'+str(board)+'/'+str(id))
 
 #댓글 좋아요

@@ -5,6 +5,8 @@ from django.contrib.auth.models import User
 from django.contrib import auth
 from django.http import HttpResponse, HttpResponseRedirect
 import json
+from usingform.models import Commentalertcontent
+from django.core import serializers
 
 def login(request):
     if request.method == "POST":
@@ -58,3 +60,26 @@ def ajax(request, value, region):
             check = False
 
         return HttpResponse(json.dumps({'check':check}), 'application/json')
+
+#알람이 되는 ajax!
+def notice_ajax(request):
+    if request.is_ajax():
+        getProfile = Profile.objects.get(user__username=request.user)
+        comment_a = Commentalert.objects.get(profile=getProfile)
+
+        #가져올 개수
+        how_many_filter = comment_a.recent - getProfile.alert
+
+        getProfile.alert = comment_a.recent
+        getProfile.save()
+
+        if(how_many_filter):
+            show_alert = Commentalertcontent.objects.filter(profile=getProfile)[:how_many_filter]
+            qs_json = serializers.serialize('json', show_alert)
+            qs_json = json.loads(qs_json)
+        else:
+            show_alert = Commentalertcontent.objects.filter(profile=getProfile)[:5]
+            qs_json = serializers.serialize('json', show_alert)
+            qs_json = json.loads(qs_json)
+
+        return HttpResponse(json.dumps({'show_alert':qs_json}), 'application/json')

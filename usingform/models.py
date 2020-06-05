@@ -75,3 +75,14 @@ class CommentLike(TimeStampedModel):
 
     def __str__(self):
         return '%s - %s' % (self.post, self.author)
+
+class Commentalertcontent(models.Model):
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    board = models.ForeignKey(Defaultform, on_delete=models.CASCADE)
+    content = models.CharField(max_length=300)
+
+    class Meta:
+        ordering = ['-id', ]
+
+    def __str__(self):
+        return '%s - %s - %s' % (self.profile, self.board, self.content)

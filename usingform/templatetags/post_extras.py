@@ -1,6 +1,7 @@
 # templates 태그 새로 만들어서 적용하기
 from django import template
-from usingform.models import Profile, CommentLike, Like, Favorite
+from usingform.models import CommentLike, Like, Favorite
+from account.models import Profile
 register = template.Library()
 
 # Board 좋아요 용 확인

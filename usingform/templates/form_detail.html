@@ -107,20 +107,24 @@ function ajax_board_favorite(x, y){
 <p>{{detail_getForm.body}}</p>
 
 <!-- 사진 -->
+{% if detail_getForm.image_set.all %}
 <p>
 <b>이미지 🎨</b><br>
 {% for i in detail_getForm.image_set.all %}
 <a href="{{i.image.url}}" download>{{i.image.name|slice:"14:"}}</a><br>
 {% endfor %}
 </p>
+{% endif %}
 
 <!-- 첨부파일 -->
+{% if detail_getForm.files_set.all %}
 <p>
 <b>첨부파일 💾</b><br>
 {% for i in detail_getForm.files_set.all %}
 <a href="{{i.files.url}}" download>{{i.files.name|slice:"11:"}}</a><br>
 {% endfor %}
 </p>
+{% endif %}
 
 <!-- 좋아요 즐겨 찾기 -->
 <p>
