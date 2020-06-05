@@ -105,7 +105,9 @@ def comment_write(request, board, id):
             a.save()
 
             #알람 차단한 사람은 알려주지 않고, 알람 차단하지 않은 사람은 알려주기
-            if not (Donotalert.objects.filter(profile=main_post.author, board=main_post).exists()):
+            #내가 내 글에 댓글을 작성했을 경우!
+            if not (main_post.author.user.username == request.user.username) and not (Donotalert.objects.filter(profile=main_post.author, board=main_post).exists()):
+                print(main_post.author.user.username, request.user.username, "1111")
                 comment_a = Commentalert.objects.get(profile=main_post.author)
                 comment_a.recent = comment_a.recent+1
                 comment_a.save()
@@ -139,7 +141,7 @@ def recomment_write(request, board, id, comment_id):
             a.save()
 
             #알람 차단한 사람은 알려주지 않고, 알람 차단하지 않은 사람은 알려주기
-            if not (Donotalert.objects.filter(profile=post.author, board=main_post).exists()):
+            if not (post.author.user.username == request.user.username) and not (Donotalert.objects.filter(profile=post.author, board=main_post).exists()):
                 comment_a = Commentalert.objects.get(profile=post.author)
                 comment_a.recent = comment_a.recent+1
                 comment_a.save()

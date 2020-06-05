@@ -8,7 +8,6 @@ register = template.Library()
 @register.filter
 def alert_checking(obj , user):
     try:
-        print(obj, user)
         getProfile = Profile.objects.get(Name=user) #안됬는데 보니깐 슈퍼유저는 Profile이 안만들어져서 찾지를 못하는 것이였음
         comment_a = Commentalert.objects.get(profile=getProfile)
         if getProfile.alert == comment_a.recent:
