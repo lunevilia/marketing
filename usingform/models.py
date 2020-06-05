@@ -79,6 +79,7 @@ class CommentLike(TimeStampedModel):
 #알람 내용
 class Commentalertcontent(models.Model):
     profile_name = models.CharField(max_length=300)
+    sender_name = models.CharField(max_length=300)
     board = models.ForeignKey(Defaultform, on_delete=models.CASCADE)
     content = models.CharField(max_length=300)
 

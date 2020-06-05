@@ -113,7 +113,7 @@ def comment_write(request, board, id):
 
                 body = commentform.cleaned_data['body']
                 #내용과 id를 저장하기
-                Commentalertcontent.objects.create(board=main_post, profile_name=main_post.author.Name, content=body)
+                Commentalertcontent.objects.create(board=main_post, sender_name=getProfile.Name, profile_name=main_post.author.Name, content=body)
             
             return redirect('/board/'+str(board)+'/'+str(id))
 
@@ -147,7 +147,7 @@ def recomment_write(request, board, id, comment_id):
 
                 body = commentform.cleaned_data['body']
                 #내용과 id를 저장하기
-                Commentalertcontent.objects.create(board=main_post, profile_name=post.author.Name, content=str("(답글) ")+body)
+                Commentalertcontent.objects.create(board=main_post, sender_name=getProfile.Name, profile_name=post.author.Name, content=str("(답글) ")+body)
 
             return redirect('/board/'+str(board)+'/'+str(id))
 
