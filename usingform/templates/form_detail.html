@@ -40,10 +40,10 @@ function ajax_comment_like(x, y){
           $('#countlike'+x).text(data["count_like"])
           if(data["like_state"]){
             // 좋아요를 누를 수 있음
-            y.value = "좋아요"
+            y.innerHTML = '<svg class="svg-icon" viewBox="0 0 20 20"><path d="M9.719,17.073l-6.562-6.51c-0.27-0.268-0.504-0.567-0.696-0.888C1.385,7.89,1.67,5.613,3.155,4.14c0.864-0.856,2.012-1.329,3.233-1.329c1.924,0,3.115,1.12,3.612,1.752c0.499-0.634,1.689-1.752,3.612-1.752c1.221,0,2.369,0.472,3.233,1.329c1.484,1.473,1.771,3.75,0.693,5.537c-0.19,0.32-0.425,0.618-0.695,0.887l-6.562,6.51C10.125,17.229,9.875,17.229,9.719,17.073 M6.388,3.61C5.379,3.61,4.431,4,3.717,4.707C2.495,5.92,2.259,7.794,3.145,9.265c0.158,0.265,0.351,0.51,0.574,0.731L10,16.228l6.281-6.232c0.224-0.221,0.416-0.466,0.573-0.729c0.887-1.472,0.651-3.346-0.571-4.56C15.57,4,14.621,3.61,13.612,3.61c-1.43,0-2.639,0.786-3.268,1.863c-0.154,0.264-0.536,0.264-0.69,0C9.029,4.397,7.82,3.61,6.388,3.61"></path></svg>'
           } else {
             // 좋아요 취소를 누를 수 있음
-            y.value = "좋아요 취소"
+            y.innerHTML = '<svg class="svg-icon" viewBox="0 0 20 20"><path fill="red" d="M9.719,17.073l-6.562-6.51c-0.27-0.268-0.504-0.567-0.696-0.888C1.385,7.89,1.67,5.613,3.155,4.14c0.864-0.856,2.012-1.329,3.233-1.329c1.924,0,3.115,1.12,3.612,1.752c0.499-0.634,1.689-1.752,3.612-1.752c1.221,0,2.369,0.472,3.233,1.329c1.484,1.473,1.771,3.75,0.693,5.537c-0.19,0.32-0.425,0.618-0.695,0.887l-6.562,6.51C10.125,17.229,9.875,17.229,9.719,17.073 M6.388,3.61C5.379,3.61,4.431,4,3.717,4.707C2.495,5.92,2.259,7.794,3.145,9.265c0.158,0.265,0.351,0.51,0.574,0.731L10,16.228l6.281-6.232c0.224-0.221,0.416-0.466,0.573-0.729c0.887-1.472,0.651-3.346-0.571-4.56C15.57,4,14.621,3.61,13.612,3.61c-1.43,0-2.639,0.786-3.268,1.863c-0.154,0.264-0.536,0.264-0.69,0C9.029,4.397,7.82,3.61,6.388,3.61"></path></svg>'
           }
         }
     },
@@ -51,30 +51,34 @@ function ajax_comment_like(x, y){
 }
 </script>
 
-<h2>번호 : {{detail_getForm.id}}</h2>
-<!-- 작성자 -->
-작성자 : {{detail_getForm.author.Name}}<br>
-
 <!-- 제목 -->
-<h3>제목 :</h3>
-{{detail_getForm.title}} <br>
+<h3>{{detail_getForm.title}}</h3>
+
+<!-- 작성일자 -->
+작성일자 : {{detail_getForm.created_at}}<br>
+
+<!-- 작성자 -->
+작성자 : {{detail_getForm.author.Name}}<br><br>
 
 <!-- 내용 -->
-<h3>내용 :</h3>
-{{detail_getForm.body}} <br>
+<p>{{detail_getForm.body}}</p>
 
 <!-- 사진 -->
-<b>사진</b><br>
+<p>
+<b>이미지 🎨</b><br>
 {% for i in detail_getForm.image_set.all %}
 <a href="{{i.image.url}}" download>{{i.image.name|slice:"14:"}}</a><br>
 {% endfor %}
+</p>
 
 <!-- 첨부파일 -->
-<b>첨부파일</b><br>
+<p>
+<b>첨부파일 💾</b><br>
 {% for i in detail_getForm.files_set.all %}
 <a href="{{i.files.url}}" download>{{i.files.name|slice:"11:"}}</a><br>
 {% endfor %}
-<br>
+</p>
+
 {% if detail_getForm.author.user.username == request.user.username %}
 <!-- 수정하기 modal -->
 <form enctype="multipart/form-data" action="{% url 'forms:mod_form' detail_getForm.category detail_getForm.id %}" method="post">
@@ -135,11 +139,15 @@ function ajax_comment_like(x, y){
 {% for comment in detail_getComment %}
 <p>
 <p>
-<div>댓글 : {{comment.body}}</div>
-<div>작성자 : {{comment.author.Name}} 좋아요 : <span id="countlike{{comment.id}}">{{comment.mylike}}</span></div>
+<div><b>댓글</b> : {{comment.body}}</div>
+<div><b>작성자</b> : {{comment.author.Name}} <br>
+👍 : <span id="countlike{{comment.id}}">{{comment.mylike}}</span>
+{% if user.is_authenticated %}
+<span onclick="ajax_comment_like('{{comment.id}}', this)">{{comment|_checking:request.user.username|safe}}</span>
+{% endif %}
+</div>
 </p>
 {% if user.is_authenticated %}
-<p><input type="button" value="{{comment|_checking:request.user.username}}" class="btn btn-primary" onclick="ajax_comment_like('{{comment.id}}', this)"></p>
 <p><input id="checkBox{{comment.id}}" type="checkbox" name="re_comment" value="답글" onclick="re_comment(this, 're_comment{{comment.id}}')"> 답글달기</p>
 <div style="display: none;" id=re_comment{{comment.id}}>
 <form action="{% url 'forms:recomment_write' detail_getForm.category detail_getForm.id comment.id %}" method="post">
@@ -154,11 +162,13 @@ function ajax_comment_like(x, y){
 <!-- 대체로 _set은 앞에는 class 이름이다!! -->
 <p>
 &nbsp;&nbsp;&nbsp;&nbsp;<b>답글 내용</b> : {{re_comment.body}}<br>
-&nbsp;&nbsp;&nbsp;&nbsp;<b>작성자</b> : {{re_comment.author.Name}} 좋아요 : <span id="countlike{{re_comment.id}}">{{re_comment.mylike}}</span><br>
-</p>
+&nbsp;&nbsp;&nbsp;&nbsp;<b>작성자</b> : {{re_comment.author.Name}}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;👍 : <span id="countlike{{re_comment.id}}">{{re_comment.mylike}}</span>
 {% if user.is_authenticated %}
-<p><input type="button" value="{{re_comment|_checking:request.user.username}}" class="btn btn-primary" onclick="ajax_comment_like('{{re_comment.id}}', this)"></p>
+<span onclick="ajax_comment_like('{{re_comment.id}}', this)">{{re_comment|_checking:request.user.username|safe}}</span>
 {% endif %}
+<br>
+</p>
 
 {% endfor %}
 <hr>
