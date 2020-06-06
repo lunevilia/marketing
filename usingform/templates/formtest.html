@@ -20,13 +20,11 @@
 {% endif %}
 <hr>
 {% for form_contents in getForm %}
-<h2>번호 : {{form_contents.id}}</h2>
+<p><h3>{{form_contents.title_short}}</h3></p>
+<p>
 <em>{{form_contents.created_at}}</em>
-{{form_contents.author.Name}}
-<h3>제목 :</h3>
-{{form_contents.title}}<br><br>
-<h3>내용 :</h3>
-{{form_contents.body}}<br><br>
+작성자 : {{form_contents.author.Name}}
+</p>
 <a href="{% url 'forms:shw_form' form_contents.category form_contents.id %}">자세히 보기</a>
 <hr>
 {% endfor %}

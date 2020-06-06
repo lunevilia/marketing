@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>READYLY</title>
+    <title>READLY</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
     <link rel="stylesheet" href="https://unpkg.com/flickity@2/dist/flickity.css" media="screen">
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
@@ -211,12 +211,12 @@ var alarm_status = true;
 </head>
 <body>
     <div class="container">
-    <h1>READYLY</h1>
+    <h1>READLY</h1>
     <a href="/category">커뮤니티</a> |
     <a href="/youtube">최신 동영상</a> |
     <a href="/youtube/playlist/">플레이리스트</a> |
     {% if user.is_authenticated %}
-    <a href="#">프로필</a> |
+    <a href="#">{{request.user.username}} 프로필</a> |
     <a href="{% url 'account:logout' %}?next={{request.path}}">로그아웃</a>
     {% else %}
     <a href="/account/signup">회원가입</a> |

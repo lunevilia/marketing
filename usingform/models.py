@@ -29,6 +29,12 @@ class Defaultform(TimeStampedModel):
     def mylike(self):
         return Like.objects.filter(post=self).count()
 
+    def title_short(self):
+        if len(self.title)>20:
+            return self.title[:20]+"..."
+        else:
+            return self.title
+
 class Image(TimeStampedModel):
     post = models.ForeignKey(Defaultform, on_delete=models.CASCADE,)
     image = models.ImageField(upload_to='board_picture/', null=True, blank=True)
