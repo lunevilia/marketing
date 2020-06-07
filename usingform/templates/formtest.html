@@ -1,5 +1,6 @@
 {% extends 'formlayout/formlayer.html' %}
 {% block name %}
+<p><a href="/category/">홈으로</a></p>
 <h2>{{board_name}}</h2>
 {% if user.is_authenticated %}
 <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
@@ -28,5 +29,5 @@
 <a href="{% url 'forms:shw_form' form_contents.category form_contents.id %}">자세히 보기</a>
 <hr>
 {% endfor %}
-
+1
 {% endblock %}

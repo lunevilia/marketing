@@ -7,6 +7,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 import json
 from usingform.models import Commentalertcontent
 from django.core import serializers
+from django.contrib.auth.decorators import login_required
 
 def login(request):
     if request.method == "POST":
@@ -46,6 +47,18 @@ def signup(request):
         error = ""
         form = SignupForm()
     return render(request, "signup.html", {"form":form, "error":error,})
+
+@login_required(login_url='/')
+def profile(request):
+    profile_information = Profile.objects.get(user__username=request.user)
+    if request.method == "POST":
+        profile_form = ModifyForm(request.POST, request.FILES, instance=profile_information)
+        if profile_form.is_valid():
+            profile_form.save()
+            return redirect('/account/profile')
+    else:
+        profile_form = ModifyForm(instance=profile_information)
+    return render(request, "profile.html", {"profile_form":profile_form})
 
 #중복확인하는 ajax용 함수 만들기 (닉네임, 아이디, 이메일)
 def ajax(request, value, region):

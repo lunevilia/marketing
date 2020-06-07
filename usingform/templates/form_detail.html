@@ -134,8 +134,8 @@ function delete_comment(x) {
 }
 
 </script>
-<!-- 알람 설정 -->
-<p>알람 활성화 : <span onclick="ajax_donot_alert('{{detail_getForm.id}}', this)">{{detail_getForm|board_alert:request.user.username|safe}}</span></p>
+<!-- 알림 설정 -->
+<p>알림 활성화 : <span onclick="ajax_donot_alert('{{detail_getForm.id}}', this)">{{detail_getForm|board_alert:request.user.username|safe}}</span></p>
 
 <!-- 제목 -->
 <h3>{{detail_getForm.title}}</h3>
