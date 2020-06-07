@@ -144,10 +144,19 @@ function delete_comment(x) {
 작성일자 : {{detail_getForm.created_at}}<br>
 
 <!-- 작성자 -->
-작성자 : {{detail_getForm.author.Name}}<br><br>
+<p>
+by : {{detail_getForm.author.Name}}
+
+<!-- 작성자 프로필 사진 -->
+{% if detail_getForm.author.Image %}
+<img width="50" height="50" src={{detail_getForm.author.Image.url}}>
+{% else %}
+<img width="50" height="50" src=https://image.flaticon.com/icons/svg/634/634741.svg>
+{% endif %}
+</p>
 
 <!-- 내용 -->
-<p>{{detail_getForm.body}}</p>
+<p><h3>{{detail_getForm.body}}</h3></p>
 
 <!-- 사진 -->
 {% if detail_getForm.image_set.all %}

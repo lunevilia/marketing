@@ -23,9 +23,14 @@
 {% for form_contents in getForm %}
 <p><h3>{{form_contents.title_short}}</h3></p>
 <p>
-<em>{{form_contents.created_at}}</em>
-작성자 : {{form_contents.author.Name}}
+by : {{form_contents.author.Name}}
+{% if form_contents.author.Image %}
+<img width="50" height="50" src={{form_contents.author.Image.url}}>
+{% else %}
+<img width="50" height="50" src=https://image.flaticon.com/icons/svg/634/634741.svg>
+{% endif %}
 </p>
+<p><em>{{form_contents.created_at}}</em></p>
 <a href="{% url 'forms:shw_form' form_contents.category form_contents.id %}">자세히 보기</a>
 <hr>
 {% endfor %}
