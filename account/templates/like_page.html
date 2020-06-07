@@ -1,0 +1,15 @@
+{% extends 'accountlayout/profilelayer.html' %}
+{% block name %}
+<h4>좋아요한 게시글</h4>
+{% for likes in user.profile.like_set.all %}
+    <p><h3>{{likes.post.title_short}}</h3><a href="/board/{{likes.post.category}}/{{likes.post.id}}">게시글 보러가기</a></p>
+    <p>
+        <em>{{likes.created_at}}</em>
+        작성자 : {{likes.post.author.Name}}
+    </p>
+    <hr>
+{% endfor %}
+
+{{user.like.post.title}}
+
+{% endblock %}

@@ -60,6 +60,13 @@ def profile(request):
         profile_form = ModifyForm(instance=profile_information)
     return render(request, "profile.html", {"profile_form":profile_form})
 
+@login_required(login_url='/')
+def like_board(request):
+    request.session['page'] = 'like'
+    #a = request.user.like_set.all()
+    #print(a)
+    return render(request, "like_page.html", )
+
 #중복확인하는 ajax용 함수 만들기 (닉네임, 아이디, 이메일)
 def ajax(request, value, region):
     if request.is_ajax():

@@ -9,6 +9,9 @@ import json
 # Create your views here.
 
 def selectform(request, board="자유게시판"): #작성하기 및 전체 글 보여주기
+    if request.session.get('page'): #저장된 위치 삭제
+        del request.session['page']
+        
     getCategory = get_object_or_404(Category, board_name=board) #board는 url로 통해서 category에 선택하는 게시판을 클릭하면 board가 들어와짐
     if request.method == 'POST':
         form = FormTest(request.POST)
@@ -47,12 +50,15 @@ def selectform(request, board="자유게시판"): #작성하기 및 전체 글 �
     return render(request, 'formtest.html', {'form':form, 'imageform':imageform, 'filesform':filesform, 'getForm':getForm, 'board_name':board,})
 
 def shw_form(request, board, id): #글의 자세한 내용 보여주기
+    #session 저장해서 그 좋아요 부분이랑 나누기 위해서 적용
+    page = request.session.get('page', False)
+
     #글 내용 보여주기
     detail_getForm = get_object_or_404(Defaultform, id=id)
     #댓글 보여주기
     detail_getComment = Comment.objects.filter(main_post=detail_getForm, post__isnull=True)
     commentform = CommentTest()
-    return render(request, 'form_detail.html', {'detail_getForm':detail_getForm, 'commentform':commentform, 'detail_getComment':detail_getComment,})
+    return render(request, 'form_detail.html', {'detail_getForm':detail_getForm, 'commentform':commentform, 'detail_getComment':detail_getComment, 'page':page,})
 
 def mod_form(request, board, id): #글 수정하기
     mod_getForm = get_object_or_404(Defaultform, id=id)
