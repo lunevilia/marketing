@@ -248,10 +248,12 @@ Favorite : <span onclick="ajax_board_favorite('{{detail_getForm.id}}', this)">{{
 
 <!-- 댓글 내용 -->
 {% for comment in detail_getComment %}
+<p> <!-- 아주 큰 p -->
+
 <p>
-<p>
+<b>작성자</b> : <img width="50" height="50" src="{{comment.author.Image.url}}"> {{comment.author.Name}}
 <div><b>댓글</b> : {{comment.body}}</div>
-<div><b>작성자</b> : {{comment.author.Name}} <br>
+<div>
 👍 : <span id="countlike{{comment.id}}">{{comment.mylike}}</span>
 {% if user.is_authenticated %}
 <span onclick="ajax_comment_like('{{comment.id}}', this)">{{comment|_checking:request.user.username|safe}}</span>
@@ -263,7 +265,7 @@ Favorite : <span onclick="ajax_board_favorite('{{detail_getForm.id}}', this)">{{
 </p>
 
 <!-- 댓글 대댓글 작성 -->
-{% if user.is_authenticated %}
+{% if user.is_superuser %}
 <p><input id="checkBox{{comment.id}}" type="checkbox" name="re_comment" value="답글" onclick="re_comment(this, 're_comment{{comment.id}}')"> 답글달기</p>
 <div style="display: none;" id=re_comment{{comment.id}}>
 <form action="{% url 'forms:recomment_write' detail_getForm.category detail_getForm.id comment.id %}" method="post">
@@ -278,8 +280,8 @@ Favorite : <span onclick="ajax_board_favorite('{{detail_getForm.id}}', this)">{{
 {% for re_comment in comment.comment_set.all %}
 <!-- 대체로 _set은 앞에는 class 이름이다!! -->
 <p>
-&nbsp;ㄴ<b>답글 내용</b> : {{re_comment.body}}<br>
-&nbsp;&nbsp;&nbsp;&nbsp;<b>작성자</b> : {{re_comment.author.Name}}<br>
+&nbsp;ㄴ<b>작성자</b> : <img width="50" height="50" src="{{re_comment.author.Image.url}}"> {{re_comment.author.Name}}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<b>답글 내용</b> : {{re_comment.body}}<br>
 <!-- 댓 대댓글 좋아요 -->
 &nbsp;&nbsp;&nbsp;&nbsp;👍 : <span id="countlike{{re_comment.id}}">{{re_comment.mylike}}</span>
 {% if user.is_authenticated %}

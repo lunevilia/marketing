@@ -40,14 +40,14 @@ class Image(TimeStampedModel):
     image = models.ImageField(upload_to='board_picture/', null=True, blank=True)
 
     def __str__(self):
-        return self.image
+        return str(self.image)
 
 class Files(TimeStampedModel):
     post = models.ForeignKey(Defaultform, on_delete=models.CASCADE,)
     files = models.FileField(upload_to='board_file/', null=True, blank=True)
 
     def __str__(self):
-        return self.files
+        return str(self.files)
 
 class Like(TimeStampedModel):
     author = models.ForeignKey(Profile, on_delete=models.CASCADE,)
@@ -55,16 +55,16 @@ class Like(TimeStampedModel):
 
     class Meta:
         ordering = ['-id', ]
-        
+
     def __str__(self):
-        return self.post
+        return str(self.post)
 
 class Favorite(TimeStampedModel):
     author = models.ForeignKey(Profile, on_delete=models.CASCADE,)
     post = models.ForeignKey(Defaultform, on_delete=models.CASCADE,)
 
     def __str__(self):
-        return self.post
+        return str(self.post)
 
 class Comment(TimeStampedModel):
     main_post = models.ForeignKey(Defaultform, on_delete=models.CASCADE)
