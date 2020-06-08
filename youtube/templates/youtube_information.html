@@ -6,7 +6,7 @@
 {% for i in response_dict %}
 {% if i.added.any %} 
 <div style="text-align: center; margin: 5%">
-    <a style="float: right;" href="https://www.youtube.com/playlist?list={{i.id.playlistId}}" target="_blank">더보기</a>
+    <a style="float: right;" href="https://www.youtube.com/playlist?list={{i.id}}" target="_blank">더보기</a>
     <h2>{{i.snippet.title}}</h2>
     <div class="gallery js-flickity" data-flickity-options='{ "freeScroll": "true", "contain": true, "prevNextButtons": false,"pageDots": false,"imagesLoaded": true }'>
         {% for a,b,c in i.added %}
