@@ -135,8 +135,9 @@ function delete_comment(x) {
 
 </script>
 <!-- 알림 설정 -->
+{% if user.is_authenticated %}
 <p>알림 활성화 : <span onclick="ajax_donot_alert('{{detail_getForm.id}}', this)">{{detail_getForm|board_alert:request.user.username|safe}}</span></p>
-
+{% endif %}
 <!-- 제목 -->
 <h3>{{detail_getForm.title}}</h3>
 
