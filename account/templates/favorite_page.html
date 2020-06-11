@@ -1,0 +1,13 @@
+{% extends 'accountlayout/profilelayer.html' %}
+{% block name %}
+<h4>즐겨찾기한 게시글</h4>
+{% for favorites in user.profile.favorite_set.all %}
+    <p><h3>{{favorites.post.title_short}}</h3><a href="/board/{{favorites.post.category}}/{{favorites.post.id}}">게시글 보러가기</a></p>
+    <p>
+        <em>{{favorites.created_at}}</em>
+        작성자 : {{favorites.post.author.Name}}
+    </p>
+    <hr>
+{% endfor %}
+
+{% endblock %}

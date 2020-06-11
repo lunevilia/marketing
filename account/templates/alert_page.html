@@ -1,0 +1,13 @@
+{% extends 'accountlayout/profilelayer.html' %}
+{% block name %}
+<h4>알림 차단한 게시글</h4>
+{% for favorites in user.profile.donotalert_set.all %}
+    <p><h3>{{favorites.board.title_short}}</h3><a href="/board/{{favorites.board.category}}/{{favorites.board.id}}">게시글 보러가기</a></p>
+    <p>
+        작성자 : {{favorites.board.author.Name}}
+    </p>
+    <hr>
+{% endfor %}
+
+{% endblock %}
+

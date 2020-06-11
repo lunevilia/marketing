@@ -66,9 +66,9 @@ function modify_overlap(x, region){
 <p>사진 : {% if user.profile.Image %}<img width="100" height="100" src="{{user.profile.Image.url}}">{% else %}설정하지 않았습니다!{% endif %}</p>
 <p>닉네임 : {{user.profile.Name}}</p>
 <p>이메일 : {{user.profile.Email}}</p>
-<p><a href="#">알림설정</a></p>
+<p><a href="{% url 'account:donotalert_board' %}">알림설정</a></p>
 <p><a href="{% url 'account:like_board' %}">좋아요한 게시판</a></p>
-<p><a href="#">즐겨찾기</a></p>
+<p><a href="{% url 'account:favorite_board' %}">즐겨찾기</a></p>
 
 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo">개인정보 수정</button>
     

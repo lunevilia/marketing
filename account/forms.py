@@ -6,7 +6,7 @@ class MyClearableFileInput(ClearableFileInput):
     initial_text = '현재 사진'
     input_text = '사진 바꾸기'
     clear_checkbox_label = '지우기'
-
+        
 class SignupForm(forms.ModelForm):
     
     class Meta:

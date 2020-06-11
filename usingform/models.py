@@ -103,5 +103,8 @@ class Donotalert(models.Model):
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
     board = models.ForeignKey(Defaultform, on_delete=models.CASCADE)
 
+    class Meta:
+        ordering = ['-id', ]
+
     def __str__(self):
         return '%s - %s' % (self.profile, self.board)

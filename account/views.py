@@ -67,6 +67,20 @@ def like_board(request):
     #print(a)
     return render(request, "like_page.html", )
 
+@login_required(login_url='/')
+def favorite_board(request):
+    request.session['page'] = 'favorite'
+    #a = request.user.like_set.all()
+    #print(a)
+    return render(request, "favorite_page.html", )
+
+@login_required(login_url='/')
+def donotalert_board(request):
+    request.session['page'] = 'donotalert'
+    #a = request.user.like_set.all()
+    #print(a)
+    return render(request, "alert_page.html", )
+
 #중복확인하는 ajax용 함수 만들기 (닉네임, 아이디, 이메일)
 def ajax(request, value, region):
     if request.is_ajax():

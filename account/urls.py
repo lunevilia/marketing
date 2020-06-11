@@ -18,7 +18,12 @@ urlpatterns = [
     path('profile/', views.profile, name='profile'),
 
     #회원페이지 => 내가쓴글, 쪽지보기, 즐겨찾기, 좋아요 requried login 추가
+    #좋아요
     path('like_board/', views.like_board, name='like_board'),
+    #즐겨찾기
+    path('favorite_board/', views.favorite_board, name='favorite_board'),
+    #알람차단
+    path('donotalert_board/', views.donotalert_board, name='donotalert_board'),
 
     #회원탈퇴
     #비밀번호 수정
