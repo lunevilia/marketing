@@ -58,6 +58,10 @@ def shw_form(request, board, id): #글의 자세한 내용 보여주기
     #댓글 보여주기
     detail_getComment = Comment.objects.filter(main_post=detail_getForm, post__isnull=True)
     commentform = CommentTest()
+
+    if board[:7] == "alarted":
+        change = get_object_or_404(Commentalertcontent, id=board[7:], profile_name=request.user.profile)
+
     return render(request, 'form_detail.html', {'detail_getForm':detail_getForm, 'commentform':commentform, 'detail_getComment':detail_getComment, 'page':page,})
 
 def mod_form(request, board, id): #글 수정하기
@@ -119,7 +123,7 @@ def comment_write(request, board, id):
 
                 body = commentform.cleaned_data['body']
                 #내용과 id를 저장하기
-                Commentalertcontent.objects.create(board=main_post, sender_name=getProfile.Name, profile_name=main_post.author.Name, content=body)
+                Commentalertcontent.objects.create(board=main_post, sender_name=getProfile.Name, profile_name=main_post.author, content=body)
             
             return redirect('/board/'+str(board)+'/'+str(id))
 
@@ -153,7 +157,7 @@ def recomment_write(request, board, id, comment_id):
 
                 body = commentform.cleaned_data['body']
                 #내용과 id를 저장하기
-                Commentalertcontent.objects.create(board=main_post, sender_name=getProfile.Name, profile_name=post.author.Name, content=str("(답글) ")+body)
+                Commentalertcontent.objects.create(board=main_post, sender_name=getProfile.Name, profile_name=post.author, content=str("(답글) ")+body)
 
             return redirect('/board/'+str(board)+'/'+str(id))
 

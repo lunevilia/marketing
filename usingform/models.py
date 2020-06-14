@@ -86,17 +86,18 @@ class CommentLike(TimeStampedModel):
         return '%s - %s' % (self.post, self.author)
 
 #알람 내용
-class Commentalertcontent(models.Model):
-    profile_name = models.CharField(max_length=300)
+class Commentalertcontent(TimeStampedModel):
+    profile_name = models.ForeignKey(Profile, on_delete=models.CASCADE) # models.CharField(max_length=300)
     sender_name = models.CharField(max_length=300)
     board = models.ForeignKey(Defaultform, on_delete=models.CASCADE)
     content = models.CharField(max_length=300)
+    view = models.BooleanField(default=True)
 
     class Meta:
         ordering = ['-id', ]
 
     def __str__(self):
-        return '%s - %s - %s' % (self.profile_name, self.board, self.content)
+        return '%s - %s - %s' % (self.profile_name.Name, self.board, self.content)
 
 #알람 차단하기
 class Donotalert(models.Model):
