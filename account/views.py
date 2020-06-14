@@ -116,3 +116,15 @@ def notice_ajax(request):
             qs_json = json.loads(qs_json)
 
         return HttpResponse(json.dumps({'show_alert':qs_json}), 'application/json')
+
+#알림내용삭제
+@login_required(login_url='/')
+def del_alert_board(request, alert_id):
+    if alert_id == "all":
+        del_alert = Commentalertcontent.objects.filter(profile_name=request.user.profile)
+        del_alert.delete()
+    else:
+        del_alert = get_object_or_404(Commentalertcontent, profile_name=request.user.profile, id=alert_id)
+        del_alert.delete()
+
+    return redirect("/account/alert_board/")
