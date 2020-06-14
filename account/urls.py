@@ -24,6 +24,8 @@ urlpatterns = [
     path('favorite_board/', views.favorite_board, name='favorite_board'),
     #알람차단
     path('donotalert_board/', views.donotalert_board, name='donotalert_board'),
+    #알림확인
+    path('alert_board/', views.alert_board, name='alert_board'),
 
     #회원탈퇴
     #비밀번호 수정

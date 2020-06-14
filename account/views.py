@@ -63,23 +63,22 @@ def profile(request):
 @login_required(login_url='/')
 def like_board(request):
     request.session['page'] = 'like'
-    #a = request.user.like_set.all()
-    #print(a)
     return render(request, "like_page.html", )
 
 @login_required(login_url='/')
 def favorite_board(request):
     request.session['page'] = 'favorite'
-    #a = request.user.like_set.all()
-    #print(a)
     return render(request, "favorite_page.html", )
 
 @login_required(login_url='/')
 def donotalert_board(request):
     request.session['page'] = 'donotalert'
-    #a = request.user.like_set.all()
-    #print(a)
     return render(request, "alert_page.html", )
+
+@login_required(login_url='/')
+def alert_board(request):
+    request.session['page'] = 'alert_board'
+    return render(request, "alert.html", )
 
 #중복확인하는 ajax용 함수 만들기 (닉네임, 아이디, 이메일)
 def ajax(request, value, region):
@@ -96,7 +95,7 @@ def ajax(request, value, region):
         return HttpResponse(json.dumps({'check':check}), 'application/json')
 
 #알람이 되는 ajax!
-def notice_ajax(request):
+def notice_ajax(request): 
     if request.is_ajax():
         getProfile = Profile.objects.get(user__username=request.user)
         comment_a = Commentalert.objects.get(profile=getProfile)

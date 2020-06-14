@@ -79,9 +79,9 @@ var alarm_status = true;
                                 $('#notice_result').append("댓글내용 : " + data["show_alert"][i]["fields"]["content"].slice(0, 17)+"...<br>")
                             }
                             $('#notice_result').append("작성자 : " + data["show_alert"][i]["fields"]["sender_name"]+"<br>")
-                            $('#notice_result').append("<a href=/board/alarted" + comment_id + "/"+url+">"+"보러가기</a><br><hr>")
+                            $('#notice_result').append("<a href=/board/alerted" + comment_id + "/"+url+">"+"보러가기</a><br><hr>")
                         }
-                        $('#notice_result').append("<a href='#'>알림 더보기</a>")
+                        $('#notice_result').append("<a href='{% url 'account:alert_board' %}'>알림 더보기</a>")
                         alarm_status = false;
                     } else {
                         $('#notice_result').html("")

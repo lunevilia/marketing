@@ -59,8 +59,11 @@ def shw_form(request, board, id): #글의 자세한 내용 보여주기
     detail_getComment = Comment.objects.filter(main_post=detail_getForm, post__isnull=True)
     commentform = CommentTest()
 
-    if board[:7] == "alarted":
-        change = get_object_or_404(Commentalertcontent, id=board[7:], profile_name=request.user.profile)
+    if request.user.is_authenticated:
+        if board[:7] == "alerted": # 만약 알림에서 확인했을 경우! True를 False로 바꾼다! (읽음 느낌)
+            change = get_object_or_404(Commentalertcontent, id=board[7:], profile_name=request.user.profile)
+            change.view = False
+            change.save()
 
     return render(request, 'form_detail.html', {'detail_getForm':detail_getForm, 'commentform':commentform, 'detail_getComment':detail_getComment, 'page':page,})
 

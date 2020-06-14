@@ -1,0 +1,13 @@
+{% extends 'accountlayout/profilelayer.html' %}
+{% block name %}
+<h4>알림 메세지</h4>
+{% for commentalert in user.profile.commentalertcontent_set.all %}
+    <p><h3> 댓글 : {{commentalert.content}}{% if commentalert.view %} {% else %} (확인){% endif %}</h3><a href="/board/alerted{{commentalert.id}}/{{commentalert.board.id}}">게시글 보러가기</a></p>
+    <p>
+        송신자 : {{commentalert.sender_name}}
+    </p>
+    <hr>
+{% endfor %}
+
+{% endblock %}
+
