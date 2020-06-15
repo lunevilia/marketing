@@ -1,19 +1,56 @@
 {% extends 'formlayout/formlayer.html' %}
 {% block name %}
-<p><a href="/category/">홈으로</a></p>
-<h2>{{board_name}}</h2>
+<script>
+    window.onload = function(){
+    //Check File API support
+    if(window.File && window.FileList && window.FileReader)
+    {
+        var filesInput = document.getElementById("id_image");
+        filesInput.addEventListener("change", function(event){
+            var files = event.target.files; //FileList object
+            var output = document.getElementById("result_picture");
+            output.innerHTML = ""
+            for(var i = 0; i< files.length; i++)
+            {
+                var file = files[i];
+                //Only pics
+                if(!file.type.match("image"))
+                    continue;
+                var picReader = new FileReader();
+                picReader.addEventListener("load",function(event){
+                    var picFile = event.target;
+                    var div = document.createElement("div");
+                    div.innerHTML = "<img style='margin-right:5px;' width=80 height=80 class='thumbnail' src='" + picFile.result + "'" +
+                    "title='" + picFile.name + "'/>";
+                    output.insertBefore(div,null);
+                });
+                //Read the image
+                picReader.readAsDataURL(file);
+            }
+        });
+    }
+    else
+    {
+        console.log("Your browser does not support File API");
+    }
+}
+</script>
+<h2>{{board_name}}
 {% if user.is_authenticated %}
 <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
     글쓰기
 </button>
+</h2>
+
 <div class="collapse" id="collapseExample">
 <br>
 <form enctype="multipart/form-data" action="{% url 'forms:selectform' board_name %}" method="post">
     {% csrf_token %}
     <table>
-    {{ form.as_table }}
-    {{imageform.as_table}}
-    {{filesform.as_table}}
+    {{ form.as_p }}
+    {{imageform.as_p}}
+    <output style="display: flex; margin-bottom: 10px;" id="result_picture"></output>
+    {{filesform.as_p}}
     </table>
     <input type="submit" value="제출하기" />
 </form>

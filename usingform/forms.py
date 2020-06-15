@@ -8,7 +8,8 @@ class FormTest(forms.ModelForm):
         labels = { 'title': '제목', 'body':'내용',}
         #help_texts = { 'title': '필수 사항 입니다!', 'body':'내용을 입력해주세요!'}
         widgets = {
-            'title': forms.TextInput(attrs={'class': 'title'}),
+            'title': forms.TextInput(attrs={'class': 'form-control'}),
+            'body': forms.Textarea(attrs={'class': 'form-control'}),
         }
 
 class ImageTest(forms.ModelForm):
@@ -18,7 +19,9 @@ class ImageTest(forms.ModelForm):
         labels = { 'image': '이미지',}
         #help_texts = { 'title': '필수 사항 입니다!', 'body':'내용을 입력해주세요!'}
         widgets = {
-            'image': forms.ClearableFileInput(attrs={'multiple': True}),
+            'image': forms.ClearableFileInput(attrs={
+                'multiple': True,
+            }),
         }
 
 class FilesTest(forms.ModelForm):
