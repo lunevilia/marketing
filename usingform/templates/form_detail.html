@@ -246,10 +246,12 @@ Favorite : <span onclick="ajax_board_favorite('{{detail_getForm.id}}', this)">{{
 <form action="{% url 'forms:comment_write' detail_getForm.category detail_getForm.id %}" method="post">
     {% csrf_token %}
     {{ commentform.as_table }}
-    <input type="submit" value="댓글달기">
+    <input type="submit" value="입력">
 </form>
 {% endif %}
+
 <p></p>
+
 <!-- 댓글 내용 -->
 {% for comment in detail_getComment %}
 <div class="media"> <!-- 아주 큰 p -->
@@ -275,7 +277,7 @@ Favorite : <span onclick="ajax_board_favorite('{{detail_getForm.id}}', this)">{{
 <form action="{% url 'forms:recomment_write' detail_getForm.category detail_getForm.id comment.id %}" method="post">
     {% csrf_token %}
     {{ commentform.as_table }}
-    <p><input type="submit" value="댓글달기"></p>
+    <p><input type="submit" value="입력"></p>
 </form>
 </div>
 {% endif %}
@@ -288,18 +290,20 @@ Favorite : <span onclick="ajax_board_favorite('{{detail_getForm.id}}', this)">{{
   <div class="media-body">
     <h5 class="mt-0">{{re_comment.author.Name}}</h5>
     {{re_comment.body}}
+  
+    <div>
+    <!-- 댓 대댓글 좋아요 -->
+    👍 : <span id="countlike{{re_comment.id}}">{{re_comment.mylike}}</span>
+    {% if user.is_authenticated %}
+    <span onclick="ajax_comment_like('{{re_comment.id}}', this)">{{re_comment|_checking:request.user.username|safe}}</span>
+    {% endif %}
+    {% if request.user.username == re_comment.author.user.username %}
+    <a style="color:#f83f3f;cursor:pointer;" onclick="delete_comment('{{re_comment.id}}');">댓글 삭제</a>
+    {% endif %}
+    <br>
+    </div>
   </div>
 </div>
-<!-- 댓 대댓글 좋아요 -->
-&nbsp;&nbsp;&nbsp;&nbsp;👍 : <span id="countlike{{re_comment.id}}">{{re_comment.mylike}}</span>
-{% if user.is_authenticated %}
-<span onclick="ajax_comment_like('{{re_comment.id}}', this)">{{re_comment|_checking:request.user.username|safe}}</span>
-{% endif %}
-{% if request.user.username == re_comment.author.user.username %}
-<a style="color:#f83f3f;cursor:pointer;" onclick="delete_comment('{{re_comment.id}}');">댓글 삭제</a>
-{% endif %}
-<br>
-
 
 {% endfor %}
 <hr>
