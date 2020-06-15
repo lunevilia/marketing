@@ -134,30 +134,35 @@ function delete_comment(x) {
 }
 
 </script>
+<hr>
 <!-- 알림 설정 -->
 {% if user.is_authenticated %}
 <p>알림 활성화 : <span onclick="ajax_donot_alert('{{detail_getForm.id}}', this)">{{detail_getForm|board_alert:request.user.username|safe}}</span></p>
 {% endif %}
-<!-- 제목 -->
-<h3>{{detail_getForm.title}}</h3>
 
-<!-- 작성일자 -->
-작성일자 : {{detail_getForm.created_at}}<br>
 
-<!-- 작성자 -->
 <p>
-by : {{detail_getForm.author.Name}}
-
-<!-- 작성자 프로필 사진 -->
-{% if detail_getForm.author.Image %}
-<img width="50" height="50" src={{detail_getForm.author.Image.url}}>
-{% else %}
-<img width="50" height="50" src=https://image.flaticon.com/icons/svg/634/634741.svg>
-{% endif %}
+  <!-- 작성자 프로필 사진 -->
+  <div style="display: flex;">
+  {% if detail_getForm.author.Image %}
+  <img width="50" height="50" src={{detail_getForm.author.Image.url}}>
+  {% else %}
+  <img width="50" height="50" src=https://image.flaticon.com/icons/svg/634/634741.svg>
+  {% endif %}
+  <span style="margin-left:10px">
+    <!-- 작성자 -->
+  {{detail_getForm.author.Name}}<br>
+  <!-- 작성일자 -->
+  {{detail_getForm.created_at}}
+  </span>
+  </div>
 </p>
 
+<!-- 제목 -->
+<h3><b>{{detail_getForm.title}}</b></h3>
+
 <!-- 내용 -->
-<p><h3>{{detail_getForm.body}}</h3></p>
+<p><h5>{{detail_getForm.body}}</h5></p>
 
 <!-- 사진 -->
 {% if detail_getForm.image_set.all %}
@@ -181,10 +186,14 @@ by : {{detail_getForm.author.Name}}
 
 <!-- 좋아요 즐겨 찾기 -->
 <p>
-👍 : <span id="board_like">{{detail_getForm.mylike}}</span>
+<span class="badge badge-light">
+  💖 : <span id="board_like">{{detail_getForm.mylike}}</span>
+</span>
 {% if user.is_authenticated %}
 <span onclick="ajax_board_like('{{detail_getForm.id}}', this)">{{detail_getForm|board_checking:request.user.username|safe}}</span>
-Favorite : <span onclick="ajax_board_favorite('{{detail_getForm.id}}', this)">{{detail_getForm|board_favorite:request.user.username|safe}}</span>
+<span class="badge badge-light">
+  Favorite : <span onclick="ajax_board_favorite('{{detail_getForm.id}}', this)">{{detail_getForm|board_favorite:request.user.username|safe}}</span>
+</span>
 {% endif %}
 </p>
 
@@ -261,7 +270,9 @@ Favorite : <span onclick="ajax_board_favorite('{{detail_getForm.id}}', this)">{{
   {{comment.body}}
 
 <div>
-👍 : <span id="countlike{{comment.id}}">{{comment.mylike}}</span>
+  <span class="badge badge-light">
+    💖 : <span id="countlike{{comment.id}}">{{comment.mylike}}</span>
+  </span>
 {% if user.is_authenticated %}
 <span onclick="ajax_comment_like('{{comment.id}}', this)">{{comment|_checking:request.user.username|safe}}</span>
 {% endif %}
@@ -269,6 +280,7 @@ Favorite : <span onclick="ajax_board_favorite('{{detail_getForm.id}}', this)">{{
 <a style="color:#f83f3f;cursor:pointer;" onclick="delete_comment('{{comment.id}}');">댓글 삭제</a>
 {% endif %}
 </div>
+
 
 <!-- 댓글 대댓글 작성 -->
 {% if user.is_superuser %}
@@ -293,7 +305,9 @@ Favorite : <span onclick="ajax_board_favorite('{{detail_getForm.id}}', this)">{{
   
     <div>
     <!-- 댓 대댓글 좋아요 -->
-    👍 : <span id="countlike{{re_comment.id}}">{{re_comment.mylike}}</span>
+    <span class="badge badge-light">
+      💖 : <span id="countlike{{re_comment.id}}">{{re_comment.mylike}}</span>
+    </span>
     {% if user.is_authenticated %}
     <span onclick="ajax_comment_like('{{re_comment.id}}', this)">{{re_comment|_checking:request.user.username|safe}}</span>
     {% endif %}
