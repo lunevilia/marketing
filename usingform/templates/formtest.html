@@ -2,6 +2,7 @@
 {% block name %}
 <script>
     window.onload = function(){
+    var a = 0;
     //Check File API support
     if(window.File && window.FileList && window.FileReader)
     {
@@ -10,12 +11,22 @@
             var files = event.target.files; //FileList object
             var output = document.getElementById("result_picture");
             output.innerHTML = ""
+            var img_count = 0
+            
+            window.filesToUpload = []
+            try {
+                window.filesToUpload.push(document.getElementById("id_image").files);
+            } catch (e) {
+                console.log(e.message);
+            }
+            
             for(var i = 0; i< files.length; i++)
             {
                 var file = files[i];
                 //Only pics
                 if(!file.type.match("image"))
                     continue;
+                    
                 var picReader = new FileReader();
                 picReader.addEventListener("load",function(event){
                     var picFile = event.target;
@@ -34,6 +45,7 @@
         console.log("Your browser does not support File API");
     }
 }
+
 </script>
 <h2>{{board_name}}
 {% if user.is_authenticated %}
@@ -49,7 +61,7 @@
     <table>
     {{ form.as_p }}
     {{imageform.as_p}}
-    <output style="display: flex; margin-bottom: 10px;" id="result_picture"></output>
+    <output style="display: flex;flex-flow:wrap; margin-bottom: 10px;" id="result_picture"></output>
     {{filesform.as_p}}
     </table>
     <input type="submit" value="제출하기" />

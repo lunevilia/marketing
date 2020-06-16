@@ -133,6 +133,41 @@ function delete_comment(x) {
   }
 }
 
+// 수정하는 페이지
+window.onload = function(){
+    //Check File API support
+    if(window.File && window.FileList && window.FileReader)
+    {
+        var filesInput = document.getElementById("id_image");
+        filesInput.addEventListener("change", function(event){
+            var files = event.target.files; //FileList object
+            var output = document.getElementById("result_picture");
+            output.innerHTML = ""
+            for(var i = 0; i< files.length; i++)
+            {
+                var file = files[i];
+                //Only pics
+                if(!file.type.match("image"))
+                    continue;
+                var picReader = new FileReader();
+                picReader.addEventListener("load",function(event){
+                    var picFile = event.target;
+                    var div = document.createElement("div");
+                    div.innerHTML = "<img style='margin-right:5px;' width=80 height=80 class='thumbnail' src='" + picFile.result + "'" +
+                    "title='" + picFile.name + "'/>";
+                    output.insertBefore(div,null);
+                });
+                //Read the image
+                picReader.readAsDataURL(file);
+            }
+        });
+    }
+    else
+    {
+        console.log("Your browser does not support File API");
+    }
+}
+
 </script>
 <hr>
 <!-- 알림 설정 -->
@@ -223,7 +258,8 @@ function delete_comment(x) {
             {% for i in detail_getForm.image_set.all %}
             {{i.image.name|slice:"14:"}}<br>
             {% endfor %}
-            이미지 : <input onchange="image_change()" type="file" name="image" accept="image/*" multiple><br>
+            이미지 : <input id="id_image" onchange="image_change()" type="file" name="image" accept="image/*" multiple><br>
+            <output style="display: flex;flex-flow:wrap; margin-bottom: 10px;" id="result_picture"></output>
             {% for i in detail_getForm.files_set.all %}
             {{i.files.name|slice:"11:"}}<br>
             {% endfor %}
