@@ -26,7 +26,7 @@ def selectform(request, board="자유게시판"): #작성하기 및 전체 글 �
             a.save()
 
             if imageform.is_valid():
-                image_list = request.FILES.getlist('image')
+                image_list = request.FILES.getlist('postimage') #form으로 가져온 건 이용하지 않고!!
                 for item in image_list: 
                     image = Image.objects.create(post=a, image=item)
                     image.save()

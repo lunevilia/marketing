@@ -22,6 +22,7 @@ class ImageTest(forms.ModelForm):
             'image': forms.ClearableFileInput(attrs={
                 'multiple': True,
             }),
+            
         }
 
 class FilesTest(forms.ModelForm):

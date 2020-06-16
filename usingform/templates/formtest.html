@@ -1,40 +1,113 @@
 {% extends 'formlayout/formlayer.html' %}
 {% block name %}
 <script>
-    window.onload = function(){
-    var a = 0;
+
+// 이미지 삭제하기 가능하게 만들기
+var count_file=0;
+
+// 각각의 input type file에 파일을 주기 위해서 설정 (File -> Filelist로 만들기)
+function FileListItem(a) {
+  a = [].slice.call(Array.isArray(a) ? a : arguments)
+  for (var c, b = c = a.length, d = !0; b-- && d;) d = a[b] instanceof File
+  if (!d) throw new TypeError("expected argument to FileList is File or array of File objects")
+  for (b = (new ClipboardEvent("")).clipboardData || new DataTransfer; c--;) b.items.add(a[c])
+  return b.files
+}
+
+// 지우기 눌렀을 경우 지워지는 것
+function deletePreview(ele, i) {
+    "use strict";
+    try {
+
+    $(ele).parent().remove();
+
+    count_file = count_file - 1
+    files_count = document.getElementById("files_count");
+    if (count_file == 0){
+        files_count.innerHTML = " 선택된 파일 없음";
+    } else {
+        files_count.innerHTML = " 파일 " + count_file + "개 ";
+    }
+
+    document.getElementById("image"+i).value = ""
+    } catch (e) {
+    console.log(e.message);
+    }
+}
+
+window.onload = function(){
     //Check File API support
     if(window.File && window.FileList && window.FileReader)
     {
+        var save_before = false;
+        var save_howmany;
         var filesInput = document.getElementById("id_image");
         filesInput.addEventListener("change", function(event){
             var files = event.target.files; //FileList object
-            var output = document.getElementById("result_picture");
-            output.innerHTML = ""
-            var img_count = 0
-            
-            window.filesToUpload = []
-            try {
-                window.filesToUpload.push(document.getElementById("id_image").files);
-            } catch (e) {
-                console.log(e.message);
+
+            count_file = files.length
+            files_count = document.getElementById("files_count");
+            if (count_file == 0){
+                files_count.innerHTML = " 선택된 파일 없음";
+            } else {
+                files_count.innerHTML = " 파일 " + files.length + "개 ";
             }
             
+
+            var output = document.getElementById("result_picture");
+            output.innerHTML = ""
+
+            // 한번 더 넣었을 경우 전부 지우기
+            if (save_before){
+                for(var i = 0; i < save_howmany; i++){
+                    before_input = document.getElementById("image"+i).remove();
+                }
+                save_before = false
+            }
+
+            // 다중으로 할 수 있는 input type file을 각각 삭제 가능하게 만들기 위해서 하나씩 생성 후, 어떤 버튼을 클릭하면 하나씩 삭제
+            for (var i = 0; i < files.length; i++){
+
+                var a = new FileListItem(files[i])
+
+                var test = document.getElementById("test");
+                var _input = document.createElement("input");
+                _input.type = "file"
+                _input.id = "image"+i
+                _input.multiple = true
+                _input.accept = "image/*"
+                _input.name = "postimage"
+                // _input.style.display = "none"
+                _input.files = a
+                test.insertBefore(_input,null);
+
+                save_before = true
+                save_howmany = files.length
+            }
+
             for(var i = 0; i< files.length; i++)
             {
                 var file = files[i];
+
                 //Only pics
                 if(!file.type.match("image"))
                     continue;
                     
                 var picReader = new FileReader();
-                picReader.addEventListener("load",function(event){
-                    var picFile = event.target;
-                    var div = document.createElement("div");
-                    div.innerHTML = "<img style='margin-right:5px;' width=80 height=80 class='thumbnail' src='" + picFile.result + "'" +
-                    "title='" + picFile.name + "'/>";
-                    output.insertBefore(div,null);
-                });
+
+                getid(i) //function을 만들어서 안에 넣으면 i라는 값을 onload안에 넣을 수 있음!!
+
+                function getid(id){ 
+                    picReader.onload = function(event){
+                        var picFile = event.target;
+                        var div = document.createElement("div");
+                        div.style.textAlign = "center"
+                        div.innerHTML = "<img style='margin-right:5px;' width=80 height=80 class='thumbnail' src='" + picFile.result + "'" +
+                        "title=''/><br><span style='cursor: pointer' class='delete' onClick='deletePreview(this, " + id + ")'>❌삭제</span>";
+                        output.insertBefore(div,null);
+                    }
+                }
+
                 //Read the image
                 picReader.readAsDataURL(file);
             }
@@ -47,6 +120,13 @@
 }
 
 </script>
+
+<style>
+.Image_Dont{
+    display:none;
+}
+</style>
+
 <h2>{{board_name}}
 {% if user.is_authenticated %}
 <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
@@ -60,8 +140,13 @@
     {% csrf_token %}
     <table>
     {{ form.as_p }}
-    {{imageform.as_p}}
+    
+    <!-- 눈속임 필요.... -->
+    <div class="Image_Dont">{{imageform.as_p}}</div>
+    <div style="margin-bottom:10px;">이미지 : <input type="button" value="파일 선택" onclick="document.getElementById('id_image').click();" /><span id='files_count'> 선택된 파일 없음</span></div>
+    <span style="display: none;" id="test"></span>
     <output style="display: flex;flex-flow:wrap; margin-bottom: 10px;" id="result_picture"></output>
+    
     {{filesform.as_p}}
     </table>
     <input type="submit" value="제출하기" />
