@@ -42,9 +42,15 @@ window.onload = function(){
         var save_before = false;
         var save_howmany;
         var filesInput = document.getElementById("id_image");
+        var filesMore = document.getElementById("image_add");
+        var filesfake = document.getElementById("image_fake");
+        
+
         filesInput.addEventListener("change", function(event){
             var files = event.target.files; //FileList object
 
+            filesMore.style.display = "block"
+            
             count_file = files.length
             files_count = document.getElementById("files_count");
             if (count_file == 0){
@@ -112,11 +118,75 @@ window.onload = function(){
                 picReader.readAsDataURL(file);
             }
         });
+
+        // 올린 후, 1개씩만 추가하기 위해서
+        filesfake.addEventListener("change", function(event){
+            
+            var files = event.target.files; //FileList object
+            var output = document.getElementById("result_picture");
+
+            if (!files.length == 0){
+                count_file++;
+            }
+
+            // 추가된 후에 숫자 올라가기!
+            files_count = document.getElementById("files_count");
+            files_count.innerHTML = " 파일 " + count_file + "개 ";
+
+            // 반복문을 돌릴 필요는 없지만 그냥 놨뒀음
+            for (var i = 0; i < files.length; i++){
+
+                var a = new FileListItem(files[i])
+                var test = document.getElementById("test");
+                var _input = document.createElement("input");
+                _input.type = "file"
+                _input.id = "image"+count_file
+                _input.multiple = true
+                _input.accept = "image/*"
+                _input.name = "postimage"
+                _input.files = a
+                test.insertBefore(_input,null);
+
+                save_before = true
+                save_howmany = files.length
+
+            }
+
+            for(var i = 0; i< files.length; i++)
+            {
+                var file = files[i];
+
+                //Only pics
+                if(!file.type.match("image"))
+                    continue;
+                    
+                var picReader = new FileReader();
+
+                getid(count_file) //function을 만들어서 안에 넣으면 i라는 값을 onload안에 넣을 수 있음!!
+
+                function getid(id){ 
+                    picReader.onload = function(event){
+                        var picFile = event.target;
+                        var div = document.createElement("div");
+                        div.style.textAlign = "center"
+                        div.innerHTML = "<img style='margin-right:5px;' width=80 height=80 class='thumbnail' src='" + picFile.result + "'" +
+                        "title=''/><br><span style='cursor: pointer' class='delete' onClick='deletePreview(this, " + id + ")'>❌삭제</span>";
+                        output.insertBefore(div,null);
+                    }
+                }
+
+                //Read the image
+                picReader.readAsDataURL(file);
+            }
+        });
     }
     else
     {
         console.log("Your browser does not support File API");
     }
+
+    
+
 }
 
 </script>
@@ -141,10 +211,14 @@ window.onload = function(){
     <table>
     {{ form.as_p }}
     
-    <!-- 눈속임 필요.... -->
+    <!-- 눈속임 필요 (이미지 선택 하기)-->
     <div class="Image_Dont">{{imageform.as_p}}</div>
     <div style="margin-bottom:10px;">이미지 : <input type="button" value="파일 선택" onclick="document.getElementById('id_image').click();" /><span id='files_count'> 선택된 파일 없음</span></div>
     <span style="display: none;" id="test"></span>
+
+    <!-- 눈속임 필요 (선택 후 몇개 추가) -->
+    <input style="display: none;" id="image_fake" type="file" accept="image/*"/>
+    <span style="display: none;" id="image_add"><input style="margin-bottom: 10px;" type="button" value="파일 추가" onclick="document.getElementById('image_fake').click();" /></span>
     <output style="display: flex;flex-flow:wrap; margin-bottom: 10px;" id="result_picture"></output>
     
     {{filesform.as_p}}
