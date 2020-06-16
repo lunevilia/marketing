@@ -77,9 +77,17 @@ def mod_form(request, board, id): #글 수정하기
             a = form.save()
 
             if request.POST.get("image_modify"):
-                pre_image_delete = Image.objects.filter(post=mod_getForm)
-                pre_image_delete.delete()
-                image_list = request.FILES.getlist('image')
+                #삭제하기 눌렀을 경우!!
+                delete_image_list = request.POST.get("delete_image").split(',')
+                delete_image_list.pop() # 마지막에 '' 가 남아서 pop을 해 주었다!
+                delete_image_list = list(map(int, delete_image_list)) #int로 바꾸어주기!
+
+                if delete_image_list:
+                    for i in delete_image_list:
+                        pre_image_delete = Image.objects.get(post=mod_getForm, id=i)
+                        pre_image_delete.delete()
+
+                image_list = request.FILES.getlist('postimage')
 
                 for item in image_list: 
                     image = Image.objects.create(post=mod_getForm, image=item)

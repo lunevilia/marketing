@@ -133,42 +133,25 @@ function delete_comment(x) {
   }
 }
 
-// 수정하는 페이지
-window.onload = function(){
-    //Check File API support
-    if(window.File && window.FileList && window.FileReader)
-    {
-        var filesInput = document.getElementById("id_image");
-        filesInput.addEventListener("change", function(event){
-            var files = event.target.files; //FileList object
-            var output = document.getElementById("result_picture");
-            output.innerHTML = ""
-            for(var i = 0; i< files.length; i++)
-            {
-                var file = files[i];
-                //Only pics
-                if(!file.type.match("image"))
-                    continue;
-                var picReader = new FileReader();
-                picReader.addEventListener("load",function(event){
-                    var picFile = event.target;
-                    var div = document.createElement("div");
-                    div.innerHTML = "<img style='margin-right:5px;' width=80 height=80 class='thumbnail' src='" + picFile.result + "'" +
-                    "title='" + picFile.name + "'/>";
-                    output.insertBefore(div,null);
-                });
-                //Read the image
-                picReader.readAsDataURL(file);
-            }
-        });
-    }
-    else
-    {
-        console.log("Your browser does not support File API");
-    }
+function delete_image(ele, i) {
+  try {
+      //이미지 미리보기가 삭제
+      $(ele).parent().remove();
+      $("#delete_image").val($("#delete_image").val()+i+",")
+      $('#image_modify').val('true');
+  } catch (e) {
+      console.log(e.message);
+  }
 }
 
 </script>
+
+<style>
+.Image_Dont{
+  display: none;
+}
+</style>
+
 <hr>
 <!-- 알림 설정 -->
 {% if user.is_authenticated %}
@@ -203,9 +186,11 @@ window.onload = function(){
 {% if detail_getForm.image_set.all %}
 <p>
 <b>이미지 🎨</b><br>
+<div style="display: flex; flex-flow:wrap;">
 {% for i in detail_getForm.image_set.all %}
-<a href="{{i.image.url}}" download>{{i.image.name|slice:"14:"}}</a><br>
+<a style="margin: 5px;" href="{{i.image.url}}" download><img style="border-radius: 5px;" width=80 height=80 src={{i.image.url}}></a>
 {% endfor %}
+</div>
 </p>
 {% endif %}
 
@@ -247,19 +232,39 @@ window.onload = function(){
         </div>
         <div class="modal-body">
           <form>
+
             <div class="form-group">
               <label for="recipient-name" class="col-form-label">제목 :</label>
               <input name="title" type="text" class="form-control" id="recipient-name" value="{{detail_getForm.title}}" required>
             </div>
+
             <div class="form-group">
               <label for="message-text" class="col-form-label">내용 :</label>
               <textarea name="body" class="form-control" id="message-text" required>{{detail_getForm.body}}</textarea>
             </div>
+
+            <!-- ###### 이미지 수정하기 ###### -->
+            <output id='preImage' style="text-align: center; display: flex; flex-wrap: wrap;">
             {% for i in detail_getForm.image_set.all %}
-            {{i.image.name|slice:"14:"}}<br>
+            <span style="margin-right:10px">
+            <img width=80 height=80 src="{{i.image.url}}"><br><span style='cursor: pointer' class='delete' onClick='delete_image(this, {{i.id}})'>❌삭제</span><br>
+            </span>
             {% endfor %}
-            이미지 : <input id="id_image" onchange="image_change()" type="file" name="image" accept="image/*" multiple><br>
+            <!-- input으로 이 id를 저장할 수 있는 리스트를 가져오기! -->
+            <input type="text" name="delete_image" id="delete_image" hidden>
+            </output>
+
+            <!-- 눈속임 필요 (이미지 선택 하기)-->
+            <div class="Image_Dont"><input id="id_image" onchange="image_change()" type="file" name="image" accept="image/*" multiple></div>
+            <div style="margin-bottom:10px;">이미지 : <input type="button" value="파일 선택" onclick="document.getElementById('id_image').click();" /><span id='files_count'> 선택된 파일 없음</span></div>
+            <span style="display: none;" id="one_input"></span>
+
+            <!-- 눈속임 필요 (선택 후 몇개 추가) -->
+            <input style="display: none;" id="image_add" type="file" accept="image/*"/>
+            <span style="display: none;" id="image_fake"><input style="margin-bottom: 10px;" type="button" value="파일 추가" onclick="document.getElementById('image_add').click();" /></span>
             <output style="display: flex;flex-flow:wrap; margin-bottom: 10px;" id="result_picture"></output>
+
+            <!-- ###### 첨부파일 수정하기 ###### -->
             {% for i in detail_getForm.files_set.all %}
             {{i.files.name|slice:"11:"}}<br>
             {% endfor %}
