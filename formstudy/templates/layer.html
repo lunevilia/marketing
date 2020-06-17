@@ -151,17 +151,17 @@ var alarm_status = true;
             <ul class="navbar-nav mr-sm-0 mt-lg-0">
             {% if user.is_authenticated %}
             <li class="nav-item">
-                <a class="nav-link" href="{% url 'account:profile' %}">{{user.profile.Name}} 프로필</a>
+                <a style="color: blue;" class="nav-link" href="{% url 'account:profile' %}">{{user.profile.Name}} 프로필</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{% url 'account:logout' %}?next={{request.path}}">📴로그아웃</a>
+                <a style="color: red;" class="nav-link" href="{% url 'account:logout' %}?next={{request.path}}">📴로그아웃</a>
             </li>
             {% else %}
             <li class="nav-item">
-                <a class="nav-link" href="/account/signup">✨회원가입</a>
+                <a style="color: green;" class="nav-link" href="/account/signup">✨회원가입</a>
             </li>
             <li class="nav-item">
-                <a style="cursor: pointer;" class="nav-link" data-toggle="modal" data-target="#loginmodal" data-whatever="@mdo">🔑로그인</a>
+                <a style="color: blue;" style="cursor: pointer;" class="nav-link" data-toggle="modal" data-target="#loginmodal" data-whatever="@mdo">🔑로그인</a>
             </li>
             {% endif %}
             </ul>

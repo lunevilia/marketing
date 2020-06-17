@@ -442,9 +442,9 @@ window.onload = function(){
 {% for form_contents in getForm %}
 <p style="display: flex;">
     {% if form_contents.author.Image %}
-    <img style="border-radius: 5px;" width="50" height="50" src={{form_contents.author.Image.url}}>
+    <img style="border-radius: 5px;margin-right:8px;" width="50" height="50" src={{form_contents.author.Image.url}}>
     {% else %}
-    <img style="border-radius: 5px;" width="50" height="50" src=https://image.flaticon.com/icons/svg/634/634741.svg>
+    <img style="border-radius: 5px;margin-right:8px;" width="50" height="50" src=https://image.flaticon.com/icons/svg/634/634741.svg>
     {% endif %}
     <span>
     <b>{{form_contents.author.Name}}</b><br>
