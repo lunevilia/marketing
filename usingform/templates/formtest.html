@@ -1,236 +1,11 @@
 {% extends 'formlayout/formlayer.html' %}
 {% block name %}
-<script>
-
-// 이미지 삭제하기 기능, 이미지 몇개 있는지 확인
-var count_imagefile=0;
-
-// 각각의 input type file에 파일을 주기 위해서 설정 (File -> Filelist로 만들기)
-function FileListItem(a) {
-  a = [].slice.call(Array.isArray(a) ? a : arguments)
-  for (var c, b = c = a.length, d = !0; b-- && d;) d = a[b] instanceof File
-  if (!d) throw new TypeError("expected argument to FileList is File or array of File objects")
-  for (b = (new ClipboardEvent("")).clipboardData || new DataTransfer; c--;) b.items.add(a[c])
-  return b.files
-}
-
-// 지우기 눌렀을 경우, 지워지므로 빠지는 숫자의 개수 측정
-function deletePreview(ele, i) {
-    try {
-        //이미지 미리보기가 삭제
-        $(ele).parent().remove();
-        //1개씩 추가하는 가짜 버튼 위치 (onclick으로 image_add를 클릭하는 것과 동일)
-        //"선택된 파일" 무슨 파일인지 알려주는 텍스트를 안보이게 하기 위해 사용
-        var filesMore = document.getElementById("image_fake");
-
-        //1개씩 지우면 input에 있는 정보를 각각 삭제
-        document.getElementById("image"+i).value = ""
-
-        //1개씩 삭제되므로 이미지 개수 -1개
-        count_imagefile = count_imagefile - 1
-
-        //개수를 알려주는 곳에 변경된 개수 적용 시키기
-        files_count = document.getElementById("files_count");
-        if (count_imagefile == 0){
-            files_count.innerHTML = " 선택된 파일 없음";
-            filesMore.style.display = "none"
-        } else {
-            files_count.innerHTML = " 파일 " + count_imagefile + "개 ";
-        }
-
-        
-    } catch (e) {
-        console.log(e.message);
-    }
-}
-
-window.onload = function(){
-    //Check File API support
-    if(window.File && window.FileList && window.FileReader)
-    {
-        //한번더 여러개의 파일을 가져올 경우 모든 파일 정보를 지우기 위해서 설정한 변수
-        var save_before = false;
-        var save_howmany;
-
-        var filesInput = document.getElementById("id_image");
-
-        //1개씩 추가하는 가짜 버튼 위치 (onclick으로 image_add를 클릭하는 것과 동일)
-        //"선택된 파일" 무슨 파일인지 알려주는 텍스트를 안보이게 하기 위해 사용
-        var filesMore = document.getElementById("image_fake");
-
-        //1개씩 추가하는 진짜 버튼 위치
-        var filesfake = document.getElementById("image_add");
-        
-        // ############## 모든 이미지 올려서 이미지 보이게 하기 ##############
-        filesInput.addEventListener("change", function(event){
-            var files = event.target.files; //FileList object
-
-            //1개씩 추가하는 가짜 버튼 위치 보이기
-            filesMore.style.display = "block"
-            
-            //눈속임용 글씨 보이게 만들기!
-            files_count = document.getElementById("files_count");
-            if (files.length == 0){
-                files_count.innerHTML = " 선택된 파일 없음";
-                filesMore.style.display = "none"
-            } else {
-                files_count.innerHTML = " 파일 " + files.length + "개 ";
-            }
-            
-            //미리보기 이미지를 보여주기 위한 장소 설정
-            var output = document.getElementById("result_picture");
-            //파일 입력으로 이미지를 다시 넣으면 기존에 있던 미리보기 이미지를 없애기! (초기화)
-            output.innerHTML = ""
-
-            // save_before는 한번 이상 이미지를 넣었으면! 다시 파일 입력을 할 때, 데이터가 저장되어 있는 input의 정보를 삭제한다!
-            if (save_before){
-                for(var i = 0; i < save_howmany; i++){
-                    document.getElementById("image"+i).remove();
-                }
-
-                //삭제가 되면 (초기화 값)
-                save_before = false
-
-                //1개씩 추가하는 가짜 버튼 위치 안보이기
-                filesMore.style.display = "none"
-            }
-
-            //여러개 이미지의 개수를 알기 위해서
-            count_imagefile = files.length
-
-            // 다중으로 할 수 있는 input type file을 각각 삭제 가능하게 만들기 위해서 하나씩 생성 후, 어떤 버튼을 클릭하면 하나씩 삭제
-            for (var i = 0; i < files.length; i++){
-
-                var _file = new FileListItem(files[i])
-
-                var one_input = document.getElementById("one_input");
-                var _input = document.createElement("input");
-                _input.type = "file"
-
-                // 다중으로 받은 input을 각자 관리하기 위해 지우거나 나중에 관리 할 수 있도록 id를 다르게 줘서 정의했다
-                _input.id = "image"+i
-                // FileList를 받기 위해서 true로 설정
-                _input.multiple = true
-                _input.accept = "image/*"
-                // name을 postimage로 한 이유는 Views에서 데이터베이스로 저장하는 것은 postimage만 저장하도록 하기 위해!
-                _input.name = "postimage"
-                _input.files = _file
-                one_input.insertBefore(_input,null);
-
-                save_before = true
-                save_howmany = files.length
-            }
-
-            for(var i = 0; i< files.length; i++)
-            {
-                var file = files[i];
-
-                //Only pics
-                if(!file.type.match("image"))
-                    continue;
-                    
-                var picReader = new FileReader();
-
-                getid(i) //function을 만들어서 안에 넣으면 i라는 값을 onload안에 넣을 수 있음!!
-
-                function getid(id){ 
-                    picReader.onload = function(event){
-                        var picFile = event.target;
-                        var div = document.createElement("div");
-                        div.style.textAlign = "center"
-                        div.innerHTML = "<img style='margin-right:5px;' width=80 height=80 class='thumbnail' src='" + picFile.result + "'" +
-                        "title=''/><br><span style='cursor: pointer' class='delete' onClick='deletePreview(this, " + id + ")'>❌삭제</span>";
-                        output.insertBefore(div,null);
-                    }
-                }
-
-                //Read the image
-                picReader.readAsDataURL(file);
-            }
-        });
-
-        // ############## 올린 후, 1개씩만 추가하기 위해서 ##############
-        filesfake.addEventListener("change", function(event){
-            
-            var files = event.target.files; //FileList object
-            var output = document.getElementById("result_picture");
-
-            // 반복문을 돌릴 필요는 없지만 그냥 놔뒀음
-            for (var i = 0; i < files.length; i++){
-
-                var a = new FileListItem(files[i])
-                var one_input = document.getElementById("one_input");
-                var _input = document.createElement("input");
-                _input.type = "file"
-                _input.id = "image"+count_imagefile
-                _input.multiple = true
-                _input.accept = "image/*"
-                _input.name = "postimage"
-                _input.files = a
-                one_input.insertBefore(_input,null);
-
-                save_howmany = count_imagefile + 1 // 한개씩 추가한 것도 취소 되면 지울 수 있도록
-
-            }
-
-            for(var i = 0; i< files.length; i++)
-            {
-                var file = files[i];
-
-                //Only pics
-                if(!file.type.match("image"))
-                    continue;
-                    
-                var picReader = new FileReader();
-
-                getid(count_imagefile) //function을 만들어서 안에 넣으면 i라는 값을 onload안에 넣을 수 있음!!
-
-                function getid(id){ 
-                    picReader.onload = function(event){
-                        var picFile = event.target;
-                        var div = document.createElement("div");
-                        div.style.textAlign = "center"
-                        div.innerHTML = "<img style='margin-right:5px;' width=80 height=80 class='thumbnail' src='" + picFile.result + "'" +
-                        "title=''/><br><span style='cursor: pointer' class='delete' onClick='deletePreview(this, " + id + ")'>❌삭제</span>";
-                        output.insertBefore(div,null);
-                    }
-                }
-
-                //Read the image
-                picReader.readAsDataURL(file);
-            }
-            if (!files.length == 0){
-                count_imagefile++;
-            }
-            // 추가된 후에 숫자 올라가기!
-            files_count = document.getElementById("files_count");
-            files_count.innerHTML = " 파일 " + count_imagefile + "개 ";
-        });
-    }
-    else
-    {
-        console.log("Your browser does not support File API");
-    }
-
-    
-
-}
-
-</script>
-
-<style>
-.Image_Dont{
-    display:none;
-}
-</style>
-
-<h2 style="display: flex;justify-content: space-between;">{{board_name}}
+<h2 style="display: flex;justify-content: space-between;">{{board_name}}{% if user.is_anonymous %}</h2>{% endif %}
 {% if user.is_authenticated %}
 <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
     글쓰기
 </button>
 </h2>
-
 <div class="collapse" id="collapseExample">
 <br>
 <form enctype="multipart/form-data" action="{% url 'forms:selectform' board_name %}" method="post">
@@ -248,7 +23,16 @@ window.onload = function(){
     <span style="display: none;" id="image_fake"><input style="margin-bottom: 10px;" type="button" value="파일 추가" onclick="document.getElementById('image_add').click();" /></span>
     <output style="display: flex;flex-flow:wrap; margin-bottom: 10px;" id="result_picture"></output>
     
-    {{filesform.as_p}}
+    <!-- 눈속임 필요 (파일 선택 하기)-->
+    <div class="File_Dont">{{filesform.as_p}}</div>
+    <div style="margin-bottom:10px;">첨부파일 : <input type="button" value="파일 선택" onclick="document.getElementById('id_files').click();" /><span id='files_count_file'> 선택된 파일 없음</span></div>
+    <span style="display: none;" id="one_input_file"></span>
+
+    <!-- 눈속임 필요 (선택 후 몇개 추가) -->
+    <input style="display: none;" id="file_add" type="file" accept="image/*"/>
+    <span style="display: none;" id="file_fake"><input style="margin-bottom: 10px;" type="button" value="파일 추가" onclick="document.getElementById('file_add').click();" /></span>
+    <output id="result_file"></output>
+
     </table>
     <div style="text-align: center;">
     <input type="submit" class="btn btn-warning" value="📃글작성" />
@@ -258,16 +42,18 @@ window.onload = function(){
 {% endif %}
 <hr>
 {% for form_contents in getForm %}
-<p>
+<p style="display: flex;">
     {% if form_contents.author.Image %}
     <img style="border-radius: 5px;" width="50" height="50" src={{form_contents.author.Image.url}}>
     {% else %}
     <img style="border-radius: 5px;" width="50" height="50" src=https://image.flaticon.com/icons/svg/634/634741.svg>
     {% endif %}
-    {{form_contents.author.Name}}
+    <span>
+    <b>{{form_contents.author.Name}}</b><br>
+    <em>작성 : {{form_contents.created_at|date:"m/d H:i"}}</em>
+    </span>
 </p>
 <p><h3>{{form_contents.title_short}}</h3></p>
-<p><em>{{form_contents.created_at|date:"m/d H:i"}}</em></p>
 <a href="{% url 'forms:shw_form' form_contents.category form_contents.id %}">자세히 보기</a>
 <hr>
 {% endfor %}

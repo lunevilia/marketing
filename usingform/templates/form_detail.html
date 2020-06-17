@@ -144,18 +144,22 @@ function delete_image(ele, i) {
   }
 }
 
-</script>
-
-<style>
-.Image_Dont{
-  display: none;
+function delete_file(ele, i) {
+  try {
+      //이미지 미리보기가 삭제
+      $(ele).parent().remove();
+      $("#delete_file").val($("#delete_file").val()+i+",")
+      $('#files_modify').val('true');
+  } catch (e) {
+      console.log(e.message);
+  }
 }
-</style>
+</script>
 
 <hr>
 <!-- 알림 설정 -->
 {% if user.is_authenticated %}
-<p>알림 활성화 : <span onclick="ajax_donot_alert('{{detail_getForm.id}}', this)">{{detail_getForm|board_alert:request.user.username|safe}}</span></p>
+<p>게시글 알림 활성화 : <span onclick="ajax_donot_alert('{{detail_getForm.id}}', this)">{{detail_getForm|board_alert:request.user.username|safe}}</span></p>
 {% endif %}
 
 
@@ -169,7 +173,7 @@ function delete_image(ele, i) {
   {% endif %}
   <span style="margin-left:10px">
     <!-- 작성자 -->
-  {{detail_getForm.author.Name}}<br>
+  <b>{{detail_getForm.author.Name}}</b><br>
   <!-- 작성일자 -->
   {{detail_getForm.created_at}}
   </span>
@@ -264,11 +268,27 @@ function delete_image(ele, i) {
             <span style="display: none;" id="image_fake"><input style="margin-bottom: 10px;" type="button" value="파일 추가" onclick="document.getElementById('image_add').click();" /></span>
             <output style="display: flex;flex-flow:wrap; margin-bottom: 10px;" id="result_picture"></output>
 
+
             <!-- ###### 첨부파일 수정하기 ###### -->
+            <output style="width:100%;" id='preFile'>
             {% for i in detail_getForm.files_set.all %}
-            {{i.files.name|slice:"11:"}}<br>
+            <div style="margin-right:10px; justify-content: space-between; display: flex">
+            <span>{{i.files.name|slice:"11:"}}</span><span style='cursor: pointer' class='delete' onClick='delete_file(this, {{i.id}})'>❌삭제</span>
+            </div>
             {% endfor %}
-            첨부파일 : <input onchange="files_change()" type="file" name="files" multiple>
+            <input type="text" name="delete_file" id="delete_file">
+            </output>
+
+            <!-- 눈속임 필요 (이미지 선택 하기)-->
+            <div class="File_Dont"><input id="id_files" onchange="files_change()" type="file" name="file" accept="*" multiple></div>
+            <div style="margin-bottom:10px;">첨부파일 : <input type="button" value="파일 선택" onclick="document.getElementById('id_files').click();" /><span id='files_count_file'> 선택된 파일 없음</span></div>
+            <span style="display: none;" id="one_input_file"></span>
+
+            <!-- 눈속임 필요 (선택 후 몇개 추가) -->
+            <input style="display: none;" id="file_add" type="file" accept="*"/>
+            <span style="display: none;" id="file_fake"><input style="margin-bottom: 10px;" type="button" value="파일 추가" onclick="document.getElementById('file_add').click();" /></span>
+            <output style="width:100%;" id="result_file"></output>
+
             <input id="image_modify" type="text" name="image_modify" value='' hidden>
             <input id="files_modify" type="text" name="files_modify" value='' hidden>
           </form>

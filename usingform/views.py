@@ -32,7 +32,7 @@ def selectform(request, board="자유게시판"): #작성하기 및 전체 글 �
                     image.save()
 
             if filesform.is_valid():
-                files_list = request.FILES.getlist('files')
+                files_list = request.FILES.getlist('postfile')
                 for item in files_list: 
                     files = Files.objects.create(post=a, files=item)
                     files.save()
@@ -77,7 +77,7 @@ def mod_form(request, board, id): #글 수정하기
             a = form.save()
 
             if request.POST.get("image_modify"):
-                #삭제하기 눌렀을 경우!!
+                #각각 이미지를 삭제하기 눌렀을 경우!!
                 delete_image_list = request.POST.get("delete_image").split(',')
                 delete_image_list.pop() # 마지막에 '' 가 남아서 pop을 해 주었다!
                 delete_image_list = list(map(int, delete_image_list)) #int로 바꾸어주기!
@@ -85,19 +85,33 @@ def mod_form(request, board, id): #글 수정하기
                 if delete_image_list:
                     for i in delete_image_list:
                         pre_image_delete = Image.objects.get(post=mod_getForm, id=i)
-                        pre_image_delete.delete()
+                        if pre_image_delete.post.author == request.user.profile:
+                            pre_image_delete.delete()
+                        else:
+                            continue
 
-                image_list = request.FILES.getlist('postimage')
+                image_list = request.FILES.getlist('postimage') #javascript의 생성으로 input의 id가 postimage 입니다!
 
                 for item in image_list: 
                     image = Image.objects.create(post=mod_getForm, image=item)
                     image.save()
 
             if request.POST.get("files_modify"):
-                pre_files_delete = Files.objects.filter(post=mod_getForm)
-                pre_files_delete.delete()
-                files_list = request.FILES.getlist('files')
+                #각각 파일을 삭제하기 눌렀을 경우!!
+                delete_file_list = request.POST.get("delete_file").split(',')
+                delete_file_list.pop() # 마지막에 '' 가 남아서 pop을 해 주었다!
+                delete_file_list = list(map(int, delete_file_list)) #int로 바꾸어주기!
 
+                if delete_file_list:
+                    for i in delete_file_list:
+                        pre_file_delete = Files.objects.get(post=mod_getForm, id=i)
+                        if pre_file_delete.post.author == request.user.profile:
+                            pre_file_delete.delete()
+                        else:
+                            continue
+
+                files_list = request.FILES.getlist('postfile') #javascript의 생성으로 input의 id가 postimage 입니다!
+            
                 for item in files_list: 
                     files = Files.objects.create(post=mod_getForm, files=item)
                     files.save()

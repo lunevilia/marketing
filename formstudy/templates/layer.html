@@ -101,7 +101,6 @@ var alarm_status = true;
         });
     }
 
-
     </script>
     <style>
         
@@ -187,6 +186,12 @@ var alarm_status = true;
             transition-duration: 1s;
         }
 
+        /* 드롭다운 올리기만 하면 보이도록 설정 */
+        .dropdown_board:hover .dropdown-menu {
+            display: block;
+            margin-top: 0;
+        }
+
         @media (min-width:300px) and (max-width:768px) {
             iframe{
                 width: 300px;
@@ -219,9 +224,9 @@ var alarm_status = true;
             </button>
             <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
               <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-                <a class="navbar-brand" href="/">READLY</a>
+                <a style="font-family: Arial;" class="navbar-brand" href="/"><b>READLY</b></a>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         커뮤니티
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
@@ -236,22 +241,24 @@ var alarm_status = true;
                 <li class="nav-item">
                     <a class="nav-link" href="/youtube/playlist/">플레이리스트</a>
                 </li>
-                {% if user.is_authenticated %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'account:profile' %}">{{user.profile.Name}} 프로필</a>
-                </li>
-                <li class="nav-item">
-                    <a style="margin-right:8px; margin-bottom:8px" class="btn btn-danger" href="{% url 'account:logout' %}?next={{request.path}}">로그아웃</a>
-                </li>
-                {% else %}
-                <li class="nav-item">
-                    <a style="margin-right:8px; margin-bottom:8px" class="btn btn-danger" href="/account/signup">회원가입</a>
-                </li>
-                <li class="nav-item">
-                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#loginmodal" data-whatever="@mdo">로그인</button>
-                </li>
-                {% endif %}
               </ul>
+            <ul class="navbar-nav mr-sm-0 mt-lg-0">
+            {% if user.is_authenticated %}
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'account:profile' %}">{{user.profile.Name}} 프로필</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'account:logout' %}?next={{request.path}}">📴로그아웃</a>
+            </li>
+            {% else %}
+            <li class="nav-item">
+                <a class="nav-link" href="/account/signup">✨회원가입</a>
+            </li>
+            <li class="nav-item">
+                <a style="cursor: pointer;" class="nav-link" data-toggle="modal" data-target="#loginmodal" data-whatever="@mdo">🔑로그인</a>
+            </li>
+            {% endif %}
+            </ul>
               {% if user.is_authenticated %}
               <div style="margin:10px" class="dropdown">
               <span id="notice" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onclick="notice_ajax()">{{user|alert_checking:user.profile.Name|safe}}</span>
