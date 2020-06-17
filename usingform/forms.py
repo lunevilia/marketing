@@ -1,15 +1,17 @@
 from django import forms
 from .models import *
-
+from django_summernote.widgets import SummernoteWidget, SummernoteInplaceWidget
 class FormTest(forms.ModelForm):
     class Meta:
         model = Defaultform
-        fields = ('title', 'body')
+        fields = ('title', 'body',)
         labels = { 'title': '제목', 'body':'내용',}
         #help_texts = { 'title': '필수 사항 입니다!', 'body':'내용을 입력해주세요!'}
         widgets = {
             'title': forms.TextInput(attrs={'class': 'form-control'}),
-            'body': forms.Textarea(attrs={'class': 'form-control'}),
+            'body': forms.Textarea(attrs={'class': 'form-control',}),
+            #'foo': SummernoteWidget(),
+            'bar': SummernoteInplaceWidget(),
         }
 
 class ImageTest(forms.ModelForm):

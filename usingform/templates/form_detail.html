@@ -582,7 +582,7 @@ window.onload = function(){
 <h3><b>{{detail_getForm.title}}</b></h3>
 
 <!-- 내용 -->
-<p><h5>{{detail_getForm.body}}</h5></p>
+<p><h5>{{detail_getForm.body|linebreaks}}</h5></p>
 
 <!-- 사진 -->
 {% if detail_getForm.image_set.all %}
