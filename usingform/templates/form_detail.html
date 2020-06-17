@@ -163,9 +163,9 @@ function delete_image(ele, i) {
   <!-- 작성자 프로필 사진 -->
   <div style="display: flex;">
   {% if detail_getForm.author.Image %}
-  <img width="50" height="50" src={{detail_getForm.author.Image.url}}>
+  <img style="border-radius: 5px;" width="50" height="50" src={{detail_getForm.author.Image.url}}>
   {% else %}
-  <img width="50" height="50" src=https://image.flaticon.com/icons/svg/634/634741.svg>
+  <img style="border-radius: 5px;" width="50" height="50" src=https://image.flaticon.com/icons/svg/634/634741.svg>
   {% endif %}
   <span style="margin-left:10px">
     <!-- 작성자 -->
@@ -305,7 +305,7 @@ function delete_image(ele, i) {
 <!-- 댓글 내용 -->
 {% for comment in detail_getComment %}
 <div class="media"> <!-- 아주 큰 p -->
-<img width="50" height="50" src="{% if comment.author.Image %}{{comment.author.Image.url}}{% else %}https://image.flaticon.com/icons/svg/634/634741.svg{% endif %}" class="mr-3" alt="...">
+<img style="border-radius: 5px;" width="50" height="50" src="{% if comment.author.Image %}{{comment.author.Image.url}}{% else %}https://image.flaticon.com/icons/svg/634/634741.svg{% endif %}" class="mr-3" alt="...">
 <div class="media-body">
   <h5 class="mt-0">{{comment.author.Name}}</h5>
   {{comment.body}}
@@ -339,7 +339,7 @@ function delete_image(ele, i) {
 {% for re_comment in comment.comment_set.all %}
 <!-- 대체로 _set은 앞에는 class 이름이다!! -->
 <div class="media mt-3">
-  <img width="50" height="50" src="{% if re_comment.author.Image %}{{re_comment.author.Image.url}}{% else %}https://image.flaticon.com/icons/svg/634/634741.svg{% endif %}" class="mr-3" alt="...">
+  <img style="border-radius: 5px;" width="50" height="50" src="{% if re_comment.author.Image %}{{re_comment.author.Image.url}}{% else %}https://image.flaticon.com/icons/svg/634/634741.svg{% endif %}" class="mr-3" alt="...">
   <div class="media-body">
     <h5 class="mt-0">{{re_comment.author.Name}}</h5>
     {{re_comment.body}}

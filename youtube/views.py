@@ -19,7 +19,7 @@ def channel(request, token=None):
     params = {
         'key': settings.YOUTUBE_API_KEY,
         'part': 'snippet',
-        'channelId': 'UCom6YhUY62jM52nIMjf5_dw',
+        'channelId': 'UCh5FgONuGDNnTXuxGz-mo5A',
         'type': 'video',
         'maxResults': '5',
         'order': 'date',
@@ -48,7 +48,7 @@ def ajax(request, gettype, token):
         params = {
             'key': settings.YOUTUBE_API_KEY,
             'part': 'snippet',
-            'channelId': 'UCom6YhUY62jM52nIMjf5_dw',
+            'channelId': 'UCh5FgONuGDNnTXuxGz-mo5A',
             'type': gettype,
             'maxResults': '5',
             'order': 'date',
@@ -111,7 +111,7 @@ def playlist(request, token=None):
     params = {
         'key': settings.YOUTUBE_API_KEY,
         'part': 'snippet',
-        'channelId': 'UCom6YhUY62jM52nIMjf5_dw',
+        'channelId': 'UCh5FgONuGDNnTXuxGz-mo5A',
         'type': 'playlist',
         'maxResults': '5',
         'order': 'date',

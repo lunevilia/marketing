@@ -224,7 +224,7 @@ window.onload = function(){
 }
 </style>
 
-<h2>{{board_name}}
+<h2 style="display: flex;justify-content: space-between;">{{board_name}}
 {% if user.is_authenticated %}
 <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
     글쓰기
@@ -250,22 +250,24 @@ window.onload = function(){
     
     {{filesform.as_p}}
     </table>
-    <input type="submit" value="제출하기" />
+    <div style="text-align: center;">
+    <input type="submit" class="btn btn-warning" value="📃글작성" />
+    </div>
 </form>
 </div>
 {% endif %}
 <hr>
 {% for form_contents in getForm %}
-<p><h3>{{form_contents.title_short}}</h3></p>
 <p>
-by : {{form_contents.author.Name}}
-{% if form_contents.author.Image %}
-<img width="50" height="50" src={{form_contents.author.Image.url}}>
-{% else %}
-<img width="50" height="50" src=https://image.flaticon.com/icons/svg/634/634741.svg>
-{% endif %}
+    {% if form_contents.author.Image %}
+    <img style="border-radius: 5px;" width="50" height="50" src={{form_contents.author.Image.url}}>
+    {% else %}
+    <img style="border-radius: 5px;" width="50" height="50" src=https://image.flaticon.com/icons/svg/634/634741.svg>
+    {% endif %}
+    {{form_contents.author.Name}}
 </p>
-<p><em>{{form_contents.created_at}}</em></p>
+<p><h3>{{form_contents.title_short}}</h3></p>
+<p><em>{{form_contents.created_at|date:"m/d H:i"}}</em></p>
 <a href="{% url 'forms:shw_form' form_contents.category form_contents.id %}">자세히 보기</a>
 <hr>
 {% endfor %}

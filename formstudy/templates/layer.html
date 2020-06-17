@@ -218,8 +218,8 @@ var alarm_status = true;
               <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
-              <a class="navbar-brand" href="/">READLY</a>
               <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+                <a class="navbar-brand" href="/">READLY</a>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         커뮤니티
@@ -241,11 +241,11 @@ var alarm_status = true;
                     <a class="nav-link" href="{% url 'account:profile' %}">{{user.profile.Name}} 프로필</a>
                 </li>
                 <li class="nav-item">
-                    <a style="margin-right:8px" class="btn btn-danger" href="{% url 'account:logout' %}?next={{request.path}}">로그아웃</a>
+                    <a style="margin-right:8px; margin-bottom:8px" class="btn btn-danger" href="{% url 'account:logout' %}?next={{request.path}}">로그아웃</a>
                 </li>
                 {% else %}
                 <li class="nav-item">
-                    <a style="margin-right:8px" class="btn btn-danger" href="/account/signup">회원가입</a>
+                    <a style="margin-right:8px; margin-bottom:8px" class="btn btn-danger" href="/account/signup">회원가입</a>
                 </li>
                 <li class="nav-item">
                     <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#loginmodal" data-whatever="@mdo">로그인</button>

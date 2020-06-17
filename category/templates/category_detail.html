@@ -39,10 +39,12 @@
 <hr>
 
 <h4>게시판 목록</h4>
-
+<br>
 {% for i in show_all %}
-<a href="{% url 'forms:selectform' i.board_name %}">{{i.board_name}}</a> {% if user.is_superuser %} | <a href="javascript:delete_category({{i.id}});">게시판 삭제</a> |
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo" onclick="myFunction('{{i.board_name}}','{{i.id}}');">수정하기</button>{% endif %}<br>
+<p>
+<a href="{% url 'forms:selectform' i.board_name %}">{{i.board_name}}</a> {% if user.is_superuser %} | <a class="btn btn-danger" href="javascript:delete_category({{i.id}});">🚮게시판 삭제</a> |
+<button type="button" class="btn btn-info" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo" onclick="myFunction('{{i.board_name}}','{{i.id}}');">🔁수정하기</button>{% endif %}
+</p>
 {% endfor %}
 {% if user.is_superuser %}
 <form action="" name="modify" method="post">
