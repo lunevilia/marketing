@@ -11,9 +11,10 @@
       modal.find('.modal-body input').val(recipient)
     })
 
-    function myFunction(x, y, z) {
+    function myFunction(x, y, color, z) {
         document.getElementById("recipient-name").value = x;
         document.getElementById("important").value = y;
+        document.getElementById("color").value = color;
         document.modify.action = "{% url 'category:mod_category' 12345 %}".replace(/12345/, z.toString())
     }
 
@@ -42,8 +43,8 @@
 <br>
 {% for i in show_all %}
 <p>
-<a href="{% url 'forms:selectform' i.board_name %}">{{i.board_name}}</a> {% if user.is_superuser %} | <a class="btn btn-danger" href="javascript:delete_category({{i.id}});">🚮게시판 삭제</a> |
-<button type="button" class="btn btn-info" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo" onclick="myFunction('{{i.board_name}}', '{{i.important}}','{{i.id}}');">🔁수정하기</button>{% endif %}
+<a style="color:{{i.color}}" href="{% url 'forms:selectform' i.board_name %}">{{i.board_name}}</a> {% if user.is_superuser %} | <a class="btn btn-danger" href="javascript:delete_category({{i.id}});">🚮게시판 삭제</a> |
+<button type="button" class="btn btn-info" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo" onclick="myFunction('{{i.board_name}}', '{{i.important}}', '{{i.color}}','{{i.id}}');">🔁수정하기</button>{% endif %}
 </p>
 {% endfor %}
 {% if user.is_superuser %}
@@ -63,8 +64,11 @@
                 <div class="form-group">
                   <label for="recipient-name" class="col-form-label">게시판 이름 :</label>
                   <input name="board_name" type="text" class="form-control" id="recipient-name" value="{{i.board_name}}" required> 
-                  <label for="recipient-name" class="col-form-label">게시판 순서 :</label>
+                  <label for="important" class="col-form-label">게시판 순서 :</label>
                   <input name="important" type="text" class="form-control" id="important" value="{{i.important}}" required> 
+                  <label for="color" class="col-form-label">게시판 색깔 :</label>
+                  <div id="color-picker-1" class="mx-auto"></div>
+                  <input name="color" type="text" class="form-control" id="color" value="{{i.color}}" required> 
                 </div>
               </form>
             </div>

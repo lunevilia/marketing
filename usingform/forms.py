@@ -1,6 +1,5 @@
 from django import forms
 from .models import *
-from django_summernote.widgets import SummernoteWidget, SummernoteInplaceWidget
 class FormTest(forms.ModelForm):
     class Meta:
         model = Defaultform
@@ -10,8 +9,6 @@ class FormTest(forms.ModelForm):
         widgets = {
             'title': forms.TextInput(attrs={'class': 'form-control'}),
             'body': forms.Textarea(attrs={'class': 'form-control',}),
-            #'foo': SummernoteWidget(),
-            'bar': SummernoteInplaceWidget(),
         }
 
 class ImageTest(forms.ModelForm):

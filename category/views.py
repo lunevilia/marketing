@@ -38,8 +38,7 @@ def mod_category(request, id): #게시판 이름 바꾸기
             if form.is_valid():
                 after_important = int(form.cleaned_data.get("important"))
                 a = form.save(False)
-                
-                ### 게시판 순서 옮기기(교환하기) ###
+                ### 게시판 순서 옮기기(교환하기) 함수로 만들지 않은 이유는 나중에 까먹을 것 같아서... ###
                 if show_all.filter(important=after_important).exists():
                     #위로 옮겼을 경우
                     if current_important > after_important:
@@ -56,7 +55,7 @@ def mod_category(request, id): #게시판 이름 바꾸기
                             change_important.save()
                         a.save()
                     else:
-                        pass
+                        a.save()
 
                 #만약 맨 마지막에 들어갈 숫자 보다 클 경우 맨 마지막 숫자로 넣기
                 elif after_important > last:

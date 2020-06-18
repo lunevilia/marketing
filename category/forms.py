@@ -12,7 +12,8 @@ class CategoryForm(forms.ModelForm):
         }
         labels = { 
             'board_name': '게시판 추가',
-            'important' : '게시판 순서'
+            'important' : '게시판 순서',
+            'color' : '게시판 색깔'
             }
         #help_texts = { 'title': '필수 사항 입니다!', 'body':'내용을 입력해주세요!'}
         # widgets = {
