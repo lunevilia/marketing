@@ -6,7 +6,7 @@ from colorfield.fields import ColorField
 class Category(models.Model):
     board_name = models.CharField(max_length=50, unique=True)
     important = models.PositiveIntegerField(validators=[MinValueValidator(1)])
-    color = ColorField(default='#000000')
+    color = ColorField(blank=True)
 
     class Meta:
         ordering = ['important', ]

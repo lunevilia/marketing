@@ -1,4 +1,5 @@
 {% extends 'categorylayout/categorylayer.html' %}
+{% load static %}
 {% block name %}
 <script>
     $('#exampleModal').on('show.bs.modal', function (event) {
@@ -29,7 +30,9 @@
     }
 
 </script>
-
+<!-- 색깔 넣어주기 위한 js -->
+<script src="{%static 'colorfield/colorfield.js'%}"></script>
+<script src="{%static 'colorfield/jscolor/jscolor.js'%}"></script>
 {% if user.is_superuser %}
 <form action="{% url 'category:show_category' %}" method="post">
     {% csrf_token %}
@@ -43,7 +46,7 @@
 <br>
 {% for i in show_all %}
 <p>
-<a style="color:{{i.color}}" href="{% url 'forms:selectform' i.board_name %}">{{i.board_name}}</a> {% if user.is_superuser %} | <a class="btn btn-danger" href="javascript:delete_category({{i.id}});">🚮게시판 삭제</a> |
+<a style="background-color:{{i.color}};color:black;" href="{% url 'forms:selectform' i.board_name %}">{{i.board_name}}</a> {% if user.is_superuser %} | <a class="btn btn-danger" href="javascript:delete_category({{i.id}});">🚮게시판 삭제</a> |
 <button type="button" class="btn btn-info" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo" onclick="myFunction('{{i.board_name}}', '{{i.important}}', '{{i.color}}','{{i.id}}');">🔁수정하기</button>{% endif %}
 </p>
 {% endfor %}
@@ -67,8 +70,7 @@
                   <label for="important" class="col-form-label">게시판 순서 :</label>
                   <input name="important" type="text" class="form-control" id="important" value="{{i.important}}" required> 
                   <label for="color" class="col-form-label">게시판 색깔 :</label>
-                  <div id="color-picker-1" class="mx-auto"></div>
-                  <input name="color" type="text" class="form-control" id="color" value="{{i.color}}" required> 
+                  <input name="color" type="text" class="form-control" id="color" value="{{i.color}}"> 
                 </div>
               </form>
             </div>

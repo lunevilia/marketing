@@ -137,7 +137,7 @@ var alarm_status = true;
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                     {% for category in user|category_get %}
-                    <a style="color:{{category.color}};" class="dropdown-item" href="/board/{{category.board_name}}">{{category.board_name}}</a>
+                    <a class="dropdown-item" href="/board/{{category.board_name}}">{{category.board_name}}</a>
                     {% endfor %}
                     </div>
                 </li>

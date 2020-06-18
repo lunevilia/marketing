@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import *
 from .forms import CategoryForm
+import re
 
 # Create your views here.
 def show_category(request): #게시판 보이게 하기 및 작성하기
@@ -38,6 +39,7 @@ def mod_category(request, id): #게시판 이름 바꾸기
             if form.is_valid():
                 after_important = int(form.cleaned_data.get("important"))
                 a = form.save(False)
+
                 ### 게시판 순서 옮기기(교환하기) 함수로 만들지 않은 이유는 나중에 까먹을 것 같아서... ###
                 if show_all.filter(important=after_important).exists():
                     #위로 옮겼을 경우
@@ -66,6 +68,10 @@ def mod_category(request, id): #게시판 이름 바꾸기
                     a.important = last
                     a.save()
 
+                return redirect('/category/')
+
+            #form에 문제가 생길 경우!
+            else:
                 return redirect('/category/')
         else:
             form = CategoryForm(instance=mod_getForm)
