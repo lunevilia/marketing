@@ -32,8 +32,7 @@
 {% if user.is_superuser %}
 <form action="{% url 'category:show_category' %}" method="post">
     {% csrf_token %}
-    {{ form.as_table }}
-    <!-- 새로운 카테고리 추가 : <input name="new_category" type="text" required><br> -->
+    {{ form.as_p }}
     <input type="submit" class="btn btn-success" value="추가하기">
 </form>
 {% endif %}
