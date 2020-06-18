@@ -397,7 +397,9 @@ window.onload = function(){
 }
 </script>
 {% endif %}
-<div style="margin-bottom: 10px;">중요한 게시글들 여기에 올리기 테스트</div>
+{% for i in important_board %}
+<div style="margin-bottom: 10px;display:table;"><span style="display:table-cell;vertical-align:middle;background-color:{{i.post.category.color}};" class="badge">{{i.post.category.board_name}}</span><a style="display:table-cell;padding-left: 5px;" href="{% url 'forms:shw_form' i.post.category i.post.id %}">{{i.post.title_short}}</a></div>
+{% endfor %}
 <h2 style="display: flex;justify-content: space-between;">{{board_name}}{% if user.is_anonymous %}</h2>{% endif %}
 {% if user.is_authenticated %}
 <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">

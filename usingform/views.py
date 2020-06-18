@@ -42,12 +42,15 @@ def selectform(request, board="자유게시판"): #작성하기 및 전체 글 �
         imageform = ImageTest()
         filesform = FilesTest()
 
+        #강조 게시글
+        important_board = Important_board.objects.all()
+
         if board:
             getForm = Defaultform.objects.filter(category__board_name=board)
         else:
             getForm = Defaultform.objects.all()
 
-    return render(request, 'formtest.html', {'form':form, 'imageform':imageform, 'filesform':filesform, 'getForm':getForm, 'board_name':board,})
+    return render(request, 'formtest.html', {'important_board':important_board,'form':form, 'imageform':imageform, 'filesform':filesform, 'getForm':getForm, 'board_name':board,})
 
 def shw_form(request, board, id): #글의 자세한 내용 보여주기
     #session 저장해서 그 좋아요 부분이랑 나누기 위해서 적용

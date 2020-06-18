@@ -3,6 +3,7 @@ from category.models import Category
 from account.models import Profile
 from django.contrib.auth.models import User
 from django import template
+from django.core.validators import MinValueValidator 
 
 register = template.Library()
 
@@ -116,3 +117,14 @@ class Donotalert(models.Model):
 
     def __str__(self):
         return '%s - %s' % (self.profile, self.board)
+
+#공지 게시판
+class Important_board(models.Model):
+    post = models.ForeignKey(Defaultform, on_delete=models.CASCADE)
+    important = models.FloatField(default=0,validators=[MinValueValidator(0)])
+
+    class Meta:
+        ordering = ['-important', ]
+
+    def __str__(self):
+        return '%s - %s' % (self.post, self.important)

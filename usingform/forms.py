@@ -1,5 +1,6 @@
 from django import forms
 from .models import *
+
 class FormTest(forms.ModelForm):
     class Meta:
         model = Defaultform

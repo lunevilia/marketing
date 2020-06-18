@@ -108,7 +108,7 @@ def notice_ajax(request):
 
         if(how_many_filter):
             show_alert = Commentalertcontent.objects.filter(profile_name=getProfile, view=True)[:5]
-            qs_json = serializers.serialize('json', show_alert, use_natural_foreign_keys=True) #use_natural_foreigin_keys를 이용해 pk가 아닌 특정 내용을 가져오도록 설정
+            qs_json = serializers.serialize('json', show_alert, use_natural_foreign_keys=True) #use_natural_foreigin_keys를 이용해 pk가 아닌 특정 내용을 가져오도록 설정 Commentalertcontent 테이블에 def로 설정해야됨!
             qs_json = json.loads(qs_json)
         else:
             show_alert = Commentalertcontent.objects.filter(profile_name=getProfile, view=True)[:5]
