@@ -25,7 +25,7 @@ function idDuplicationCheck(token) {
                 y = data["pagetoken"]
                 if (data["response_dict"][0]["kind"] == "youtube#playlist"){
                     for (var i=0; i<data["response_dict"].length; i++){
-                        var playlist_Id = data["response_dict"][i]["id"]["playlistId"]
+                        var playlist_Id = data["response_dict"][i]["id"]
                         var playlist_Title = data["response_dict"][i]["snippet"]["title"]
                         var thumbnail = data["response_dict"][i]["snippet"]["thumbnails"]["high"]["url"]
                         if(data["response_dict"][i]["added"]){
