@@ -36,6 +36,9 @@ class Defaultform(TimeStampedModel):
         else:
             return self.title
 
+    # def comment_count(self):
+    #     self.comment_set
+
 class Image(TimeStampedModel):
     post = models.ForeignKey(Defaultform, on_delete=models.CASCADE,)
     image = models.ImageField(upload_to='board_picture/', null=True, blank=True)

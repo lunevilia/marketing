@@ -453,8 +453,27 @@ window.onload = function(){
     <em>작성 : {{form_contents.created_at|date:"m/d H:i"}}</em>
     </span>
 </p>
-<p><h3>{{form_contents.title_short}}</h3></p>
-<a href="{% url 'forms:shw_form' form_contents.category form_contents.id %}">자세히 보기</a>
+<p>
+    <h3>
+    {{form_contents.title_short}}
+
+    {% if form_contents.image_set.all %}
+    🎨
+    {% endif %}
+    {% if form_contents.file_set.all %}
+    💾
+    {% endif %}
+    </h3>
+</p>
+<p>
+    <span class="badge badge-light">
+        댓글 : {{form_contents.comment_set.all|length}} 
+    </span>
+    <span class="badge badge-light">
+        좋아요💖 : <span>{{form_contents.like_set.all|length}}</span>
+    </span>
+</p>
+<a href="{% url 'forms:shw_form' form_contents.category form_contents.id %}">자세히 보기</a> 
 <hr>
 {% endfor %}
 
