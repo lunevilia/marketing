@@ -400,12 +400,29 @@ window.onload = function(){
 {% for i in important_board %}
 <div style="margin-bottom: 10px;display:table;"><span style="display:table-cell;vertical-align:middle;background-color:{{i.post.category.color}};" class="badge">{{i.post.category.board_name}}</span><a style="display:table-cell;padding-left: 5px;" href="{% url 'forms:shw_form' i.post.category i.post.id %}">{{i.post.title_short}}</a></div>
 {% endfor %}
-<h2 style="display: flex;justify-content: space-between;">{{board_name}}{% if user.is_anonymous %}</h2>{% endif %}
+<span style="display:flex;justify-content: space-between;">
+    <h2>{{board_name}}</h2>
+    <div style="display: flex;">
+{% if user.is_anonymous %}
+<!-- 디자인 때문에 좀 복잡합니다 -->
+<form method="GET" style="text-align: right;margin-left:8px;" action="{% url 'forms:selectform' board_name %}">
+    <input type="text" calss="form-control" name="search">
+    <input type="submit" value="검색">
+</form>
+</div>
+</span>
+{% endif %}
+
 {% if user.is_authenticated %}
-<button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-    글쓰기
+<button style="height: fit-content;font-size: x-small;" class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+✏글쓰기
 </button>
-</h2>
+<form method="GET" style="text-align: right;margin-left:8px;" action="{% url 'forms:selectform' board_name %}">
+    <input type="text" calss="form-control" name="search">
+    <input type="submit" value="검색">
+</form>
+</div>
+</span>
 <div class="collapse" id="collapseExample">
 <br>
 <form enctype="multipart/form-data" action="{% url 'forms:selectform' board_name %}" method="post">

@@ -12,8 +12,10 @@ from django.db.models import Count
 def selectform(request, board="자유게시판"): #작성하기 및 전체 글 보여주기
     if request.session.get('page'): #저장된 위치 삭제
         del request.session['page']
-        
+
+    #request.method == 'post'안에 있어야 하지만 예외 처리를 위해서 바깥에 착상    
     getCategory = get_object_or_404(Category, board_name=board) #board는 url로 통해서 category에 선택하는 게시판을 클릭하면 board가 들어와짐
+
     if request.method == 'POST':
         form = FormTest(request.POST)
         imageform = ImageTest(request.POST, request.FILES)
@@ -43,6 +45,9 @@ def selectform(request, board="자유게시판"): #작성하기 및 전체 글 �
         imageform = ImageTest()
         filesform = FilesTest()
 
+        #검색 기능 추가
+        search = request.GET.get("search", "")
+
         #강조 게시글
         important_board = Important_board.objects.all()
 
@@ -51,7 +56,8 @@ def selectform(request, board="자유게시판"): #작성하기 및 전체 글 �
         like_board = Defaultform.objects.filter(category__board_name=board).annotate(num_item=Count('like')).order_by('-num_item')[:3]
 
         if board:
-            getForm = Defaultform.objects.filter(category__board_name=board)
+            #검색 기능 contains로 제목 기준으로 가져오기!
+            getForm = Defaultform.objects.filter(category__board_name=board, title__contains=search)
         else:
             getForm = Defaultform.objects.all()
 
