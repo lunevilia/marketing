@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import *
 from .forms import *
+from usingform.forms import ImportantTest
+from usingform.models import Important_board
 from django.contrib.auth.models import User
 from django.contrib import auth
 from django.http import HttpResponse, HttpResponseRedirect
@@ -80,6 +82,50 @@ def alert_board(request):
     request.session['page'] = 'alert_board'
     return render(request, "alert.html", )
 
+
+#중요 게시판 생성
+@login_required(login_url='/')
+def important_board(request):
+    if request.user.is_superuser:
+        _board = Important_board.objects.all()
+        if request.method == 'POST':
+            form = ImportantTest(request.POST)
+            if form.is_valid():
+                form.save()
+                return redirect('/account/important_board')
+        else:
+            form = ImportantTest()
+        return render(request, "important_page.html", {"form":form, "board":_board,})
+    else:
+        return redirect('/account/profile')
+
+#중요 게시판 삭제
+@login_required(login_url='/')
+def del_important_board(request, important_id):
+    if request.user.is_superuser:
+        del_important = get_object_or_404(Important_board, id=important_id)
+        del_important.delete()
+        return redirect("/account/important_board/")
+    else:
+        return redirect('/account/profile')
+
+#중요 게시판 수정
+@login_required(login_url='/')
+def mod_important_board(request, important_id):
+    if request.user.is_superuser:
+        mod_board = get_object_or_404(Important_board, id=important_id)
+        if request.method == 'POST':
+            form = ImportantTest(request.POST, instance=mod_board)
+            if form.is_valid():
+                form.save()
+                return redirect('/account/important_board')
+        else:
+            form = ImportantTest(instance=mod_board)
+        return render(request, "mod_important_page.html", {"form":form, "mod_board":mod_board,})
+    else:
+        return redirect('/account/profile')
+
+
 #중복확인하는 ajax용 함수 만들기 (닉네임, 아이디, 이메일)
 def ajax(request, value, region):
     if request.is_ajax():
@@ -95,6 +141,7 @@ def ajax(request, value, region):
         return HttpResponse(json.dumps({'check':check}), 'application/json')
 
 #알람이 되는 ajax!
+@login_required(login_url='/')
 def notice_ajax(request): 
     if request.is_ajax():
         getProfile = Profile.objects.get(user__username=request.user)
@@ -128,3 +175,4 @@ def del_alert_board(request, alert_id):
         del_alert.delete()
 
     return redirect("/account/alert_board/")
+

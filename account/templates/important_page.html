@@ -1,0 +1,22 @@
+{% extends 'accountlayout/profilelayer.html' %}
+{% block name %}
+<h4>중요도 게시판 관리</h4>
+<form action="{% url 'account:important_board' %}" method="post">
+    {% csrf_token %}
+    <table>
+    {{ form.as_table }}
+    </table>
+    <input type="submit" value="생성">
+</form>
+
+<p></p>
+
+{% for i in board %}
+📃 게시글 : {{i.post.title}}<br>
+📝 작성자 : {{i.post.author.Name}}<br>
+✅ 중요도 : {{i.important}}<br>
+<a href="{% url 'account:mod_important_board' i.id %}">수정하기</a> <a style="color:red;" href="{% url 'account:del_important_board' i.id %}">삭제하기</a>
+<hr>
+{% endfor %}
+
+{% endblock %}

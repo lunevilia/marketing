@@ -42,3 +42,12 @@ class CommentTest(forms.ModelForm):
         widgets = {
             'body': forms.TextInput(attrs={'class': 'form-control', 'rows':3, 'id':False,}),
         }
+
+class ImportantTest(forms.ModelForm):
+    class Meta:
+        model = Important_board
+        fields = '__all__'
+        labels = {'post':'게시판선택', 'important':'중요도'}
+        widgets = {
+            'important': forms.TextInput(attrs={'class': 'form-control',}),
+        }

@@ -70,7 +70,9 @@ function modify_overlap(x, region){
 <p><a href="{% url 'account:like_board' %}">좋아요한 게시판</a></p>
 <p><a href="{% url 'account:favorite_board' %}">즐겨찾기</a></p>
 <p><a href="{% url 'account:alert_board' %}">알림내용</a></p>
-
+{% if user.is_superuser %}
+<p><a href="{% url 'account:important_board' %}">중요게시판 설정</a></p>
+{% endif %}
 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo">개인정보 수정</button>
     
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">

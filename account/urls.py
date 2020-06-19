@@ -28,6 +28,12 @@ urlpatterns = [
     path('alert_board/', views.alert_board, name='alert_board'),
     #알림삭제
     path('del_alert_board/<alert_id>/', views.del_alert_board, name='del_alert_board'),
+    #중요게시판 생성(운영자)
+    path('important_board/', views.important_board, name='important_board'),
+    #중요게시판 삭제(운영자)
+    path('del_important_board/<important_id>/', views.del_important_board, name='del_important_board'),
+    #중요게시판 수정(운영자)
+    path('mod_important_board/<important_id>/', views.mod_important_board, name='mod_important_board'),
     
 
     #회원탈퇴
