@@ -6,6 +6,7 @@ from category.models import Category
 from django.contrib.auth.models import User
 from django.http import HttpResponse
 import json
+from django.db.models import Count
 # Create your views here.
 
 def selectform(request, board="자유게시판"): #작성하기 및 전체 글 보여주기
@@ -45,12 +46,16 @@ def selectform(request, board="자유게시판"): #작성하기 및 전체 글 �
         #강조 게시글
         important_board = Important_board.objects.all()
 
+        #인기글 3개 가져오기 (.annotate => order_by를 이용할 수 있는 새로운 필드를 생성 기준을 Count('like') 즉, like 테이블 개수 기준으로)
+        #이 글 기준 -> 좋아요의 여러 개수 -> Count클래스로 like 개수를 얻고 그것을 num_item이라는 정렬할 수 있는 새로운 필드를 생성 후 필드 값으로 대입한 느낌
+        like_board = Defaultform.objects.filter(category__board_name=board).annotate(num_item=Count('like')).order_by('-num_item')[:3]
+
         if board:
             getForm = Defaultform.objects.filter(category__board_name=board)
         else:
             getForm = Defaultform.objects.all()
 
-    return render(request, 'formtest.html', {'important_board':important_board,'form':form, 'imageform':imageform, 'filesform':filesform, 'getForm':getForm, 'board_name':board,})
+    return render(request, 'formtest.html', {'like_board':like_board,'important_board':important_board,'form':form, 'imageform':imageform, 'filesform':filesform, 'getForm':getForm, 'board_name':board,})
 
 def shw_form(request, board, id): #글의 자세한 내용 보여주기
     #session 저장해서 그 좋아요 부분이랑 나누기 위해서 적용

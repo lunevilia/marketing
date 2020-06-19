@@ -440,7 +440,19 @@ window.onload = function(){
 </form>
 </div>
 {% endif %}
+<!-- 인기글 -->
 <hr>
+{% for i in like_board %}
+<div style="margin-bottom:3px;display:table;">
+    <span style="display:table-cell;vertical-align:middle;background-color:{{i.category.color}};" class="badge">인기글</span>
+    <a style="display:table-cell;padding-left: 5px;" href="{% url 'forms:shw_form' i.category i.id %}">{{i.title_short}}</a>
+    <span class="badge badge-light">
+        좋아요💖 : <span>{{i.num_item}}</span>
+    </span>
+</div>
+{% endfor %}
+<hr>
+<!-- 모든 글 -->
 {% for form_contents in getForm %}
 <p style="display: flex;">
     {% if form_contents.author.Image %}
