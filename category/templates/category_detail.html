@@ -34,11 +34,17 @@
 <script src="{%static 'colorfield/colorfield.js'%}"></script>
 <script src="{%static 'colorfield/jscolor/jscolor.js'%}"></script>
 {% if user.is_superuser %}
-<form action="{% url 'category:show_category' %}" method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" class="btn btn-success" value="추가하기">
-</form>
+<div class="card bg-light mb-3">
+  <div class="card-header"><b>게시판 관리</b></div>
+  <div class="card-body">
+    <form action="{% url 'category:show_category' %}" method="post">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <input type="submit" class="btn btn-success" value="추가하기">
+    </form>
+  </div>
+</div>
+
 {% endif %}
 <hr>
 
