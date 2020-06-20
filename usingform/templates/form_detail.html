@@ -566,7 +566,7 @@ window.onload = function(){
 {% endif %}
 
 
-<p>
+<p></p>
   <!-- 작성자 프로필 사진 -->
   <div style="display: flex;">
   {% if detail_getForm.author.Image %}
@@ -581,13 +581,13 @@ window.onload = function(){
   {{detail_getForm.created_at}}
   </span>
   </div>
-</p>
+<p></p>
 
 <!-- 제목 -->
 <h3><b>{{detail_getForm.title}}</b></h3>
 
 <!-- 내용 -->
-<p><h5>{{detail_getForm.body|safe|linebreaks}}</h5></p>
+<h5>{{detail_getForm.body|safe|linebreaks}}</h5>
 
 <!-- 사진 -->
 {% if detail_getForm.image_set.all %}
@@ -757,7 +757,7 @@ window.onload = function(){
 <!-- 댓글 내용 -->
 {% for comment in detail_getComment %}
 <div class="media"> <!-- 아주 큰 p -->
-<img style="border-radius: 5px;" width="50" height="50" src="{% if comment.author.Image %}{{comment.author.Image.url}}{% else %}https://image.flaticon.com/icons/svg/634/634741.svg{% endif %}" class="mr-3" alt="...">
+<img alt={{comment.author.Name}} style="border-radius: 5px;" width="50" height="50" src="{% if comment.author.Image %}{{comment.author.Image.url}}{% else %}https://image.flaticon.com/icons/svg/634/634741.svg{% endif %}" class="mr-3" alt="...">
 <div class="media-body">
   <h5 class="mt-0">{{comment.author.Name}}</h5>
   {{comment.body}}
