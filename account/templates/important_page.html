@@ -1,6 +1,6 @@
 {% extends 'accountlayout/profilelayer.html' %}
 {% block name %}
-<h4>중요도 게시판 관리</h4>
+<h4 style="text-align: center;">중요도 게시판 관리</h4>
 <form action="{% url 'account:important_board' %}" method="post">
     {% csrf_token %}
     <table>

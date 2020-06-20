@@ -1,6 +1,6 @@
 {% extends 'accountlayout/profilelayer.html' %}
 {% block name %}
-<h4>중요도 게시판 수정</h4>
+<h4 style="text-align: center;">중요도 게시판 수정</h4>
 <a href="/account/important_board/">취소</a>
 <form action="{% url 'account:mod_important_board' mod_board.id %}" method="post">
     {% csrf_token %}
