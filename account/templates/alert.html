@@ -1,7 +1,9 @@
 {% extends 'accountlayout/profilelayer.html' %}
 {% block name %}
 <h4>알림 메세지</h4>
+<hr>
 <a href="{% url 'account:del_alert_board' 'all' %}">알림 전체 삭제</a>
+<hr>
 {% for commentalert in user.profile.commentalertcontent_set.all %}
     <p><h3> 댓글 : {{commentalert.content.body}}{% if commentalert.view %} <span class="badge badge-pill badge-warning">NEW</span> {% else %} <span class="badge badge-pill badge-success">확인</span>{% endif %}</h3><a href="/board/alerted{{commentalert.id}}/{{commentalert.board.id}}">게시글 보러가기</a></p>
     <p>

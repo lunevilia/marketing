@@ -61,22 +61,39 @@ function modify_overlap(x, region){
     }
 
 </script>
-<h4>개인 정보</h4>
-
-<p>사진 : {% if user.profile.Image %}<img width="100" height="100" src="{{user.profile.Image.url}}">{% else %}설정하지 않았습니다!{% endif %}</p>
-<p>닉네임 : {{user.profile.Name}}</p>
-<p>이메일 : {{user.profile.Email}}</p>
-<p><a href="{% url 'account:donotalert_board' %}">알림설정</a></p>
-<p><a href="{% url 'account:like_board' %}">좋아요한 게시판</a></p>
-<p><a href="{% url 'account:favorite_board' %}">즐겨찾기</a></p>
-<p><a href="{% url 'account:alert_board' %}">알림내용</a></p>
-{% if user.is_superuser %}
-<p><a href="{% url 'account:important_board' %}">중요게시판 설정</a></p>
-{% endif %}
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo">개인정보 수정</button>
+<div class="card bg-light mb-3" style="width:fit-content;margin:auto;padding: 20px;">
+    <div style="text-align: center;" class="card-header"><h4>회원정보</h4></div>
+    <div class="card-body">
+        <div style="text-align: center;">
+        <h4>프로필 사진</h4>
+        <p>{% if user.profile.Image %}<img alt="{{user.profile.Name}}" width="100" height="100" src="{{user.profile.Image.url}}">{% else %}설정하지 않았습니다!{% endif %}</p>
+        </div>
+        <table style="margin:auto;">
+            <tr>
+                <td><b>닉네임 &nbsp;&nbsp; </b></td><td style="text-align: center;">{{user.profile.Name}}</td>
+            </tr>
+            <tr>
+                <td><b>이메일 &nbsp;&nbsp; </b></td><td>{{user.profile.Email}}</td>
+            </tr>
+        </table>
+        <p></p>
+        <div style="text-align: center;">
+            <p><a href="{% url 'account:donotalert_board' %}">알림설정</a></p>
+            <p><a href="{% url 'account:like_board' %}">좋아요한 게시판</a></p>
+            <p><a href="{% url 'account:favorite_board' %}">즐겨찾기</a></p>
+            <p><a href="{% url 'account:alert_board' %}">알림내용</a></p>
+            {% if user.is_superuser %}
+            <p><a href="{% url 'account:important_board' %}">중요게시판 설정</a></p>
+            {% endif %}
+        </div>
+    </div>
+    <div style="text-align: center;" class="card-footer">
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo">개인정보 수정</button>
+    </div>
+</div>
     
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="exampleModalLabel">정보 수정</h5>

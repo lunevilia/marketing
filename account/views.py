@@ -46,8 +46,12 @@ def signup(request):
         else:
             error = "비밀번호를 다시 확인해주세요!"
     else:
+        if request.user.is_authenticated:
+            return redirect('/account/profile')
+
         error = ""
         form = SignupForm()
+        
     return render(request, "signup.html", {"form":form, "error":error,})
 
 @login_required(login_url='/')
