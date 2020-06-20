@@ -11,7 +11,12 @@ $('#exampleModal').on('show.bs.modal', function (event) {
   var modal = $(this)
   modal.find('.modal-title').text('New message to ' + recipient)
   modal.find('.modal-body input').val(recipient)
+});
+
+$('#imageModal').on('shown.bs.modal', function () {
+
 })
+
 function image_change(){
   $('#image_modify').val('true');
 }
@@ -590,10 +595,38 @@ window.onload = function(){
 <b>이미지 🎨</b><br>
 <div style="display: flex; flex-flow:wrap;">
 {% for i in detail_getForm.image_set.all %}
-<a style="margin: 5px;" href="{{i.image.url}}" download><img style="border-radius: 5px;" width=80 height=80 src={{i.image.url}}></a>
+<a id="image_modal" style="margin: 5px;" onclick="image_modal_change(this);" data-toggle="modal" data-target="#imageModal"><img style="border-radius: 5px;" width=80 height=80 src={{i.image.url}}></a>
 {% endfor %}
 </div>
 </p>
+<!-- 이미지 보여주는 modal -->
+<!-- Modal -->
+<div class="modal fade" id="imageModal" tabindex="-1" role="dialog" aria-labelledby="imageModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalCenterTitle">이미지</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <img width=100% id="modal_detail_image">
+      </div>
+      <div class="modal-footer">
+        <a id="modal_detail_image_download" class="btn btn-primary" download>다운로드</a>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- 이미지 모달을 이용해서 이미지 다운로드 보여주고 다운로드 클릭하면 다운로드 -->
+<script>
+  function image_modal_change(x){
+    document.getElementById("modal_detail_image").src = x.childNodes[0].currentSrc;
+    document.getElementById("modal_detail_image_download").href = x.childNodes[0].currentSrc;
+}
+</script>
 {% endif %}
 
 <!-- 첨부파일 -->
@@ -619,12 +652,13 @@ window.onload = function(){
 {% endif %}
 </p>
 
+
 {% if detail_getForm.author.user.username == request.user.username %}
 <!-- 수정하기 modal -->
 <form enctype="multipart/form-data" action="{% url 'forms:mod_form' detail_getForm.category detail_getForm.id %}" method="post">
     {% csrf_token %}
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="exampleModalLabel">수정하기</h5>
