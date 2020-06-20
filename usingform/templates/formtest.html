@@ -402,7 +402,7 @@ window.onload = function(){
 {% endfor %}
 <div style="display:flex;justify-content: space-between;">
     <h2>{{board_name}}</h2>
-    <div style="display: flex;">
+<div style="display: flex;">
 {% if user.is_anonymous %}
 <!-- 디자인 때문에 좀 복잡합니다 -->
 <form method="GET" style="text-align: right;margin-left:8px;" action="{% url 'forms:selectform' board_name %}">
