@@ -34,17 +34,20 @@
 <script src="{%static 'colorfield/colorfield.js'%}"></script>
 <script src="{%static 'colorfield/jscolor/jscolor.js'%}"></script>
 {% if user.is_superuser %}
-<div class="card bg-light mb-3">
-  <div class="card-header"><b>게시판 관리</b></div>
-  <div class="card-body">
-    <form action="{% url 'category:show_category' %}" method="post">
-      {% csrf_token %}
-      {{ form.as_p }}
-      <input type="submit" class="btn btn-success" value="추가하기">
-    </form>
+<button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#category_add" aria-expanded="false" aria-controls="category_add">게시판추가</button>
+<p></p>
+<div class="collapse" id="category_add">
+  <div class="card bg-light mb-3">
+    <div class="card-header"><b>게시판 관리</b></div>
+    <div class="card-body">
+      <form action="{% url 'category:show_category' %}" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" class="btn btn-success" value="추가하기">
+      </form>
+    </div>
   </div>
 </div>
-
 {% endif %}
 <hr>
 
