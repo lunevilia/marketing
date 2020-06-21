@@ -10,6 +10,16 @@ function modify_profile() {
   }
 }
 
+function delete_profile() {
+    var r = prompt("정말로 아이디를 삭제하시겠습니까?\n삭제를 원하면 \"삭제\"를 입력하고 확인을 눌러주세요!\n(삭제하면 복구는 불가능🚫 합니다!)");
+    if (r == "삭제") {
+        location.href = "{% url 'account:del_user' %}";
+        alert("그 동안 감사했습니다!");
+    } else {
+        return;
+    }
+}
+
 function rematch(x){
     var nickname_check;
     if (x=="nickname_id") {
@@ -82,6 +92,7 @@ function modify_overlap(x, region){
             <p><a href="{% url 'account:like_board' %}">좋아요한 게시판</a></p>
             <p><a href="{% url 'account:favorite_board' %}">즐겨찾기</a></p>
             <p><a href="{% url 'account:alert_board' %}">알림내용</a></p>
+            <p><a style="color: red;cursor:pointer;" onclick="delete_profile()">회원탈퇴</a></p>
             {% if user.is_superuser %}
             <p><a href="{% url 'account:important_board' %}">중요게시판 설정</a></p>
             {% endif %}

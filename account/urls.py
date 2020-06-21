@@ -14,6 +14,9 @@ urlpatterns = [
     #로그아웃
     path('logout/', auth_views.LogoutView.as_view(), kwargs={'next_page': '/'}, name='logout'),
 
+    #아이디삭제
+    path('del_user/', views.del_user, name='del_user'),
+
     #회원정보 수정 requried login 추가
     path('profile/', views.profile, name='profile'),
 

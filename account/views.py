@@ -51,8 +51,14 @@ def signup(request):
 
         error = ""
         form = SignupForm()
-        
+
     return render(request, "signup.html", {"form":form, "error":error,})
+
+@login_required(login_url='/')
+def del_user(request):
+    user = User.objects.get(username=request.user)
+    user.delete()
+    return redirect('/')
 
 @login_required(login_url='/')
 def profile(request):
