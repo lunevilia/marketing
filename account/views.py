@@ -12,6 +12,12 @@ from django.core import serializers
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
+#Email 전송
+from django.core.mail import EmailMessage
+
+import random
+import string
+
 def login(request):
     if request.method == "POST":
         if request.is_ajax():
@@ -58,12 +64,52 @@ def signup(request):
 
     return render(request, "signup.html", {"form":form, "error":error,})
 
+#랜덤 비밀번호 제조
+def randomString(stringLength=8):
+    letters = string.ascii_lowercase
+    return ''.join(random.choice(letters) for i in range(stringLength))
+
+#비밀번호 찾기
+def find_password(request):
+    if request.method == "POST":
+        username = request.POST.get("username")
+        email = request.POST.get("email")
+        
+        try:
+            user = User.objects.get(username=username)
+            
+            if user.profile.Email == email:
+                send_message_title = "Readly의 임시 비밀번호입니다!"
+                user_email = email
+                
+                #임시 비밀번호로 수정
+                password = randomString()
+                user.set_password(password)
+                user.save()
+
+                send_message_body = "회원님의 비밀번호는 '" + str(password) + "'의 임시 비밀번호로 변경되었습니다!"
+
+                email_send = EmailMessage(send_message_title, send_message_body, to=[user_email])
+                messages.info(request, '입력하신 이메일로 임시 비밀번호를 전송했습니다!')
+                try:
+                    email_send.send()
+                except:
+                    messages.info(request, '유효하지 않은 이메일로 회원가입 하셔서\n이메일 전송이 불가능 합니다!')
+                    return redirect('/account/find_password')
+        except:
+            messages.info(request, '입력하신 회원 정보가 없습니다!')
+        return redirect('/account/find_password')
+    else:
+        return render(request, "find_password.html")
+
+#회원삭제
 @login_required(login_url='/')
 def del_user(request):
     user = User.objects.get(username=request.user)
     user.delete()
     return redirect('/')
 
+#회원정보 보기 및 수정하기
 @login_required(login_url='/')
 def profile(request):
     profile_information = Profile.objects.get(user__username=request.user)

@@ -7,6 +7,7 @@ from django.contrib import messages
 # Create your views here.
 def show_category(request): #게시판 보이게 하기 및 작성하기
     show_all = Category.objects.all()
+
     if request.method == 'POST':
         if request.user.is_superuser:
             form = CategoryForm(request.POST)
