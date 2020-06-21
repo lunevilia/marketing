@@ -10,6 +10,7 @@ import json
 from usingform.models import Commentalertcontent
 from django.core import serializers
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 
 def login(request):
     if request.method == "POST":
@@ -43,6 +44,9 @@ def signup(request):
                 profile.save()
                 auth.login(request, user)
                 return redirect('/')
+            else:
+                messages.info(request, '회원가입 중 비정상 적인 방법으로 접근했습니다.\n다시 회원가입해주세요!')
+                return redirect('/')
         else:
             error = "비밀번호를 다시 확인해주세요!"
     else:
@@ -63,10 +67,14 @@ def del_user(request):
 @login_required(login_url='/')
 def profile(request):
     profile_information = Profile.objects.get(user__username=request.user)
+    #수정하기
     if request.method == "POST":
         profile_form = ModifyForm(request.POST, request.FILES, instance=profile_information)
         if profile_form.is_valid():
             profile_form.save()
+            return redirect('/account/profile')
+        else:
+            messages.info(request, '비정상적인 수정 방법입니다!\n다시 수정해주세요!')
             return redirect('/account/profile')
     else:
         profile_form = ModifyForm(instance=profile_information)
@@ -103,6 +111,9 @@ def important_board(request):
             if form.is_valid():
                 form.save()
                 return redirect('/account/important_board')
+            else:
+                messages.info(request, '생성 중 오류가 났습니다!')
+                return redirect('/account/important_board')
         else:
             form = ImportantTest()
         return render(request, "important_page.html", {"form":form, "board":_board,})
@@ -128,6 +139,9 @@ def mod_important_board(request, important_id):
             form = ImportantTest(request.POST, instance=mod_board)
             if form.is_valid():
                 form.save()
+                return redirect('/account/important_board')
+            else:
+                messages.info(request, '수정 중 오류가 났습니다!')
                 return redirect('/account/important_board')
         else:
             form = ImportantTest(instance=mod_board)

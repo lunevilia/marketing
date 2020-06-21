@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .models import *
 from .forms import CategoryForm
 import re
+from django.contrib import messages
 
 # Create your views here.
 def show_category(request): #게시판 보이게 하기 및 작성하기
@@ -18,6 +19,9 @@ def show_category(request): #게시판 보이게 하기 및 작성하기
                 #생성시에 적용하도록 (form wait는 이 함수를 통해서 save를 한다)
                 create_then_order(show_all, num_important, form_wait)
 
+                return redirect('/category/')
+            else:
+                messages.info(request, '생성 중 오류가 났습니다!')
                 return redirect('/category/')
         else:
             return redirect('/category/')
@@ -72,6 +76,7 @@ def mod_category(request, id): #게시판 이름 바꾸기
 
             #form에 문제가 생길 경우!
             else:
+                messages.info(request, '변경 중 오류가 났습니다!')
                 return redirect('/category/')
         else:
             form = CategoryForm(instance=mod_getForm)

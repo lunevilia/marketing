@@ -430,6 +430,13 @@ window.onload = function(){
 </form>
 </div>
 </div>
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
 <div class="collapse" id="collapseExample">
 <br>
 <form enctype="multipart/form-data" action="{% url 'forms:selectform' board_name %}" method="post">

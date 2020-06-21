@@ -7,6 +7,7 @@ from django.contrib.auth.models import User
 from django.http import HttpResponse
 import json
 from django.db.models import Count
+from django.contrib import messages
 # Create your views here.
 
 def selectform(request, board="자유게시판"): #작성하기 및 전체 글 보여주기
@@ -40,6 +41,10 @@ def selectform(request, board="자유게시판"): #작성하기 및 전체 글 �
                     files = Files.objects.create(post=a, files=item)
                     files.save()
             return redirect('/board/'+str(board))
+        else:
+            #공백만 집어 넣을 경우
+            messages.info(request, '생성 중 오류가 났습니다!')
+            return redirect('/board/'+str(board))
     else:
         form = FormTest()
         imageform = ImageTest()
@@ -68,9 +73,10 @@ def selectform(request, board="자유게시판"): #작성하기 및 전체 글 �
 def shw_form(request, board, id): #글의 자세한 내용 보여주기
     #session 저장해서 그 좋아요 부분이랑 나누기 위해서 적용
     page = request.session.get('page', False)
-
+    
     #글 내용 보여주기
     detail_getForm = get_object_or_404(Defaultform, id=id)
+
     #댓글 보여주기
     detail_getComment = Comment.objects.filter(main_post=detail_getForm, post__isnull=True)
     commentform = CommentTest()
@@ -133,6 +139,9 @@ def mod_form(request, board, id): #글 수정하기
                     files.save()
 
             return redirect('/board/'+str(board)+'/'+str(id))
+        else:
+            messages.info(request, '수정 중 오류가 났습니다!')
+            return redirect('/board/'+str(board)+'/'+str(id))
 
 def del_form(request, board, id): #글 삭제하기
     post_instance = Defaultform.objects.get(id=id)
@@ -167,6 +176,8 @@ def comment_write(request, board, id):
                 Commentalertcontent.objects.create(board=main_post, sender_name=getProfile.Name, profile_name=main_post.author, content=a)
             
             return redirect('/board/'+str(board)+'/'+str(id))
+        else:
+            return redirect('/board/'+str(board)+'/'+str(id))
 
 #댓글 삭제
 def comment_del(request, board, id, comment_id):
@@ -200,6 +211,8 @@ def recomment_write(request, board, id, comment_id):
                 #내용과 id를 저장하기
                 Commentalertcontent.objects.create(board=main_post, sender_name=getProfile.Name, profile_name=post.author, content=a)
 
+            return redirect('/board/'+str(board)+'/'+str(id))
+        else:
             return redirect('/board/'+str(board)+'/'+str(id))
 
 #댓글 좋아요

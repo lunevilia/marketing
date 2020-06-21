@@ -27,7 +27,7 @@ function idDuplicationCheck(token) {
                     for (var i=0; i<data["response_dict"].length; i++){
                         var playlist_Id = data["response_dict"][i]["id"]
                         var playlist_Title = data["response_dict"][i]["snippet"]["title"]
-                        var thumbnail = data["response_dict"][i]["snippet"]["thumbnails"]["high"]["url"]
+                        // var thumbnail = data["response_dict"][i]["snippet"]["thumbnails"]["high"]["url"]
                         if(data["response_dict"][i]["added"]){
                             var text = "<div style='text-align: center; margin: 5%'><a style='float: right;' href='https://www.youtube.com/playlist?list=" + playlist_Id + "' target='_blank'>더보기</a><h2>"+playlist_Title+"</h2><div class='gallery js-flickity' data-flickity-options=\'{\"freeScroll\": \"true\", \"contain\": true, \"prevNextButtons\": false,\"pageDots\": false,\"imagesLoaded\": true }\'>"
                                 for (var j=0; j<data["response_dict"][i]["added"].length; j++){
@@ -36,7 +36,7 @@ function idDuplicationCheck(token) {
                                 var video_image = data["response_dict"][i]["added"][j][2]["url"];
                                 text += "<a class='gallery-cell' target='_blank' href='https://youtu.be/" + video_id + "'><img class='card-img-top' src='" + video_image + "' alt='Card image cap'><div class='card-body'><p class='card-text'>"+video_name+"</p></div></a>"
                                 }
-                            text += "</div>"+thumbnail+"<br><hr></div>"
+                            // text += "</div>"+thumbnail+"<br><hr></div>"
                             $("#enters").append(text)
                         }
                     }
