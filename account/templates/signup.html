@@ -90,10 +90,32 @@
         }
     });
     }
+
+window.onload = function(){
+    //Check File API support
+    if(window.File && window.FileList && window.FileReader)
+    {
+        var ImageInput = document.getElementById("id_Image");
+        var image_set = document.getElementById("image_set")
+        ImageInput.addEventListener("change", function(event){
+            var files = event.target.files; //FileList object
+            if(files.length){
+                image_set.innerHTML = "사진 설정 완료"
+            } else {
+                image_set.innerHTML = ""
+            }
+        });
+    }
+}
+
 </script>
 <style>
 th {
     text-align: right;
+}
+
+tr, td {
+    text-align: center;
 }
 </style>
 <div class="card bg-light mb-3">
@@ -101,42 +123,54 @@ th {
     <div class="card-body">
         <form enctype="multipart/form-data" action="{% url 'account:signup' %}" method="post">
             {% csrf_token %}
-            <table style="margin:auto; margin-bottom: 10px;">
+            <table style="margin:auto; margin-bottom: 10px;width: 100%;">
                 <tr>
-                    <td style="text-align: right;"><b>아이디:</b></td><td><input id="username_id" name="username_id" type="text" onchange="rematch(this.id)" required> <input type="button" value="중복확인" onclick="overlap($('#username_id').val(), 'username');"> </td>
+                    <td><input style="text-align: center;" id="username_id" name="username_id" type="text" placeholder="👤아이디" onchange="rematch(this.id)" required></td>
                 </tr>
                 <tr>
-                    <td style="text-align: center;" colspan="2"><span id="username_check"></span></td>
+                    <td><input class="btn btn-warning btn-sm" type="button" value="아이디 중복확인" onclick="overlap($('#username_id').val(), 'username');"></span></td>
                 </tr>
                 <tr>
-                    <td style="text-align: right;"><b>비밀번호:</b></td><td><input name="password1" type="password" required></td>
+                    <td><span id="username_check"></span></td>
                 </tr>
                 <tr>
-                    <td style="text-align: right;"><b>비밀번호 확인:</b></td><td><input name="password2" type="password" required></td>
+                    <td><input style="text-align: center;" name="password1" type="password" placeholder="🔒비밀번호" required></td>
                 </tr>
                 <tr>
-                    <td colspan="2">{{ form.as_table }}</td>
+                    <td><input style="text-align: center;" name="password2" type="password" placeholder="🔒비밀번호 확인" required></td>
                 </tr>
                 <tr>
-                    <td style="text-align: center;" colspan="2"><input type="button" value="닉네임 중복확인" onclick="overlap($('#nickname_id').val(), 'nickname');"></td>
+                    <td>{{ form.Name }}</td>
                 </tr>
                 <tr>
-                    <td style="text-align: center;" colspan="2"><span id="nickname_check"></span></td>
+                    <td><input class="btn btn-warning btn-sm" type="button" value="닉네임 중복확인" onclick="overlap($('#nickname_id').val(), 'nickname');"></td>
                 </tr>
                 <tr>
-                    <td style="text-align: center;" colspan="2"><input type="button" value="이메일 중복확인" onclick="overlap($('#email_id').val(), 'email');"></td>
+                    <td><span id="nickname_check"></span></td>
                 </tr>
                 <tr>
-                    <td style="text-align: center;" colspan="2"><span id="email_check"></span></td>
+                    <td>{{ form.Image }}</td>
                 </tr>
                 <tr>
-                    <td style="text-align: center;" colspan="2"><span>✏</span></td>
+                    <td>{{ form.Email }}</td>
                 </tr>
                 <tr>
-                    <td style="text-align: center;" colspan="2"><input id="user_submit" type="submit" value="가입하기" disabled> <span id="overlap_id">중복확인을 해주세요!</span></td>
+                    <td><input class="btn btn-warning btn-sm" type="button" value="이메일 중복확인" onclick="overlap($('#email_id').val(), 'email');"></td>
                 </tr>
                 <tr>
-                    <td style="text-align: center;" colspan="2"><span>{{error}}</span></td>
+                    <td><span id="email_check"></span></td>
+                </tr>
+                <tr>
+                    <td><input class="btn btn-info btn-sm" style="margin-top:5px;" type="button" value="🖼프로필사진(선택사항)" onclick="document.getElementById('id_Image').click();" /></td>
+                </tr>
+                <tr>
+                    <td><div style="color: blue; margin-bottom: 10px;" id="image_set"></div></td>
+                </tr>
+                <tr>
+                    <td><input class="btn btn-primary btn-sm" id="user_submit" type="submit" value="가입하기" disabled><br><span id="overlap_id">중복확인을 해주세요!</span></td>
+                </tr>
+                <tr>
+                    <td><span>{{error}}</span></td>
                 </tr>
             </table>    
         </form>

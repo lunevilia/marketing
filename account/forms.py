@@ -8,18 +8,24 @@ class MyClearableFileInput(ClearableFileInput):
     clear_checkbox_label = '지우기'
         
 class SignupForm(forms.ModelForm):
-    
     class Meta:
         model = Profile
         fields = ('Name', 'Image', 'Email',)
         labels = {
-            'Name': '닉네임',
-            'Image': '프로필 사진',
-            'Email': '이메일',
+            'Name': '',
+            'Image': '',
+            'Email': '',
         }
         widgets = {
-            'Name': forms.TextInput(attrs={'id': 'nickname_id', 'onchange':"rematch(this.id)", }),
-            'Email': forms.TextInput(attrs={'id': 'email_id', 'onchange':"rematch(this.id)",}),
+            'Name': forms.TextInput(attrs={
+                'id': 'nickname_id',
+                'onchange':'rematch(this.id)',
+                'placeholder':'🎭닉네임',
+                'style':'text-align:center',
+                'required':True,
+                }),
+            'Email': forms.TextInput(attrs={'id': 'email_id', 'onchange':"rematch(this.id)", 'placeholder':'✉이메일','style':'text-align:center','required':True,}),
+            'Image': forms.FileInput(attrs={'style':'display:none',})
         }
 
         onchange="rematch(this.id)"
