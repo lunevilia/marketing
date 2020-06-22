@@ -17,6 +17,9 @@ urlpatterns = [
     #비밀번호 찾기
     path('find_password/', views.find_password, name='find_password'),
 
+    #비밀번호 변경
+    path('mod_password/', views.mod_password, name='mod_password'),
+
     #아이디삭제
     path('del_user/', views.del_user, name='del_user'),
 

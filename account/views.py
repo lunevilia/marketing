@@ -102,6 +102,22 @@ def find_password(request):
     else:
         return render(request, "find_password.html")
 
+#비밀번호 변경
+@login_required(login_url='/')
+def mod_password(request):
+    if request.method == "POST":
+        current_password = request.POST.get("b_password")
+        new_password = request.POST.get("n_password")
+        try:
+            user = User.objects.get(username=request.user)
+            user.set_password(new_password)
+            user.save()
+        except:
+            messages.info(request, '오류가 일어났습니다!')
+
+        return redirect('/account/profile')
+
+
 #회원삭제
 @login_required(login_url='/')
 def del_user(request):

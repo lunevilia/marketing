@@ -10,6 +10,15 @@ function modify_profile() {
   }
 }
 
+function change_password(){
+  if (document.getElementById("n_password").value == document.getElementById("c_password").value) {
+    return true;
+  } else {
+    document.getElementById("check_password").innerHTML = "새로운 비밀번호와 비밀번호 확인이 일치하지 않습니다!"
+    return false;
+  }
+}
+
 function delete_profile() {
     var r = prompt("정말로 아이디를 삭제하시겠습니까?\n삭제를 원하면 \"삭제\"를 입력하고 확인을 눌러주세요!\n(삭제하면 복구는 불가능🚫 합니다!)");
     if (r == "삭제") {
@@ -100,16 +109,18 @@ function modify_overlap(x, region){
     </div>
     <div style="text-align: center;" class="card-footer">
         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo">개인정보 수정</button>
+        <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#passwordModal" data-whatever="@mdo">비밀번호 변경</button>
     </div>
     {% if messages %}
-    <ul class="messages">
+    <div style="text-align: center;">
         {% for message in messages %}
-        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {{ message }}
         {% endfor %}
-    </ul>
+    </div>
     {% endif %}
 </div>
-    
+
+<!-- 회원정보 수정 modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
@@ -134,5 +145,38 @@ function modify_overlap(x, region){
       </div>
     </div>
   </div>
+
+  <!-- 비밀번호 변경 modal -->
+  <div class="modal fade" id="passwordModal" tabindex="-1" role="dialog" aria-labelledby="passwordModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="passwordModalLabel">비밀번호변경</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form onSubmit="return change_password()" action="{% url 'account:mod_password' %}" method="POST">
+            {% csrf_token %}
+        <div class="modal-body">
+            <div class="form-group">
+                <label for="n_password" class="col-form-label">새로운 비밀번호</label>
+                <input name="n_password" type="password" class="form-control" id="n_password" minlength="8" required>
+            </div>
+            <div class="form-group">
+                <label for="c_password" class="col-form-label">비밀번호 확인</label>
+                <input name="c_password" type="password" class="form-control" id="c_password" minlength="8" required>
+            </div>
+          <div id="check_password" style="text-align: center;"></div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
+          <input type="submit" class="btn btn-primary" value="변경하기">
+        </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
 
 {% endblock %}
