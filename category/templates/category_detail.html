@@ -1,6 +1,8 @@
 {% extends 'categorylayout/categorylayer.html' %}
 {% load static %}
 {% block name %}
+
+{% if user.is_superuser %}
 <script>
     $('#exampleModal').on('show.bs.modal', function (event) {
       var button = $(event.relatedTarget) // Button that triggered the modal
@@ -19,8 +21,8 @@
         document.modify.action = "{% url 'category:mod_category' 12345 %}".replace(/12345/, z.toString())
     }
 
-    function delete_category(x) {
-      var r = confirm("정말로 게시판을 삭제하시겠습니까?");
+    function delete_category(x, y) {
+      var r = confirm(`정말로 ${y} 게시판을 삭제하시겠습니까?`);
 
       if (r == true) {
         location.href = "{% url 'category:delete_category' 12345 %}".replace(/12345/, x);
@@ -28,12 +30,40 @@
         return;
       }
     }
-
 </script>
-<!-- 색깔 넣어주기 위한 js -->
 <script src="{%static 'colorfield/colorfield.js'%}"></script>
 <script src="{%static 'colorfield/jscolor/jscolor.js'%}"></script>
+{% endif %}
+
+<style>
+/* 커뮤니티 버튼 디자인 */
+.btn .category {
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+  transition: 0.5s;
+}
+
+.btn .category:after {
+  content: '👀';
+  position: absolute;
+  opacity: 0;
+  top: 0;
+  right: -20px;
+  transition: 0.5s;
+}
+
+.btn:hover .category {
+  padding-right: 30px;
+}
+
+.btn:hover .category:after {
+  opacity: 1;
+  right: 0;
+}
+</style>
 {% if user.is_superuser %}
+<!-- 색깔 넣어주기 위한 js -->
 <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#category_add" aria-expanded="false" aria-controls="category_add">게시판추가</button>
 <p></p>
 <div class="collapse" id="category_add">
@@ -61,8 +91,8 @@
 <br>
 {% for i in show_all %}
 <p>
-<a style="background-color:{{i.color}};color:black;" href="{% url 'forms:selectform' i.board_name %}">{{i.board_name}}</a> {% if user.is_superuser %} | <a class="btn btn-danger" href="javascript:delete_category({{i.id}});">🚮게시판 삭제</a> |
-<button type="button" class="btn btn-info" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo" onclick="myFunction('{{i.board_name}}', '{{i.important}}', '{{i.color}}','{{i.id}}');">🔁수정하기</button>{% endif %}
+<a class="btn btn-lg btn-block" style="background-color:{{i.color}};color:black;box-shadow:0px 5px {{i.color}}61;" href="{% url 'forms:selectform' i.board_name %}"><b class="category">{{i.board_name}} </b></a> {% if user.is_superuser %}<div style="text-align: center;"><a class="btn btn-danger" href="javascript:delete_category({{i.id}}, '{{i.board_name}}');">🚮게시판 삭제</a>
+<button type="button" class="btn btn-info" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo" onclick="myFunction('{{i.board_name}}', '{{i.important}}', '{{i.color}}','{{i.id}}');">🔁수정하기</button></div>{% endif %}
 </p>
 {% endfor %}
 {% if user.is_superuser %}
