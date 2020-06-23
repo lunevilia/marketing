@@ -170,8 +170,19 @@ tr, td {
                     <td><input class="btn btn-primary btn-sm" id="user_submit" type="submit" value="가입하기" disabled><br><span id="overlap_id">중복확인을 해주세요!</span></td>
                 </tr>
                 <tr>
-                    <td><span>{{error}}</span></td>
+                    <td><span style="color:red;">{{error}}</span></td>
                 </tr>
+                {% if messages %}
+                <tr>
+                    <td>
+                    <div style="text-align: center;color:red;">
+                        {% for message in messages %}
+                        {{ message }}
+                        {% endfor %}
+                    </div>
+                    </td>
+                </tr>
+                {% endif %}
             </table>    
         </form>
     </div>

@@ -36,11 +36,11 @@ def signup(request):
     if request.method == "POST":
         form = SignupForm(request.POST, request.FILES)
         if request.POST["password1"]==request.POST["password2"]:
-            user = User.objects.create_user(
+            if form.is_valid():
+                user = User.objects.create_user(
                 username=request.POST.get("username_id"),
                 password=request.POST.get("password1")
-            )
-            if form.is_valid():
+                )
                 profile = Profile(
                     user=user,
                     Name=form.cleaned_data.get('Name'),
@@ -51,8 +51,10 @@ def signup(request):
                 auth.login(request, user)
                 return redirect('/')
             else:
-                messages.info(request, '회원가입 중 비정상 적인 방법으로 접근했습니다.\n다시 회원가입해주세요!')
-                return redirect('/')
+                if "Email" in form.errors.keys():
+                    messages.info(request, "올바른 이메일 주소를 입력하세요.")
+                
+                return redirect('/account/signup')
         else:
             error = "비밀번호를 다시 확인해주세요!"
     else:

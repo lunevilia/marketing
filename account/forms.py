@@ -24,7 +24,7 @@ class SignupForm(forms.ModelForm):
                 'style':'text-align:center',
                 'required':True,
                 }),
-            'Email': forms.TextInput(attrs={'id': 'email_id', 'onchange':"rematch(this.id)", 'placeholder':'✉이메일','style':'text-align:center','required':True,}),
+            'Email': forms.EmailInput(attrs={'id': 'email_id', 'onchange':"rematch(this.id)", 'placeholder':'✉이메일','style':'text-align:center','required':True,}),
             'Image': forms.FileInput(attrs={'style':'display:none',})
         }
 
