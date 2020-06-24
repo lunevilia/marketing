@@ -653,7 +653,7 @@ window.onload = function(){
 </p>
 
 
-{% if detail_getForm.author.user.username == request.user.username %}
+{% if detail_getForm.author.user.username == request.user.username or user.is_superuser %}
 <!-- 수정하기 modal -->
 <form enctype="multipart/form-data" action="{% url 'forms:mod_form' detail_getForm.category detail_getForm.id %}" method="post">
     {% csrf_token %}

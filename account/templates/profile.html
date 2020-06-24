@@ -103,12 +103,12 @@ function modify_overlap(x, region){
             <p><a href="{% url 'account:alert_board' %}">알림내용</a></p>
             <p><a style="color: red;cursor:pointer;" onclick="delete_profile()">회원탈퇴</a></p>
             {% if user.is_superuser %}
-            <p><a href="{% url 'account:important_board' %}">중요게시판 설정</a></p>
+            <p><a href="{% url 'account:important_board' %}">⚠중요게시판 설정</a></p>
             {% endif %}
         </div>
     </div>
     <div style="text-align: center;" class="card-footer">
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo">개인정보 수정</button>
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo">📃개인정보 수정</button>
         <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#passwordModal" data-whatever="@mdo">비밀번호 변경</button>
     </div>
     {% if messages %}

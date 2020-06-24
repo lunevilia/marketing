@@ -91,57 +91,60 @@ def shw_form(request, board, id): #글의 자세한 내용 보여주기
 
 def mod_form(request, board, id): #글 수정하기
     mod_getForm = get_object_or_404(Defaultform, id=id)
-
-    if request.method == 'POST':
-        form = FormTest(request.POST, instance=mod_getForm)
-        
-        if form.is_valid():
-            a = form.save()
-
-            if request.POST.get("image_modify"):
-                #각각 이미지를 삭제하기 눌렀을 경우!!
-                delete_image_list = request.POST.get("delete_image").split(',')
-                delete_image_list.pop() # 마지막에 '' 가 남아서 pop을 해 주었다!
-                delete_image_list = list(map(int, delete_image_list)) #int로 바꾸어주기!
-
-                if delete_image_list:
-                    for i in delete_image_list:
-                        pre_image_delete = Image.objects.get(post=mod_getForm, id=i)
-                        if pre_image_delete.post.author == request.user.profile:
-                            pre_image_delete.delete()
-                        else:
-                            continue
-
-                image_list = request.FILES.getlist('postimage') #javascript의 생성으로 input의 id가 postimage 입니다!
-
-                for item in image_list: 
-                    image = Image.objects.create(post=mod_getForm, image=item)
-                    image.save()
-
-            if request.POST.get("files_modify"):
-                #각각 파일을 삭제하기 눌렀을 경우!!
-                delete_file_list = request.POST.get("delete_file").split(',')
-                delete_file_list.pop() # 마지막에 '' 가 남아서 pop을 해 주었다!
-                delete_file_list = list(map(int, delete_file_list)) #int로 바꾸어주기!
-
-                if delete_file_list:
-                    for i in delete_file_list:
-                        pre_file_delete = Files.objects.get(post=mod_getForm, id=i)
-                        if pre_file_delete.post.author == request.user.profile:
-                            pre_file_delete.delete()
-                        else:
-                            continue
-
-                files_list = request.FILES.getlist('postfile') #javascript의 생성으로 input의 id가 postimage 입니다!
+    if request.user == mod_getForm.author.user or request.user.is_superuser:
+        if request.method == 'POST':
+            form = FormTest(request.POST, instance=mod_getForm)
             
-                for item in files_list: 
-                    files = Files.objects.create(post=mod_getForm, files=item)
-                    files.save()
+            if form.is_valid():
+                a = form.save()
 
-            return redirect('/board/'+str(board)+'/'+str(id))
-        else:
-            messages.info(request, '수정 중 오류가 났습니다!')
-            return redirect('/board/'+str(board)+'/'+str(id))
+                if request.POST.get("image_modify"):
+                    #각각 이미지를 삭제하기 눌렀을 경우!!
+                    delete_image_list = request.POST.get("delete_image").split(',')
+                    delete_image_list.pop() # 마지막에 '' 가 남아서 pop을 해 주었다!
+                    delete_image_list = list(map(int, delete_image_list)) #int로 바꾸어주기!
+
+                    if delete_image_list:
+                        for i in delete_image_list:
+                            pre_image_delete = Image.objects.get(post=mod_getForm, id=i)
+                            if pre_image_delete.post.author == request.user.profile:
+                                pre_image_delete.delete()
+                            else:
+                                continue
+
+                    image_list = request.FILES.getlist('postimage') #javascript의 생성으로 input의 id가 postimage 입니다!
+
+                    for item in image_list: 
+                        image = Image.objects.create(post=mod_getForm, image=item)
+                        image.save()
+
+                if request.POST.get("files_modify"):
+                    #각각 파일을 삭제하기 눌렀을 경우!!
+                    delete_file_list = request.POST.get("delete_file").split(',')
+                    delete_file_list.pop() # 마지막에 '' 가 남아서 pop을 해 주었다!
+                    delete_file_list = list(map(int, delete_file_list)) #int로 바꾸어주기!
+
+                    if delete_file_list:
+                        for i in delete_file_list:
+                            pre_file_delete = Files.objects.get(post=mod_getForm, id=i)
+                            if pre_file_delete.post.author == request.user.profile:
+                                pre_file_delete.delete()
+                            else:
+                                continue
+
+                    files_list = request.FILES.getlist('postfile') #javascript의 생성으로 input의 id가 postimage 입니다!
+                
+                    for item in files_list: 
+                        files = Files.objects.create(post=mod_getForm, files=item)
+                        files.save()
+
+                return redirect('/board/'+str(board)+'/'+str(id))
+            else:
+                messages.info(request, '수정 중 오류가 났습니다!')
+                return redirect('/board/'+str(board)+'/'+str(id))
+    else:
+        messages.info(request, '작성자 외의 사람이 수정하려고 했습니다!')
+        return redirect('/board/'+str(board)+'/'+str(id))
 
 def del_form(request, board, id): #글 삭제하기
     post_instance = Defaultform.objects.get(id=id)
