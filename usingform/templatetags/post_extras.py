@@ -48,5 +48,5 @@ def _checking(obj, user):
 @register.filter
 def kill_script(value):
     a = value.replace("<script>","&lt;script&gt;")
-    b = a.replace("</sciprt>","<&lt;/sciprt&gt;")
+    b = a.replace("</script>","&lt;/script&gt;")
     return b
