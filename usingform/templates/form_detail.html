@@ -645,9 +645,9 @@ window.onload = function(){
   💖 : <span id="board_like">{{detail_getForm.mylike}}</span>
 </span>
 {% if user.is_authenticated %}
-<span onclick="ajax_board_like('{{detail_getForm.id}}', this)">{{detail_getForm|board_checking:request.user.username|safe}}</span>
+<span style="cursor: pointer;" onclick="ajax_board_like('{{detail_getForm.id}}', this)">{{detail_getForm|board_checking:request.user.username|safe}}</span>
 <span class="badge badge-light">
-  Favorite : <span onclick="ajax_board_favorite('{{detail_getForm.id}}', this)">{{detail_getForm|board_favorite:request.user.username|safe}}</span>
+  Favorite : <span style="cursor: pointer;" onclick="ajax_board_favorite('{{detail_getForm.id}}', this)">{{detail_getForm|board_favorite:request.user.username|safe}}</span>
 </span>
 {% endif %}
 </p>
@@ -774,7 +774,7 @@ window.onload = function(){
     💖 : <span id="countlike{{comment.id}}">{{comment.mylike}}</span>
   </span>
 {% if user.is_authenticated %}
-<span onclick="ajax_comment_like('{{comment.id}}', this)">{{comment|_checking:request.user.username|safe}}</span>
+<span style="cursor: pointer;" onclick="ajax_comment_like('{{comment.id}}', this)">{{comment|_checking:request.user.username|safe}}</span>
 {% endif %}
 {% if request.user.username == comment.author.user.username %}
 <a style="color:#f83f3f;cursor:pointer;" onclick="delete_comment('{{comment.id}}');">댓글 삭제</a>
@@ -809,7 +809,7 @@ window.onload = function(){
       💖 : <span id="countlike{{re_comment.id}}">{{re_comment.mylike}}</span>
     </span>
     {% if user.is_authenticated %}
-    <span onclick="ajax_comment_like('{{re_comment.id}}', this)">{{re_comment|_checking:request.user.username|safe}}</span>
+    <span style="cursor: pointer;" onclick="ajax_comment_like('{{re_comment.id}}', this)">{{re_comment|_checking:request.user.username|safe}}</span>
     {% endif %}
     {% if request.user.username == re_comment.author.user.username %}
     <a style="color:#f83f3f;cursor:pointer;" onclick="delete_comment('{{re_comment.id}}');">댓글 삭제</a>

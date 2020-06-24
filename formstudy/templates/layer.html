@@ -173,7 +173,7 @@ var alarm_status = true;
             </ul>
               {% if user.is_authenticated %}
               <div style="margin:10px" class="dropdown">
-              <span id="notice" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onclick="notice_ajax()">{{user|alert_checking:user.profile.Name|safe}}</span>
+              <span style="cursor: pointer;" id="notice" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onclick="notice_ajax()">{{user|alert_checking:user.profile.Name|safe}}</span>
               <div style="padding:20px;" class="dropdown-menu alert-warning" aria-labelledby="notice" id="notice_result"></div>
               </div>
               {% endif %}
