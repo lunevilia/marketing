@@ -1,0 +1,41 @@
+<!-- {% load post_extras %} -->
+<!-- 댓글 내용 -->
+{% if comment %}
+<div class="media"> <!-- 아주 큰 p -->
+<img alt={{comment.author.Name}} style="border-radius: 5px;" width="50" height="50" src="{% if comment.author.Image %}{{comment.author.Image.url}}{% else %}https://image.flaticon.com/icons/svg/634/634741.svg{% endif %}" class="mr-3" alt="...">
+<div class="media-body">
+  <h5 class="mt-0">{{comment.author.Name}}</h5>
+  {{comment.body}}
+
+<div>
+  <span class="badge badge-light">
+    💖 : <span id="countlike{{comment.id}}">{{comment.mylike}}</span>
+  </span>
+{% if user.is_authenticated %}
+<span style="cursor: pointer;" onclick="ajax_comment_like('{{comment.id}}', this)">{{comment|_checking:request.user.username|safe}}</span>
+{% endif %}
+{% if request.user.username == comment.author.user.username %}
+<a style="color:#f83f3f;cursor:pointer;" onclick="delete_comment('{{comment.id}}');">댓글 삭제</a>
+{% endif %}
+</div>
+<!-- 댓글 대댓글 작성 -->
+{% if user.is_superuser %}
+<p><input id="checkBox{{comment.id}}" type="checkbox" name="re_comment" value="답글" onclick="re_comment(this, 're_comment{{comment.id}}')"> 답글달기</p>
+<div style="display: none;" id=re_comment{{comment.id}}>
+<form action="{% url 'forms:recomment_write' detail_getForm.category detail_getForm.id comment.id %}" method="post">
+    {% csrf_token %}
+    {{ commentform.as_table }}
+    <p><input style="margin-top:5px;" type="submit" value="답글입력"></p>
+</form>
+</div>
+{% endif %}
+
+{% for re_comment in comment.comment_set.all %}
+    {%with comment=re_comment template_name="comments.html" %}
+        {%include template_name%}
+    {%endwith%}  
+{% endfor %}
+
+</div>
+</div>
+{% endif %}
