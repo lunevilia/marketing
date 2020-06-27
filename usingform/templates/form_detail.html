@@ -596,7 +596,7 @@ window.onload = function(){
 <b>이미지 🎨</b><br>
 <div style="display: flex; flex-flow:wrap;">
 {% for i in detail_getForm.image_set.all %}
-<a id="image_modal" style="margin: 5px;" onclick="image_modal_change(this);" data-toggle="modal" data-target="#imageModal"><img style="border-radius: 5px;" width=80 height=80 src={{i.image.url}}></a>
+<a id="image_modal" style="margin: 5px;cursor: pointer;" onclick="image_modal_change(this);" data-toggle="modal" data-target="#imageModal"><img style="border-radius: 5px;" width=80 height=80 src={{i.image.url}}></a>
 {% endfor %}
 </div>
 </p>
@@ -761,9 +761,10 @@ window.onload = function(){
 {% endif %}
 
 <p></p>
-
+<!-- 대대댓글 정보 볼 수 있도록 설정!!! 재귀 함수 -->
 {%for comment in detail_getComment %} 
   {%include "comments.html" %}
   <hr>
 {%endfor%}
+
 {% endblock %}
