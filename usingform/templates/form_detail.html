@@ -596,7 +596,7 @@ window.onload = function(){
 <b>이미지 🎨</b><br>
 <div style="display: flex; flex-flow:wrap;">
 {% for i in detail_getForm.image_set.all %}
-<a id="image_modal" style="margin: 5px;cursor: pointer;" onclick="image_modal_change(this);" data-toggle="modal" data-target="#imageModal"><img style="border-radius: 5px;" width=80 height=80 src={{i.image.url}}></a>
+<a id="image_modal" style="margin: 5px;cursor: pointer;" onclick="image_modal_change('{{i.image.url}}');" data-toggle="modal" data-target="#imageModal"><img style="border-radius: 5px;" width=80 height=80 src={{i.image.url}}></a>
 {% endfor %}
 </div>
 </p>
@@ -624,8 +624,8 @@ window.onload = function(){
 <!-- 이미지 모달을 이용해서 이미지 다운로드 보여주고 다운로드 클릭하면 다운로드 -->
 <script>
   function image_modal_change(x){
-    document.getElementById("modal_detail_image").src = x.childNodes[0].currentSrc;
-    document.getElementById("modal_detail_image_download").href = x.childNodes[0].currentSrc;
+    document.getElementById("modal_detail_image").src = x;
+    document.getElementById("modal_detail_image_download").href = x;
 }
 </script>
 {% endif %}
