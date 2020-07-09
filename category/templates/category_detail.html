@@ -18,6 +18,7 @@
         document.getElementById("recipient-name").value = x;
         document.getElementById("important").value = y;
         document.getElementById("color").value = color;
+        document.getElementById("color").style.backgroundColor = color;
         document.modify.action = "{% url 'category:mod_category' 12345 %}".replace(/12345/, z.toString())
     }
 
@@ -115,7 +116,8 @@
                   <label for="important" class="col-form-label">게시판 순서 :</label>
                   <input name="important" type="text" class="form-control" id="important" value="{{i.important}}" required> 
                   <label for="color" class="col-form-label">게시판 색깔 :</label>
-                  <input name="color" type="text" class="form-control" id="color" value="{{i.color}}"> 
+                  <input id="color" {{form.color}}>
+                  <!-- 눈속임 사용 -->
                 </div>
               </form>
             </div>

@@ -19,3 +19,4 @@ class CategoryForm(forms.ModelForm):
             'color' : '게시판 색깔'
         }
         # form을 html에 띄울때, 해당 label들의 표시를 'board_name'과 같이 필드명으로 하지 않고, '게시판 추가' 처럼 사용자가 직접 정의하겠다
+ 
