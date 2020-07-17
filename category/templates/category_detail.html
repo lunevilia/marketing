@@ -90,12 +90,12 @@
 {% endif %}
 <h4>게시판 목록</h4>
 <br>
+<div>
 {% for i in show_all %}
-<p>
-<a class="btn btn-lg btn-block" style="background-color:{{i.color}};color:black;box-shadow:0px 5px {{i.color}}61;" href="{% url 'forms:selectform' i.board_name %}"><b class="category">{{i.board_name}} </b></a> {% if user.is_superuser %}<div style="text-align: center;"><a class="btn btn-danger" href="javascript:delete_category({{i.id}}, '{{i.board_name}}');">🚮게시판 삭제</a>
+<a class="btn btn-lg" style="background-color:{{i.color}};color:black;box-shadow:0px 5px {{i.color}}61;margin:5px;" href="{% url 'forms:selectform' i.board_name %}"><b class="category">{{i.board_name}} </b></a> {% if user.is_superuser %}<div style="text-align: center;"><a class="btn btn-danger" href="javascript:delete_category({{i.id}}, '{{i.board_name}}');">🚮게시판 삭제</a>
 <button type="button" class="btn btn-info" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo" onclick="myFunction('{{i.board_name}}', '{{i.important}}', '{{i.color}}','{{i.id}}');">🔁수정하기</button></div>{% endif %}
-</p>
 {% endfor %}
+</div>
 {% if user.is_superuser %}
 <form action="" name="modify" method="post">
     {% csrf_token %}
