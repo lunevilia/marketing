@@ -1,0 +1,96 @@
+{% extends 'layer.html' %}
+{% block contents %}
+<style>
+    /* flickity 때문에 */
+    .gallery-cell {
+            color: black;
+            width: 30%;
+            height: 25vh;
+            margin-right: 10px;
+            background: white;
+            counter-increment: gallery-cell;
+            border-style: solid;
+            border-width: 0.2px;
+            border-color: grey;
+            border-radius: 5px;
+            transition-duration: 1s;
+        }
+
+        .gallery-cell:hover{
+            color: black;
+            text-decoration: none;
+            box-shadow : 5px 5px 2px 0.5px grey;
+            transition-duration: 1s;
+        }
+
+        .gallery-cell:visited{
+            color: black;
+            text-decoration: none;
+        }
+
+        /* cell number */
+        .gallery-cell:before {
+            display: block;
+            text-align: center;
+            line-height: 200px;
+            font-size: 80px;
+            color: white;
+        }
+
+        /* iframe */
+
+        iframe{
+            width: 560px;
+            height: 315px;
+        }
+
+        * {
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+        }
+
+        body { font-family: sans-serif; }
+
+        .card-body{
+                padding:0.5rem;
+            }
+        .card{
+            transition-duration: 1s;
+        }
+
+        .card:hover {
+            box-shadow : 5px 5px 2px 0.5px rgba(0, 0, 255, .2);
+            transition-duration: 1s;
+        }
+
+        /* 드롭다운 올리기만 하면 보이도록 설정 */
+        .dropdown_board:hover .dropdown-menu {
+            display: block;
+            margin-top: 0;
+        }
+
+        @media (min-width:300px) and (max-width:768px) {
+            iframe{
+                width: 300px;
+                height: 169px;
+            }
+
+            .gallery-cell {
+                width: 45%;
+                height: 150px;
+            }
+        }
+
+        @media (min-width:1200px) {
+            .gallery-cell {
+                width: 30%;
+                height: 300px;
+            }
+        }
+
+        /* flickity 때문에 */
+</style>
+{% block name %}
+{% endblock %}
+
+{% endblock %}

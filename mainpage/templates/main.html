@@ -1,0 +1,91 @@
+{% extends 'mainlayout/mainlayer.html' %}
+{% block name %}
+<link rel="stylesheet" href="https://unpkg.com/flickity@2/dist/flickity.css" media="screen">
+<script src="https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js"></script>
+
+<hr>
+<div style="display: flex;justify-content: space-around;">
+    <div style="text-align: center;line-height:normal;cursor:pointer;" onClick="window.open('https://www.wku.ac.kr/')">
+        <div style="background-color: grey;border-radius: 50px;width: 50px;height: 50px;margin: auto;">
+            
+        </div>
+        <span style="font-size: 80%;">학교<br>홈페이지</span>
+    </div>
+    <div style="text-align: center;line-height:normal;cursor:pointer;" onClick="window.open('http://intra.wku.ac.kr/')">
+        <div style="background-color: grey;border-radius: 50px;width: 50px;height: 50px;margin: auto;">
+            
+        </div>
+        <span style="font-size: 80%;">웹정보<br>서비스</span>
+    </div>
+    <div style="text-align: center;line-height:normal;cursor:pointer;" onClick="window.open('https://www.wku.ac.kr/')">
+        <div style="background-color: grey;border-radius: 50px;width: 50px;height: 50px;margin: auto;">
+            
+        </div>
+        <span style="font-size: 80%;">학사<br>공지</span>
+    </div>
+    <div style="text-align: center;line-height:normal;cursor:pointer;" onClick="window.open('https://www.wku.ac.kr/')">
+        <div style="background-color: grey;border-radius: 50px;width: 50px;height: 50px;margin: auto;">
+            
+        </div>
+        <span style="font-size: 80%;">학사<br>일정</span>
+    </div>
+    <div style="text-align: center;line-height:normal;cursor:pointer;" onClick="window.open('https://www.wku.ac.kr/')">
+        <div style="background-color: grey;border-radius: 50px;width: 50px;height: 50px;margin: auto;">
+            
+        </div>
+        <span style="font-size: 80%;">장학<br>공지</span>
+    </div>
+    <div style="text-align: center;line-height:normal;cursor:pointer;" onClick="window.open('http://elibrary.wku.ac.kr/')">
+        <div style="background-color: grey;border-radius: 50px;width: 50px;height: 50px;margin: auto;">
+            
+        </div>
+        <span style="font-size: 80%;">도서관</span>
+    </div>
+</div>
+<hr>
+<div style="display: flex;justify-content: space-evenly;text-align: center;">
+    <div>
+        <div style="width: 150px;height: 100px;border-radius: 10px;background-color: grey;margin:auto">
+
+        </div>
+        <span>챗봇 사용하기</span>
+    </div>
+    <div>
+        <div style="width: 150px;height: 100px;border-radius: 10px;background-color: grey;margin:auto">
+
+        </div>
+        <span>영상 자료 확인</span>
+    </div>
+</div>
+<hr>
+
+<div>
+
+    <a style="float: right;" href="#" target="_blank">더보기</a>
+    <div style="padding:7px;" class="badge badge-pill badge-success">추천정보</div>
+    <div style="margin-top:10px;" class="gallery js-flickity" data-flickity-options='{ "freeScroll": "true", "contain": true, "prevNextButtons": false,"pageDots": false,"imagesLoaded": true }'>
+        <a target='_blank' class="gallery-cell" href="#">
+            <img width='100%' height="100%" src="https://www.saraminimage.co.kr/event/contents/mento/2012/lyi_121115_1.jpg">
+        </a>
+        <a target='_blank' class="gallery-cell" href="#">
+            <img width='100%' height="100%" src="https://image.slidesharecdn.com/sns-170706142926/95/sns-1-638.jpg?cb=1502699987">
+        </a>
+        <a target='_blank' class="gallery-cell" href="#">
+            <img width='100%' height="100%" src="https://img1.daumcdn.net/thumb/R800x0/?scode=mtistory2&fname=https%3A%2F%2Ft1.daumcdn.net%2Fcfile%2Ftistory%2F9993D9415CF0E67D24">
+        </a>
+        
+    </div>
+    <!-- <br> -->
+    <!-- {{i.snippet.thumbnails.high.url}}<br> -->
+
+</div>
+<hr>
+<div>
+    <div style="padding:7px;" class="badge badge-pill badge-success">게시판</div>
+    <div>
+        {% for i in show_all %}
+            <a style="display:block;text-align: center; background-color: aquamarine; margin:7px;font-size: large;border-radius: 50px;padding: 5px;" href="{% url 'forms:selectform' i.board_name %}">{{i.board_name}}</a>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
