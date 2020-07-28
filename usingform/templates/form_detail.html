@@ -587,7 +587,7 @@ window.onload = function(){
 <h3><b>{{detail_getForm.title}}</b></h3>
 
 <!-- 내용 (script태그 이용 못하게 잠금 걸어 놓음 templatetag 만들어서) -->
-{{detail_getForm.body|kill_script|safe|linebreaks}}
+{{detail_getForm|add_link|kill_script|safe|linebreaks}}
 
 
 <!-- 사진 -->

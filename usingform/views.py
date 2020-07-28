@@ -10,6 +10,8 @@ from django.db.models import Count
 from django.contrib import messages
 # Create your views here.
 
+from django.db.models import Q
+
 def selectform(request, board="자유게시판"): #작성하기 및 전체 글 보여주기
     if request.session.get('page'): #저장된 위치 삭제
         del request.session['page']
@@ -28,6 +30,7 @@ def selectform(request, board="자유게시판"): #작성하기 및 전체 글 �
             a.author = getProfile
             a.category = getCategory #글을 작성할때 category를 자동으로 작성할 수 있도록 설정
             a.save()
+            a.tag_save()
 
             if imageform.is_valid():
                 image_list = request.FILES.getlist('postimage') #form으로 가져온 건 이용하지 않고!!
@@ -43,7 +46,7 @@ def selectform(request, board="자유게시판"): #작성하기 및 전체 글 �
             return redirect('/board/'+str(board))
         else:
             #공백만 집어 넣을 경우
-            messages.info(request, '생성 중 오류가 났습니다!')
+            messages.info(request, '생성 중 오류가 났습니다!')  
             return redirect('/board/'+str(board))
     else:
         form = FormTest()
@@ -60,9 +63,9 @@ def selectform(request, board="자유게시판"): #작성하기 및 전체 글 �
         #이 글 기준 -> 좋아요의 여러 개수 -> Count클래스로 like 개수를 얻고 그것을 num_item이라는 정렬할 수 있는 새로운 필드를 생성 후 필드 값으로 대입한 느낌
         like_board = Defaultform.objects.filter(category__board_name=board).annotate(num_item=Count('like')).order_by('-num_item')[:3]
 
-        if board:
+        if search:
             #검색 기능 contains로 제목 기준으로 가져오기!
-            getForm = Defaultform.objects.filter(category__board_name=board, title__contains=search)
+            getForm = Defaultform.objects.filter(category__board_name=board).filter(Q(title__contains=search) | Q(body__contains=search))
         else:
             getForm = Defaultform.objects.all()
 
@@ -97,6 +100,7 @@ def mod_form(request, board, id): #글 수정하기
             
             if form.is_valid():
                 a = form.save()
+                a.tag_save()
 
                 if request.POST.get("image_modify"):
                     #각각 이미지를 삭제하기 눌렀을 경우!!

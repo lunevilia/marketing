@@ -5,6 +5,8 @@ from django.contrib.auth.models import User
 from django import template
 from django.core.validators import MinValueValidator 
 
+import re
+
 from django.conf import settings
 from PIL import Image as Img
 from PIL import ExifTags
@@ -26,6 +28,7 @@ class Defaultform(TimeStampedModel):
     author = models.ForeignKey(Profile, on_delete=models.CASCADE,)
     body = models.TextField()
     category = models.ForeignKey(Category, on_delete=models.CASCADE,)
+    tag_set = models.ManyToManyField('Tag', blank=True)
 
     class Meta:
         ordering = ['-id', ]
@@ -42,8 +45,24 @@ class Defaultform(TimeStampedModel):
         else:
             return self.title
 
+    def tag_save(self):
+        tags = re.findall(r'#(\w+)\b', self.body)
+
+        if not tags:
+            return
+
+        for t in tags:
+            tag, tag_created = Tag.objects.get_or_create(tag_name=t)
+            self.tag_set.add(tag)
+
     # def comment_count(self):
     #     self.comment_set
+
+class Tag(models.Model):
+    tag_name = models.CharField(max_length=140, unique=True)
+
+    def __str__(self):
+        return self.tag_name
 
 class Image(TimeStampedModel):
     post = models.ForeignKey(Defaultform, on_delete=models.CASCADE,)

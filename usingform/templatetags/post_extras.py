@@ -2,7 +2,22 @@
 from django import template
 from usingform.models import CommentLike, Like, Favorite, Donotalert
 from account.models import Profile
+import re
 register = template.Library()
+
+#게시글 Hash Tag
+@register.filter
+def add_link(value):
+    main_text = value.body
+    category = value.category.board_name
+    tags = value.tag_set.all()
+
+    if tags:
+        for tag in tags:
+            main_text = re.sub(r'\#'+tag.tag_name+r'\b', '<a href=/board/'+category+'/?search='+tag.tag_name+">"+tag.tag_name+'</a>', main_text)
+        return main_text
+    else:
+        return main_text
 
 # Board 좋아요 용 확인
 @register.filter
