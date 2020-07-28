@@ -10,17 +10,9 @@
             background: white;
             counter-increment: gallery-cell;
             border-style: solid;
-            border-width: 0.2px;
-            border-color: grey;
+            border-width: 2px;
+            border-color: rgb(170, 170, 170);
             border-radius: 5px;
-            transition-duration: 1s;
-        }
-
-        .gallery-cell:hover{
-            color: black;
-            text-decoration: none;
-            box-shadow : 5px 5px 2px 0.5px grey;
-            transition-duration: 1s;
         }
 
         .gallery-cell:visited{
@@ -53,14 +45,6 @@
 
         .card-body{
                 padding:0.5rem;
-            }
-        .card{
-            transition-duration: 1s;
-        }
-
-        .card:hover {
-            box-shadow : 5px 5px 2px 0.5px rgba(0, 0, 255, .2);
-            transition-duration: 1s;
         }
 
         /* 드롭다운 올리기만 하면 보이도록 설정 */
@@ -78,6 +62,7 @@
             .gallery-cell {
                 width: 45%;
                 height: 150px;
+                border-color: rgb(170, 170, 170);
             }
         }
 
@@ -85,6 +70,7 @@
             .gallery-cell {
                 width: 30%;
                 height: 300px;
+                border-color: rgb(170, 170, 170);
             }
         }
 
