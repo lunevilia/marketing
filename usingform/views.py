@@ -67,7 +67,7 @@ def selectform(request, board="자유게시판"): #작성하기 및 전체 글 �
             #검색 기능 contains로 제목 기준으로 가져오기!
             getForm = Defaultform.objects.filter(category__board_name=board).filter(Q(title__contains=search) | Q(body__contains=search))
         else:
-            getForm = Defaultform.objects.all()
+            getForm = Defaultform.objects.filter(category__board_name=board)
 
     return render(request, 'formtest.html', {'like_board':like_board,'important_board':important_board,'form':form, 'imageform':imageform, 'filesform':filesform, 'getForm':getForm, 'board_name':board,})
 
