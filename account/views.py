@@ -61,7 +61,7 @@ def signup(request):
         if request.user.is_authenticated:
             return redirect('/account/profile')
 
-        error = ""
+        error = " "
         form = SignupForm()
 
     return render(request, "signup.html", {"form":form, "error":error,})

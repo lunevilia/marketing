@@ -1,0 +1,174 @@
+{% extends 'layer.html' %}
+{% block contents %}
+
+<script>
+var y = '{{pagetoken}}';
+var state = false; // scroll 한번에 한번씩만!!
+
+window.onscroll = function(ev) {
+    if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight && state==false)  {
+        state = true
+        idDuplicationCheck(y);
+    }
+};
+
+function idDuplicationCheck(token) {  
+    // Ajax 통신으로 서버에 Data를 전송하고 Return 받습니다.
+    $.ajax({
+        // type을 설정합니다.
+        type : 'GET',
+        url : "{% url 'youtube:ajax' gettype 'abc' %}".replace(/abc/, token.toString()),
+        success : function (data) {
+            // 서버에서 Return된 값으로 중복 여부를 사용자에게 알려줍니다.
+            if (data) {
+                console.log(data);
+                y = data["pagetoken"]
+                if (data["response_dict"][0]["kind"] == "youtube#playlist"){
+                    for (var i=0; i<data["response_dict"].length; i++){
+                        var playlist_Id = data["response_dict"][i]["id"]
+                        var playlist_Title = data["response_dict"][i]["snippet"]["title"]
+                        // var thumbnail = data["response_dict"][i]["snippet"]["thumbnails"]["high"]["url"]
+                        if(data["response_dict"][i]["added"]){
+                            var text = "<div style='text-align: center; margin: 5%'><a style='float: right;' href='https://www.youtube.com/playlist?list=" + playlist_Id + "' target='_blank'>더보기</a><h2>"+playlist_Title+"</h2><div class='gallery js-flickity' data-flickity-options=\'{\"freeScroll\": \"true\", \"contain\": true, \"prevNextButtons\": false,\"pageDots\": false,\"imagesLoaded\": true }\'>"
+                                for (var j=0; j<data["response_dict"][i]["added"].length; j++){
+                                var video_name = data["response_dict"][i]["added"][j][0];
+                                var video_id = data["response_dict"][i]["added"][j][1];
+                                var video_image = data["response_dict"][i]["added"][j][2]["url"];
+                                text += "<a class='gallery-cell' target='_blank' href='https://youtu.be/" + video_id + "'><img class='card-img-top' src='" + video_image + "' alt='Card image cap'><div class='card-body'><p class='card-text'>"+video_name+"</p></div></a>"
+                                }
+                            // text += "</div>"+thumbnail+"<br><hr></div>"
+                            $("#enters").append(text)
+                        }
+                    }
+                } else {
+                    for (var i=0; i<data["response_dict"].length; i++){
+                        var video_id = data["response_dict"][i]["id"]["videoId"]
+                        var video_name = data["response_dict"][i]["snippet"]["title"]
+                        $("#enters").append("<div style='text-align: center; margin: 5%'><iframe src='https://www.youtube.com/embed/" + video_id + "' frameborder='0' allow='accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture' allowfullscreen></iframe><br>"+video_name+"</div>")
+                    }
+                }
+                
+                state = false
+            } else {
+                alert("NONE");
+            }
+        },
+        error: function () { 
+            // 오류 걸릴 경우 Loading 안보이게
+            $("#loader").hide();  
+        },
+        complete: function() {
+            $('.gallery').flickity({
+                contain: true,
+                prevNextButtons: false,
+                pageDots: false,
+                imagesLoaded: true 
+            })
+        }
+    });
+}
+</script>
+<style>
+    /* flickity 때문에 */
+    .gallery-cell {
+            color: black;
+            width: 30%;
+            height: 32vh;
+            margin-right: 10px;
+            background: white;
+            counter-increment: gallery-cell;
+            border-style: solid;
+            border-width: 0.2px;
+            border-color: grey;
+            border-radius: 5px;
+            transition-duration: 1s;
+        }
+
+        .gallery-cell:hover{
+            color: black;
+            text-decoration: none;
+            box-shadow : 5px 5px 2px 0.5px grey;
+            transition-duration: 1s;
+        }
+
+        .gallery-cell:visited{
+            color: black;
+            text-decoration: none;
+        }
+
+        /* cell number */
+        .gallery-cell:before {
+            display: block;
+            text-align: center;
+            line-height: 200px;
+            font-size: 80px;
+            color: white;
+        }
+
+        /* iframe */
+
+        iframe{
+            width: 560px;
+            height: 315px;
+        }
+
+        * {
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+        }
+
+        body { font-family: sans-serif; }
+
+        .gallery {
+            margin-bottom: 10%;
+        }
+
+        .card-body{
+                padding:0.5rem;
+            }
+        .card{
+            transition-duration: 1s;
+        }
+
+        .card:hover {
+            box-shadow : 5px 5px 2px 0.5px rgba(0, 0, 255, .2);
+            transition-duration: 1s;
+        }
+
+        /* 드롭다운 올리기만 하면 보이도록 설정 */
+        .dropdown_board:hover .dropdown-menu {
+            display: block;
+            margin-top: 0;
+        }
+
+        @media (min-width:300px) and (max-width:768px) {
+            iframe{
+                width: 300px;
+                height: 169px;
+            }
+
+            .gallery-cell {
+                width: 45%;
+                height: 32vh;
+            }
+        }
+
+        @media (min-width:1200px) {
+            .gallery-cell {
+                width: 30%;
+                height: 32vh;
+            }
+        }
+
+        /* flickity 때문에 */
+</style>
+<h2>Video</h2>
+{% block name %}
+{% endblock %}
+<div id="loader" style="margin:auto;margin-bottom: 100px;text-align: center;">
+<button class="btn btn-primary" type="button" disabled>
+    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+    Loading...
+</button>
+</div>
+{% endblock %}

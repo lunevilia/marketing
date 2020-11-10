@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     'account',
     'mainpage',
     'colorfield',
+    'video',
+    'video_category',
 ]
 
 MIDDLEWARE = [
